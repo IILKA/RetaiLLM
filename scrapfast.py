@@ -25,8 +25,8 @@ class Logger:
         self.total_progress = 0
         
     def set_total_progress(self, keywords_count, results_per_keyword):
-        # Add 1 to account for overall summary
-        self.total_progress = (keywords_count * results_per_keyword) + 1
+        # Add keywords_count to account for overall summary of each keyword
+        self.total_progress = (keywords_count * results_per_keyword) + keywords_count
         print(f"[PROGRESS] {self.current_progress}/{self.total_progress}")
         
     def update_progress(self):
@@ -285,21 +285,14 @@ class WebScraper:
             self.driver.quit()
             return results
 
-def scrapfast(words="business strategy 2024 startup profit"):
+def scrapfast(words=["business strategy 2024 startup profit"], num_res=3):
     try:
         scraper = WebScraper()
         scraper.logger.start_total_timer()  # Start total timer
         
-        results = scraper.search_and_scrape([words], 2)
+        results = scraper.search_and_scrape(words, num_res)
         
         if results:
-            print("\nResults:")
-            for result in results:
-                print(f"\nKeyword: {result['keyword']}")
-                print(f"URLs: {result['urls']}")
-                print(f"Overall Summary: {result['overall_summary']}")
-                print(f"Sentiment: {result['sentiment']}")
-            
             scraper.logger.end_total_timer()  # End total timer
             return results
             
@@ -319,4 +312,10 @@ def scrapfast(words="business strategy 2024 startup profit"):
         return None
 
 if __name__ == "__main__":
-    scrapfast("online snack shop 2024 business idea strategy profit start up")
+    results = scrapfast(["online snack shop 2024 business idea strategy profit start up", "hong kong 2024 startup company new clothing fasion reminder notes"],3)
+    print("\nResults:")
+    for result in results:
+        print(f"\nKeyword: {result['keyword']}")
+        print(f"URLs: {result['urls']}")
+        print(f"Overall Summary: {result['overall_summary']}")
+        print(f"Sentiment: {result['sentiment']}")
