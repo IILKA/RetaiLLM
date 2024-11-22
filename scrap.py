@@ -17,14 +17,43 @@ import nltk
 from nltk.tokenize import sent_tokenize
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from deepseek import DeepSeek
+from datetime import datetime
+
+class Logger:
+    def __init__(self):
+        self.start_times = {}
+        self.pending_messages = {}
+        
+    def start(self, message):
+        self.start_times[message] = time.time()
+        self.pending_messages[message] = message
+        print(f"[INFO] {message}", end='', flush=True)  # Print without newline
+        
+    def end(self, message):
+        if message in self.start_times:
+            elapsed = time.time() - self.start_times[message]
+            if message in self.pending_messages:
+                print(f" ({elapsed:.2f}s)")  # Print only the time with newline
+                del self.pending_messages[message]
+            del self.start_times[message]
+            
+    def log(self, message):
+        print(f"[INFO] {message}")
+            
+    def warning(self, message):
+        print(f"[WARNING] {message}")
+        
+    def error(self, message):
+        print(f"[ERROR] {message}")
 
 class WebScraper:
     def __init__(self):
+        self.logger = Logger()
         self.search_engines = [
             {
                 'name': 'Google',
                 'url': 'https://www.google.com/search?q=',
-                'result_selector': 'div.g div.yuRUbf a',
+                'result_selector': 'div.g div.yuRUbf a', 
                 'title_selector': 'div.g h3',
                 'snippet_selector': 'div.g div.VwiC3b'
             },
@@ -36,7 +65,7 @@ class WebScraper:
                 'snippet_selector': '#b_results .b_caption p'
             },
             {
-                'name': 'DuckDuckGo',
+                'name': 'DuckDuckGo', 
                 'url': 'https://html.duckduckgo.com/html/?q=',
                 'result_selector': 'a.result__a',
                 'title_selector': 'a.result__a',
@@ -60,7 +89,7 @@ class WebScraper:
                 'name': 'Startpage',
                 'url': 'https://www.startpage.com/do/search?q=',
                 'result_selector': '.w-gl__result-url',
-                'title_selector': '.w-gl__result-title',
+                'title_selector': '.w-gl__result-title', 
                 'snippet_selector': '.w-gl__description'
             }
         ]
@@ -70,55 +99,49 @@ class WebScraper:
         self.setup_selenium()
         self.setup_sentiment_analyzers()
 
-        # Initialize DeepSeek
         try:
             self.deepseek = DeepSeek()
         except Exception as e:
-            print(f"[WARNING] Failed to initialize DeepSeek: {str(e)}")
+            self.logger.warning(f"Failed to initialize DeepSeek: {str(e)}")
             self.deepseek = None
-    
+
     def get_content_summary(self, content):
         if self.deepseek is None:
             return content
             
         try:
-            summary = self.deepseek.summary_web(content, max_tokens=4000) #max token
+            summary = self.deepseek.summary_web(content, max_tokens=4000)
             return summary
         except Exception as e:
-            print(f"[WARNING] Summary generation failed: {str(e)}")
+            self.logger.warning(f"Summary generation failed: {str(e)}")
             return content
-        
-    
 
     def setup_sentiment_analyzers(self):
-        print("[INFO] Setting up sentiment analyzers")
+        self.logger.start("Setting up sentiment analyzers")
         try:
             nltk.download('punkt', quiet=True)
         except:
-            print("[WARNING] NLTK punkt download failed, but continuing...")
+            self.logger.warning("NLTK punkt download failed, but continuing...")
         self.vader = SentimentIntensityAnalyzer()
+        self.logger.end("Setting up sentiment analyzers")
 
     def perform_sentiment_analysis(self, text):
         try:
-            # Split text into sentences
             sentences = sent_tokenize(text)
             
-            # TextBlob analysis
             blob = TextBlob(text)
             textblob_polarity = blob.sentiment.polarity
             textblob_subjectivity = blob.sentiment.subjectivity
             
-            # VADER analysis
             vader_scores = self.vader.polarity_scores(text)
             
-            # Calculate per-sentence sentiment
             sentence_sentiments = []
-            for sentence in sentences[:]:  # Limit to first ? sentences
+            for sentence in sentences[:]:
                 vader_sent_scores = self.vader.polarity_scores(sentence)
                 blob_sent = TextBlob(sentence)
                 
                 sentence_sentiment = {
-                    'text': sentence[:],  # Limit ? sentence length
+                    'text': sentence[:],
                     'vader': vader_sent_scores,
                     'textblob': {
                         'polarity': blob_sent.sentiment.polarity,
@@ -127,7 +150,6 @@ class WebScraper:
                 }
                 sentence_sentiments.append(sentence_sentiment)
 
-            # Compile results
             sentiment_results = {
                 'overall': {
                     'vader': vader_scores,
@@ -146,20 +168,17 @@ class WebScraper:
             return json.dumps(sentiment_results)
             
         except Exception as e:
-            print(f"[ERROR] Sentiment analysis failed: {str(e)}")
+            self.logger.error(f"Sentiment analysis failed: {str(e)}")
             return json.dumps({'error': str(e)})
         
     def perform_overall_sentiment_analysis(self, text):
         try:
-            # TextBlob analysis
             blob = TextBlob(text)
             textblob_polarity = blob.sentiment.polarity
             textblob_subjectivity = blob.sentiment.subjectivity
             
-            # VADER analysis
             vader_scores = self.vader.polarity_scores(text)
             
-            # Create concise sentiment summary
             sentiment_summary = {
                 'compound_score': round(vader_scores['compound'], 3),
                 'polarity': round(textblob_polarity, 3),
@@ -167,7 +186,7 @@ class WebScraper:
                 'sentiment_category': self.get_sentiment_category(vader_scores['compound'], textblob_polarity),
                 'sentiment_distribution': {
                     'positive': round(vader_scores['pos'], 3),
-                    'neutral': round(vader_scores['neu'], 3),
+                    'neutral': round(vader_scores['neu'], 3), 
                     'negative': round(vader_scores['neg'], 3)
                 }
             }
@@ -175,7 +194,7 @@ class WebScraper:
             return json.dumps(sentiment_summary)
                 
         except Exception as e:
-            print(f"[ERROR] Sentiment analysis failed: {str(e)}")
+            self.logger.error(f"Sentiment analysis failed: {str(e)}")
             return json.dumps({'error': str(e)})
 
     def get_sentiment_category(self, vader_compound, textblob_polarity):
@@ -192,7 +211,7 @@ class WebScraper:
             return 'neutral'
 
     def setup_selenium(self):
-        print("[INFO] Setting up Selenium WebDriver")
+        self.logger.start("Setting up Selenium WebDriver")
         chrome_options = Options()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--disable-gpu')
@@ -204,24 +223,28 @@ class WebScraper:
         chrome_options.add_experimental_option('useAutomationExtension', False)
         self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": self.ua.random})
+        self.logger.end("Setting up Selenium WebDriver")
 
     def create_output_directory(self):
-        print("[INFO] Creating output directory")
+        self.logger.start("Creating output directory")
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
+        self.logger.end("Creating output directory")
 
     def fetch_with_selenium(self, url, retry_count=2):
         for attempt in range(retry_count):
             try:
-                print(f"[INFO] Fetching URL (attempt {attempt + 1}): {url}")
+                msg = f"Fetching URL (attempt {attempt + 1}): {url}"
+                self.logger.start(msg)
                 self.driver.get(url)
                 WebDriverWait(self.driver, 15).until(
                     EC.presence_of_element_located((By.TAG_NAME, "body"))
                 )
                 time.sleep(random.uniform(3, 5))
+                self.logger.end(msg)
                 return self.driver.page_source
             except Exception as e:
-                print(f"[ERROR] Attempt {attempt + 1} failed: {str(e)}")
+                self.logger.error(f"Attempt {attempt + 1} failed: {str(e)}")
                 if attempt < retry_count - 1:
                     time.sleep(random.uniform(2, 4))
                     continue
@@ -237,26 +260,25 @@ class WebScraper:
                 writer.writerow(['Search Engine', 'URL', 'Content', 'Sentiment Analysis', 'Summary', 'Summary Sentiment'])
             writer.writerow([
                 result['engine'],
-                result['url'],
+                result['url'], 
                 result['content'],
                 result['sentiment'],
                 result['summary'],
                 result['summary_sentiment']
             ])
-        print(f"[INFO] Successfully appended result to CSV: {filename}")
+        self.logger.log(f"Successfully appended result to CSV: {filename}")
 
-    def search_and_scrape(self, keywords=["starting a business", "selling  in 2024"]):
+    def search_and_scrape(self, keywords=["starting a business", "selling in 2024"]):
         self.keywords = keywords
         file_locations = []
         aggregated_data = []
         try:
             for keyword in self.keywords:
-                print(f"\n[INFO] Processing keyword: {keyword}")
+                self.logger.log(f"Processing keyword: {keyword}")
                 results_count = 0
                 keyword_urls = []
                 keyword_summaries = []
                 
-                # Get initial row count from existing file
                 filename = f"try_search/{keyword.replace(' ', '_')}.csv"
                 if os.path.exists(filename):
                     with open(filename, 'r', encoding='utf-8-sig') as csvfile:
@@ -268,7 +290,7 @@ class WebScraper:
                     if results_count >= 3:
                         break
 
-                    print(f"\n[INFO] Trying search engine: {engine['name']}")
+                    self.logger.log(f"Trying search engine: {engine['name']}")
                     try:
                         search_url = f"{engine['url']}{quote(keyword)}"
                         page_source = self.fetch_with_selenium(search_url)
@@ -282,7 +304,7 @@ class WebScraper:
                         if not links:
                             continue
 
-                        print(f"[INFO] Found {len(links)} potential results on {engine['name']}")
+                        self.logger.log(f"Found {len(links)} potential results on {engine['name']}")
                         
                         for link in links:
                             if results_count >= 3:
@@ -291,21 +313,24 @@ class WebScraper:
                             href = link.get('href')
                             if href and href.startswith('http'):
                                 try:
-                                    print(f"[INFO] Fetching content from: {href}")
+                                    self.logger.start(f"Fetching content from: {href}")
                                     page_content = self.fetch_with_selenium(href)
                                     
                                     if page_content:
                                         page_soup = BeautifulSoup(page_content, 'html.parser')
                                         content = ' '.join(page_soup.get_text(strip=True).split())
                                         
-                                        print("[INFO] Performing sentiment analysis")
+                                        self.logger.start("Performing sentiment analysis")
                                         sentiment_results = self.perform_sentiment_analysis(content)
+                                        self.logger.end("Performing sentiment analysis")
                                         
-                                        print("[INFO] Generating summary")
+                                        self.logger.start("Generating summary") 
                                         content_summary = self.get_content_summary(content)
+                                        self.logger.end("Generating summary")
                                         
-                                        print("[INFO] Performing sentiment analysis on summary")
+                                        self.logger.start("Performing sentiment analysis on summary")
                                         summary_sentiment_results = self.perform_sentiment_analysis(content_summary)
+                                        self.logger.end("Performing sentiment analysis on summary")
                                         
                                         result = {
                                             'url': href,
@@ -325,33 +350,38 @@ class WebScraper:
                                         
                                         results_count += 1
                                         row_number += 1
+                                        self.logger.end(f"Fetching content from: {href}")
                                     
                                 except Exception as e:
-                                    print(f"[ERROR] Failed to fetch page content: {str(e)}")
+                                    self.logger.error(f"Failed to fetch page content: {str(e)}")
                             
                             time.sleep(random.uniform(4, 7))
                     
                     except Exception as e:
-                        print(f"[ERROR] {engine['name']} search failed: {str(e)}")
+                        self.logger.error(f"{engine['name']} search failed: {str(e)}")
                     
                     time.sleep(random.uniform(5, 8))
 
                 if keyword_summaries:
                     combined_summaries = " ".join(keyword_summaries)
-                    print("[INFO] Generating overall summary")
-                    overall_summary = self.deepseek.summary_content(combined_summaries, max_tokens=4000)
-                    print("[INFO] Performing overall ssentiment analysis")
+                    self.logger.start("Generating overall summary")
+                    overall_summary = self.deepseek.summary_content(combined_summaries, max_tokens=4000) 
+                    self.logger.end("Generating overall summary")
+                    
+                    self.logger.start("Performing overall sentiment analysis")
                     overall_sentiment = self.perform_overall_sentiment_analysis(overall_summary)
+                    self.logger.end("Performing overall sentiment analysis")
+                    
                     aggregated_data.append([keyword_urls, overall_summary, overall_sentiment])
 
         finally:
-            print("[INFO] Closing WebDriver")
+            self.logger.log("Closing WebDriver")
             self.driver.quit()
             return [file_locations, aggregated_data]
 
-def main():
+def scrap(words="business strategy 2024 startup profit"):
     scraper = WebScraper()
-    results = scraper.search_and_scrape(["start bussiness 2024 online shop snacks"])
+    results = scraper.search_and_scrape([words])
     
     print("\nFile locations with row numbers:")
     for location in results[0]:
@@ -364,7 +394,11 @@ def main():
         print(f"Summary Sentiment: {data[2]}")
 
 if __name__ == "__main__":
-    main()
+    scrap("online snack shop 2024 business idea strategy profit start up")
+#fakeuseragent==1.5.1
+#selenium==4.26.1
+#textblob==0.18.0
+#vaderSentiment==3.3.2
 #fakeuseragent==1.5.1
 #selenium==4.26.1
 #textblob==0.18.0
