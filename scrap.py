@@ -82,7 +82,7 @@ class WebScraper:
             return content
             
         try:
-            summary = self.deepseek.summary(content, max_tokens=4000) #max token
+            summary = self.deepseek.summary_web(content, max_tokens=4000) #max token
             return summary
         except Exception as e:
             print(f"[WARNING] Summary generation failed: {str(e)}")
@@ -145,6 +145,35 @@ class WebScraper:
             
             return json.dumps(sentiment_results)
             
+        except Exception as e:
+            print(f"[ERROR] Sentiment analysis failed: {str(e)}")
+            return json.dumps({'error': str(e)})
+        
+    def perform_overall_sentiment_analysis(self, text):
+        try:
+            # TextBlob analysis
+            blob = TextBlob(text)
+            textblob_polarity = blob.sentiment.polarity
+            textblob_subjectivity = blob.sentiment.subjectivity
+            
+            # VADER analysis
+            vader_scores = self.vader.polarity_scores(text)
+            
+            # Create concise sentiment summary
+            sentiment_summary = {
+                'compound_score': round(vader_scores['compound'], 3),
+                'polarity': round(textblob_polarity, 3),
+                'subjectivity': round(textblob_subjectivity, 3),
+                'sentiment_category': self.get_sentiment_category(vader_scores['compound'], textblob_polarity),
+                'sentiment_distribution': {
+                    'positive': round(vader_scores['pos'], 3),
+                    'neutral': round(vader_scores['neu'], 3),
+                    'negative': round(vader_scores['neg'], 3)
+                }
+            }
+            
+            return json.dumps(sentiment_summary)
+                
         except Exception as e:
             print(f"[ERROR] Sentiment analysis failed: {str(e)}")
             return json.dumps({'error': str(e)})
@@ -219,10 +248,13 @@ class WebScraper:
     def search_and_scrape(self, keywords=["starting a business", "selling  in 2024"]):
         self.keywords = keywords
         file_locations = []
+        aggregated_data = []
         try:
             for keyword in self.keywords:
                 print(f"\n[INFO] Processing keyword: {keyword}")
                 results_count = 0
+                keyword_urls = []
+                keyword_summaries = []
                 
                 # Get initial row count from existing file
                 filename = f"try_search/{keyword.replace(' ', '_')}.csv"
@@ -230,11 +262,10 @@ class WebScraper:
                     with open(filename, 'r', encoding='utf-8-sig') as csvfile:
                         row_number = sum(1 for row in csv.reader(csvfile))
                 else:
-                    row_number = 1  # Start from 1 to account for header row
+                    row_number = 1
 
                 for engine in self.search_engines:
                     if results_count >= 3:
-                        print(f"[INFO] Already have 3 results, skipping remaining engines")
                         break
 
                     print(f"\n[INFO] Trying search engine: {engine['name']}")
@@ -243,14 +274,12 @@ class WebScraper:
                         page_source = self.fetch_with_selenium(search_url)
                         
                         if not page_source:
-                            print(f"[ERROR] Failed to get results from {engine['name']}, trying next engine")
                             continue
 
                         soup = BeautifulSoup(page_source, 'html.parser')
                         links = soup.select(engine['result_selector'])
                         
                         if not links:
-                            print(f"[ERROR] No results found on {engine['name']}, trying next engine")
                             continue
 
                         print(f"[INFO] Found {len(links)} potential results on {engine['name']}")
@@ -288,14 +317,14 @@ class WebScraper:
                                         }
                                         
                                         self.append_to_csv(keyword, result)
-                                        
-                                        # Add file location with row number to the list
                                         filename = f"try_search/{keyword.replace(' ', '_')}.csv"
                                         file_locations.append(f"{filename}[{row_number}]")
                                         
+                                        keyword_urls.append(href)
+                                        keyword_summaries.append(content_summary)
+                                        
                                         results_count += 1
                                         row_number += 1
-                                        print(f"[INFO] Successfully scraped, analyzed, and saved content")
                                     
                                 except Exception as e:
                                     print(f"[ERROR] Failed to fetch page content: {str(e)}")
@@ -307,24 +336,35 @@ class WebScraper:
                     
                     time.sleep(random.uniform(5, 8))
 
-                if results_count == 0:
-                    print(f"[ERROR] No results found for keyword: {keyword} after trying all engines")
+                if keyword_summaries:
+                    combined_summaries = " ".join(keyword_summaries)
+                    print("[INFO] Generating overall summary")
+                    overall_summary = self.deepseek.summary_content(combined_summaries, max_tokens=4000)
+                    print("[INFO] Performing overall ssentiment analysis")
+                    overall_sentiment = self.perform_overall_sentiment_analysis(overall_summary)
+                    aggregated_data.append([keyword_urls, overall_summary, overall_sentiment])
 
         finally:
             print("[INFO] Closing WebDriver")
             self.driver.quit()
-            return file_locations
+            return [file_locations, aggregated_data]
 
 def main():
     scraper = WebScraper()
-    file_locations = scraper.search_and_scrape(["start a snack business", "open a online shop", "selling food in 2024"])
+    results = scraper.search_and_scrape(["start bussiness 2024 online shop snacks"])
+    
     print("\nFile locations with row numbers:")
-    for location in file_locations:
+    for location in results[0]:
         print(location)
+    
+    print("\nAggregated Data:")
+    for data in results[1]:
+        print(f"\nURLs: {data[0]}")
+        print(f"Overall Summary: {data[1]}")
+        print(f"Summary Sentiment: {data[2]}")
 
 if __name__ == "__main__":
     main()
-
 #fakeuseragent==1.5.1
 #selenium==4.26.1
 #textblob==0.18.0
