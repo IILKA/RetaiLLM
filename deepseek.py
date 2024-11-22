@@ -3,7 +3,7 @@ import openai
 class DeepSeek:
     def __init__(self):
         self.openai = openai
-        # self.openai.api_key = "..."
+        self.openai.api_key = "..."
         self.openai.api_base = "https://api.deepseek.com"
         self.model = "deepseek-chat"
 
@@ -34,11 +34,23 @@ class DeepSeek:
         )
         return response.choices[0].message['content'].strip()
 
-    def summary(self, content, max_tokens):
+    def summary_web(self, content, max_tokens):
         response = self.openai.ChatCompletion.create(
             model=self.model,
             messages=[
-                {"role": "system", "content": "Please provide a concise summary of the following content:"},
+                {"role": "system", "content": "Please provide a concise summary of the following content in a website 200 words with point form and without any introduction or conclusion:"},
+                {"role": "user", "content": content}
+            ],
+            max_tokens=max_tokens,
+            temperature=0.3
+        )
+        return response.choices[0].message['content'].strip()
+
+    def summary_content(self, content, max_tokens):
+        response = self.openai.ChatCompletion.create(
+            model=self.model,
+            messages=[
+                {"role": "system", "content": "Please provide a concise summary of the following content that conclude all of the main ideas in the following passages in 500 words with point form and without any introduction or conclusion:"},
                 {"role": "user", "content": content}
             ],
             max_tokens=max_tokens,
@@ -76,4 +88,4 @@ class DeepSeek:
 #     # summary = deepseek.summary(text_to_summarize, 100)
 #     print("Summary:", summary)
 
-#openai==0.28
+#openai==0.28.0
