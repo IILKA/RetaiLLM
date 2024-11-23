@@ -12,6 +12,7 @@ const systemMessage = {
   "role": "system", "content": "You are a Entrepreneurship Education Manager. You are a professional in Retail Store, Business and Supply Chain Management."
 }
 
+
 function App() {
   const [messages, setMessages] = useState([
     {
@@ -45,7 +46,8 @@ function App() {
       } else {
         role = "user";
       }
-      return { role: role, content: messageObject.message}
+      let messageUpload = window.textcontent + messageObject.message;
+      return { role: role, content: messageUpload };
     });
 
     const apiRequestBody = {
@@ -81,6 +83,33 @@ function App() {
     });
   }
 
+  const [content, setContent] = useState('');
+
+  const handleFileRead = (e) => {
+    const text = e.target.result;
+    setContent(text);
+    console.log(text);
+    //limit the text content to 200 characters
+    if (text.length > 200) {
+      window.textcontent = text.substring(0, 200);
+    } else {
+      window.textcontent = text;
+    }
+  };
+
+  const handlefileUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    //input.accept = '.txt';
+    input.click();
+    input.onchange = e => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = handleFileRead;
+      reader.readAsText(file);
+    };
+  };
+
   return (
     <div className="App" style={{backdropFilter: "blur(10px)"}}>
       <div style={{ height: "80vh", width: "80vh", borderRadius: "30px"}}>
@@ -96,7 +125,11 @@ function App() {
                 return <Message key={i} model={message} style={{textAlign: "left"}}/>
               })}
             </MessageList>
-            <MessageInput placeholder="Type message here" onSend={handleSend} />        
+            <MessageInput 
+              placeholder="Type message here" 
+              onSend={handleSend} 
+              onAttachClick={handlefileUpload}
+              />        
           </ChatContainer>
         </MainContainer>
       </div>
