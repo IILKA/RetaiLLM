@@ -22,6 +22,8 @@ from datetime import timedelta
 import warnings
 from tqdm import tqdm
 import random
+import os  # For directory management
+import datetime  # For timestamp generation
 
 # ========================= Setup and Configuration =========================
 
@@ -43,6 +45,20 @@ def set_seed(seed=42):
         torch.cuda.manual_seed_all(seed)
 
 set_seed()
+
+# ========================= Helper Functions =========================
+
+def get_timestamp():
+    """
+    Generates a timestamp string in the format YYYYMMDD_HHMMSS.
+    
+    Returns:
+    - str: The current timestamp.
+    """
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+
+# Ensure the 'plots' directory exists
+os.makedirs('plots', exist_ok=True)
 
 # ========================= Clustering Analysis =========================
 
@@ -91,7 +107,8 @@ class ClusteringAnalysis:
         self.df['cluster_kmeans'] = kmeans.fit_predict(self.scaled_features)
         
         if visualize:
-            self.plot_clusters('cluster_kmeans', title='KMeans Clustering Results')
+            filename = self.plot_clusters('cluster_kmeans', title='KMeans Clustering Results')
+            print(f"Saved KMeans clustering plot as {filename}")
         
         return self.df.copy()
 
@@ -112,7 +129,8 @@ class ClusteringAnalysis:
         self.df['cluster_dbscan'] = dbscan.fit_predict(self.scaled_features)
         
         if visualize:
-            self.plot_clusters('cluster_dbscan', title='DBSCAN Clustering Results')
+            filename = self.plot_clusters('cluster_dbscan', title='DBSCAN Clustering Results')
+            print(f"Saved DBSCAN clustering plot as {filename}")
         
         return self.df.copy()
 
@@ -133,18 +151,22 @@ class ClusteringAnalysis:
         self.df['cluster_hierarchical'] = hierarchical.fit_predict(self.scaled_features)
         
         if visualize:
-            self.plot_clusters('cluster_hierarchical', title='Hierarchical Clustering Results')
+            filename = self.plot_clusters('cluster_hierarchical', title='Hierarchical Clustering Results')
+            print(f"Saved Hierarchical clustering plot as {filename}")
         
         return self.df.copy()
 
     def plot_clusters(self, cluster_column: str, title: str = 'Clustering Results', highlight_ids: list = None):
         """
-        Plots a scatter plot of the clustering results.
+        Plots a scatter plot of the clustering results and saves it as a file.
         
         Parameters:
         - cluster_column (str): The column name containing cluster labels.
         - title (str): The title of the plot.
         - highlight_ids (list or None): List of customer IDs to highlight in the plot.
+        
+        Returns:
+        - str: The filepath of the saved plot.
         """
         plt.figure(figsize=(10, 7))
         unique_clusters = self.df[cluster_column].unique()
@@ -180,8 +202,15 @@ class ClusteringAnalysis:
         plt.ylabel(self.feature_columns[1].replace('_', ' ').title())
         plt.legend(title='Cluster', bbox_to_anchor=(1.05, 1), loc='upper left')
         plt.grid(True)
+        
+        # Generate filename with timestamp
+        timestamp = get_timestamp()
+        filename = f"plots/{title.replace(' ', '_').lower()}_{timestamp}.png"
         plt.tight_layout()
-        plt.show()
+        plt.savefig(filename)
+        plt.close()
+        
+        return filename
 
 # ========================= Correlation Analysis =========================
 
@@ -226,13 +255,16 @@ class CorrelationAnalyzer:
 
     def visualize_correlation(self, method: str = 'pearson', figsize: tuple = (10, 8), annot: bool = True, cmap: str = 'coolwarm'):
         """
-        Visualizes the correlation matrix using a heatmap.
+        Visualizes the correlation matrix using a heatmap and saves it as a file.
         
         Parameters:
         - method (str): The correlation method to visualize ('pearson', 'spearman', 'kendall').
         - figsize (tuple): The size of the figure.
         - annot (bool): Whether to annotate the heatmap with correlation coefficients.
         - cmap (str): The color map to use for the heatmap.
+        
+        Returns:
+        - str: The filepath of the saved plot.
         """
         if method == 'pearson':
             if self.pearson_corr is None:
@@ -255,7 +287,16 @@ class CorrelationAnalyzer:
         plt.figure(figsize=figsize)
         sns.heatmap(corr, annot=annot, fmt=".2f", cmap=cmap, linewidths=0.5)
         plt.title(title)
-        plt.show()
+            
+        # Generate filename with timestamp
+        timestamp = get_timestamp()
+        filename = f"plots/{title.replace(' ', '_').lower()}_{timestamp}.png"
+        plt.tight_layout()
+        plt.savefig(filename)
+        plt.close()
+        
+        print(f"Saved correlation heatmap as {filename}")
+        return filename
 
     def pairwise_correlation(self, method: str = 'pearson') -> pd.DataFrame:
         """
@@ -286,15 +327,29 @@ class CorrelationAnalyzer:
 
     def plot_pairwise_relationships(self, kind: str = 'scatter', hue: str = None, figsize: tuple = (12, 10)):
         """
-        Plots pairwise relationships between variables using Seaborn's pairplot.
+        Plots pairwise relationships between variables using Seaborn's pairplot and saves it as a file.
         
         Parameters:
         - kind (str): The kind of plot to use ('scatter', 'reg', 'kde', 'hist').
         - hue (str): The variable name to use for color encoding.
         - figsize (tuple): The size of the figure.
+        
+        Returns:
+        - str: The filepath of the saved plot.
         """
         sns.pairplot(self.df, kind=kind, hue=hue, diag_kind='kde', corner=True)
-        plt.show()
+        title = 'Pairwise Relationships'
+        plt.suptitle(title, y=1.02)
+        
+        # Generate filename with timestamp
+        timestamp = get_timestamp()
+        filename = f"plots/{title.replace(' ', '_').lower()}_{timestamp}.png"
+        plt.tight_layout()
+        plt.savefig(filename)
+        plt.close()
+        
+        print(f"Saved pairwise relationships plot as {filename}")
+        return filename
 
 # ========================= Regression Analysis =========================
 
@@ -383,7 +438,7 @@ class RegressionAnalysis:
     def __init__(self, data: pd.DataFrame, target: str):
         """
         Initializes the regression analysis class.
-    
+
         Parameters:
         - data (pd.DataFrame): DataFrame containing all features and the target variable.
         - target (str): The target variable column name.
@@ -394,23 +449,25 @@ class RegressionAnalysis:
         self.y = None
         self.models = {}
         self.results = {}
+        self.n_features = 0  # To track the number of predictors
 
     def set_features(self, feature_columns: list):
         """
         Sets the predictor and target variables.
-    
+
         Parameters:
         - feature_columns (list of str): List of predictor variable column names.
         """
         self.X = self.data[feature_columns]
         self.y = self.data[self.target]
+        self.n_features = len(feature_columns)
         print(f"Selected features: {feature_columns}")
         print(f"Target: {self.target}")
 
     def train_test_split_data(self, test_size: float = 0.2, random_state: int = 42):
         """
         Splits the data into training and testing sets.
-    
+
         Parameters:
         - test_size (float): Proportion of the dataset to include in the test split.
         - random_state (int): Seed used by the random number generator.
@@ -448,7 +505,7 @@ class RegressionAnalysis:
     def train_transformer(self, epochs: int = 100, batch_size: int = 16, learning_rate: float = 1e-3, window_size: int = 24, patience: int = 20):
         """
         Trains a Transformer-based regression model.
-    
+
         Parameters:
         - epochs (int): Number of training epochs.
         - batch_size (int): Batch size for training.
@@ -479,7 +536,7 @@ class RegressionAnalysis:
         for i in range(len(X_scaled) - window_size):
             sequences.append(X_scaled[i:i+window_size])
             targets.append(y_scaled[i+window_size])
-        
+
         sequences = np.array(sequences)
         targets = np.array(targets)
 
@@ -512,13 +569,13 @@ class RegressionAnalysis:
             for seq, target in dataloader:
                 seq = seq.to(device)        # Shape: (batch_size, window_size, input_size)
                 target = target.to(device)  # Shape: (batch_size)
-    
+
                 optimizer.zero_grad()
                 output = model(seq)         # Shape: (batch_size, 1)
                 loss = criterion(output.squeeze(), target)
                 loss.backward()
                 optimizer.step()
-    
+
                 epoch_losses.append(loss.item())
             
             avg_loss = np.mean(epoch_losses)
@@ -589,17 +646,24 @@ class RegressionAnalysis:
             
             mse = mean_squared_error(self.y_test, predictions)
             r2 = r2_score(self.y_test, predictions)
-            self.results[name] = {'MSE': mse, 'R2': r2}
+            self.results[name] = {'MSE': mse, 'R2': r2, 'Predictions': predictions}
             print(f"{name} - MSE: {mse:.4f}, R2: {r2:.4f}")
 
     def plot_results(self):
         """
-        Plots actual vs predicted values for all models.
+        Plots actual vs predicted values for univariate models with continuous regression curves.
+        Labels the true and predicted values of the test set.
+        Saves the plots as files.
+        For multivariate models, only outputs predictions.
         """
-        plt.figure(figsize=(10, 6))
+        # Ensure the plots directory exists
+        os.makedirs('plots', exist_ok=True)
+
         for name, model in self.models.items():
             if name != 'Transformer':
-                predictions = model.predict(self.X_test)
+                # For non-Transformer models, get predictions for training and testing sets
+                predictions_train = model.predict(self.X_train)
+                predictions_test = model.predict(self.X_test)
             else:
                 # For Transformer, perform scaling and forecasting
                 transformer_info = model
@@ -610,35 +674,110 @@ class RegressionAnalysis:
                 transformer_model.eval()
                 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-                # Prepare test data
+                # Prepare training data
+                X_train_scaled = scaler_X.transform(self.X_train)
+                y_train_scaled = scaler_y.transform(self.y_train.values.reshape(-1, 1)).flatten()
+
+                sequences_train = []
+                targets_train = []
+                for i in range(len(X_train_scaled) - window_size):
+                    sequences_train.append(X_train_scaled[i:i+window_size])
+                    targets_train.append(y_train_scaled[i+window_size])
+                
+                sequences_train = np.array(sequences_train)
+                targets_train = np.array(targets_train)
+
+                sequences_train = torch.tensor(sequences_train, dtype=torch.float32).to(device)
+                targets_train = torch.tensor(targets_train, dtype=torch.float32).to(device)
+
+                with torch.no_grad():
+                    predictions_train_scaled = transformer_model(sequences_train).cpu().numpy().flatten()
+                predictions_train = scaler_y.inverse_transform(predictions_train_scaled.reshape(-1,1)).flatten()
+
+                # Prepare testing data
                 X_test_scaled = scaler_X.transform(self.X_test)
                 y_test_scaled = scaler_y.transform(self.y_test.values.reshape(-1, 1)).flatten()
 
-                sequences = []
-                targets = []
+                sequences_test = []
+                targets_test = []
                 for i in range(len(X_test_scaled) - window_size):
-                    sequences.append(X_test_scaled[i:i+window_size])
-                    targets.append(y_test_scaled[i+window_size])
+                    sequences_test.append(X_test_scaled[i:i+window_size])
+                    targets_test.append(y_test_scaled[i+window_size])
                 
-                sequences = np.array(sequences)
-                targets = np.array(targets)
+                sequences_test = np.array(sequences_test)
+                targets_test = np.array(targets_test)
 
-                sequences = torch.tensor(sequences, dtype=torch.float32).to(device)
-                targets = torch.tensor(targets, dtype=torch.float32).to(device)
+                sequences_test = torch.tensor(sequences_test, dtype=torch.float32).to(device)
+                targets_test = torch.tensor(targets_test, dtype=torch.float32).to(device)
 
                 with torch.no_grad():
-                    predictions_scaled = transformer_model(sequences).cpu().numpy().flatten()
-                
-                predictions = scaler_y.inverse_transform(predictions_scaled.reshape(-1,1)).flatten()
+                    predictions_test_scaled = transformer_model(sequences_test).cpu().numpy().flatten()
+                predictions_test = scaler_y.inverse_transform(predictions_test_scaled.reshape(-1,1)).flatten()
             
-            sns.scatterplot(x=self.y_test, y=predictions, label=name)
-        
-        plt.xlabel('Actual Values')
-        plt.ylabel('Predicted Values')
-        plt.title('Actual vs Predicted Values')
-        plt.legend()
-        plt.grid(True)
-        plt.show()
+            # Determine if the model is univariate
+            if self.n_features == 1:
+                # Univariate regression: Plot training and testing data points and continuous regression curve
+                plt.figure(figsize=(12, 8))
+                predictor = self.X.columns[0]
+                
+                # Plot training data points
+                plt.scatter(self.X_train[predictor], self.y_train, color='blue', label='Training Data', alpha=0.6)
+                # Plot testing data points (true values)
+                plt.scatter(self.X_test[predictor], self.y_test, color='red', marker='x', label='Test Data (True)', alpha=0.6)
+                # Plot testing data points (predicted values)
+                plt.scatter(self.X_test[predictor], predictions_test, color='green', marker='o', label='Test Data (Predicted)', alpha=0.6)
+                
+                # Generate a smooth range of feature values for plotting the regression curve
+                feature_min = self.X[predictor].min()
+                feature_max = self.X[predictor].max()
+                feature_range = np.linspace(feature_min, feature_max, 500).reshape(-1, 1)
+                
+                if name != 'Transformer':
+                    # For non-Transformer models, predict on the feature range
+                    predictions_curve = model.predict(feature_range)
+                else:
+                    # For Transformer models, generating a continuous curve is more complex
+                    # Here's a simplified approach assuming window_size=1 for demonstration
+                    # Adjust according to your actual window_size and Transformer architecture
+                    if transformer_info['window_size'] == 1:
+                        X_curve_scaled = transformer_info['scaler_X'].transform(feature_range)
+                        sequences_curve = X_curve_scaled.reshape(-1, 1, self.n_features)
+                        sequences_curve = torch.tensor(sequences_curve, dtype=torch.float32).to(device)
+                        with torch.no_grad():
+                            predictions_curve_scaled = transformer_model(sequences_curve).cpu().numpy().flatten()
+                        predictions_curve = transformer_info['scaler_y'].inverse_transform(predictions_curve_scaled.reshape(-1,1)).flatten()
+                    else:
+                        # If window_size > 1, more sophisticated handling is required
+                        # Here, we'll skip plotting for Transformer with window_size > 1
+                        predictions_curve = np.nan * np.ones(feature_range.shape[0])
+                        print(f"Continuous curve plotting for Transformer with window_size={transformer_info['window_size']} is not implemented.")
+                
+                if not np.isnan(predictions_curve).all():
+                    # Plot the continuous regression curve
+                    plt.plot(feature_range, predictions_curve, color='purple', label='Regression Curve', linewidth=2)
+                
+                plt.xlabel(predictor.replace('_', ' ').title())
+                plt.ylabel(self.target.replace('_', ' ').title())
+                plt.title(f"Regression Analysis: {self.target} vs {predictor} ({name})")
+                plt.legend()
+                plt.grid(True)
+                
+                # Generate filename with timestamp
+                timestamp = get_timestamp()
+                filename = f"plots/{self.target}_vs_{predictor}_{name.lower()}_{timestamp}.png"
+                plt.tight_layout()
+                plt.savefig(filename)
+                plt.close()
+                
+                print(f"Saved regression plot for {name} as {filename}")
+            else:
+                # Multivariate regression: Output predictions
+                if name != 'Transformer':
+                    print(f"\n{name} Regression Predictions on Test Set:")
+                    print(model.predict(self.X_test))
+                else:
+                    print(f"\n{name} Regression Predictions on Test Set:")
+                    print(predictions_test)
 
     def get_results(self) -> dict:
         """
@@ -672,13 +811,22 @@ class KaplanMeierEstimator:
         self.km_fit.fit(durations=self.data['durations'], event_observed=self.data['event_observed'])
 
     def plot_survival_curve(self):
-        """Plot the Kaplan-Meier survival curve."""
+        """Plot the Kaplan-Meier survival curve and save it as a file."""
+        plt.figure()
         self.km_fit.plot_survival_function()
         plt.title('Kaplan-Meier Survival Curve')
         plt.xlabel('Time (months)')
         plt.ylabel('Survival Probability')
         plt.grid(True)
-        plt.show()
+        
+        # Generate filename with timestamp
+        timestamp = get_timestamp()
+        filename = f"plots/kaplan_meier_survival_curve_{timestamp}.png"
+        plt.tight_layout()
+        plt.savefig(filename)
+        plt.close()
+        
+        print(f"Saved Kaplan-Meier survival curve as {filename}")
 
 class CoxProportionalHazardsModel:
     def __init__(self, data: pd.DataFrame):
@@ -707,7 +855,7 @@ class CoxProportionalHazardsModel:
 
     def plot_survival_curve(self, covariates: dict = None):
         """
-        Plot the survival curve.
+        Plot the survival curve and save it as a file.
         
         Args:
         covariates (dict or None): Dictionary of specific covariates to plot.
@@ -731,7 +879,20 @@ class CoxProportionalHazardsModel:
         if covariates:
             plt.legend()
         plt.grid(True)
-        plt.show()
+        
+        # Generate filename with timestamp
+        timestamp = get_timestamp()
+        if covariates:
+            covariates_str = "_".join([f"{k}_{v}" for k, v in covariates.items()])
+            filename = f"plots/cox_survival_curve_{covariates_str}_{timestamp}.png"
+        else:
+            filename = f"plots/cox_baseline_survival_curve_{timestamp}.png"
+        
+        plt.tight_layout()
+        plt.savefig(filename)
+        plt.close()
+        
+        print(f"Saved Cox survival curve as {filename}")
 
 # ========================= Time Series Forecasting =========================
 
@@ -851,6 +1012,10 @@ class TimeSeriesForecaster:
         self.predictions = forecast_series
         self.future_dates = forecast_dates
         self.models['ARIMA'] = fitted_model
+
+        # Plot and save the forecast
+        self.plot_forecast(forecast_series, 'ARIMA')
+
         return forecast_series
 
     def prepare_transformer_data(self, window_size: int = 24) -> DataLoader:
@@ -873,7 +1038,7 @@ class TimeSeriesForecaster:
         for i in range(len(sales_scaled) - window_size):
             sequences.append(sales_scaled[i:i+window_size])
             targets.append(sales_scaled[i+window_size])
-
+        
         sequences = np.array(sequences)
         targets = np.array(targets)
 
@@ -988,11 +1153,15 @@ class TimeSeriesForecaster:
         self.predictions = forecast_series
         self.future_dates = forecast_dates
         self.models['Transformer'] = model
+
+        # Plot and save the forecast
+        self.plot_forecast(forecast_series, 'Transformer')
+
         return forecast_series
 
     def plot_forecast(self, forecast: pd.Series, method: str):
         """
-        Plots historical sales data along with the forecasted values.
+        Plots historical sales data along with the forecasted values and saves the plot as a file.
 
         Parameters:
         - forecast (pd.Series): Forecasted sales values.
@@ -1006,7 +1175,15 @@ class TimeSeriesForecaster:
         plt.title(f'Sales Forecast using {method}')
         plt.legend()
         plt.grid(True)
-        plt.show()
+        
+        # Generate filename with timestamp
+        timestamp = get_timestamp()
+        filename = f"plots/sales_forecast_{method.lower()}_{timestamp}.png"
+        plt.tight_layout()
+        plt.savefig(filename)
+        plt.close()
+        
+        print(f"Saved {method} forecast plot as {filename}")
 
     def run_forecast(self, steps: int = 6, window_size: int = 24, epochs: int = 200, lr: float = 0.001) -> pd.Series:
         """
@@ -1020,7 +1197,6 @@ class TimeSeriesForecaster:
 
         Returns:
         - forecast (pd.Series): Forecasted sales values.
-        - method (str): Forecasting method used.
         """
         method = self.determine_method()
         print(f"Selected Forecasting Method: {method}")
@@ -1032,7 +1208,6 @@ class TimeSeriesForecaster:
         else:
             raise ValueError("Unsupported forecasting method.")
 
-        self.plot_forecast(forecast, method)
         return forecast
 
 # ========================= Data Analysis Manager =========================
@@ -1065,7 +1240,7 @@ class DataAnalysisManager:
                                    Example: {"method": "Clustering_DBSCAN", "features": ["Advertising", "Sales"], "eps": 0.5, "min_samples": 2}
 
         Returns:
-        - result: The result of the analysis, which could be a DataFrame, plot, or printed output.
+        - result: The result of the analysis, which could be a DataFrame, plot filepath, or printed output.
         """
         method = analysis_command.get("method", "").lower()
         if not method:
@@ -1095,19 +1270,19 @@ class DataAnalysisManager:
                 corr_matrix = self.correlation.pearson_corr
                 print("Pearson Correlation Matrix:")
                 print(corr_matrix)
-                self.correlation.visualize_correlation(method='pearson')
+                corr_plot = self.correlation.visualize_correlation(method='pearson')
             elif corr_type.lower() == "spearman":
                 self.correlation.calculate_spearman()
                 corr_matrix = self.correlation.spearman_corr
                 print("Spearman Correlation Matrix:")
                 print(corr_matrix)
-                self.correlation.visualize_correlation(method='spearman')
+                corr_plot = self.correlation.visualize_correlation(method='spearman')
             elif corr_type.lower() == "kendall":
                 self.correlation.calculate_kendall()
                 corr_matrix = self.correlation.kendall_corr
                 print("Kendall Correlation Matrix:")
                 print(corr_matrix)
-                self.correlation.visualize_correlation(method='kendall')
+                corr_plot = self.correlation.visualize_correlation(method='kendall')
             else:
                 raise ValueError("Unsupported correlation type. Choose 'Pearson', 'Spearman', or 'Kendall'.")
 
@@ -1133,20 +1308,20 @@ class DataAnalysisManager:
             # Perform specified clustering
             if cluster_type.lower() == "kmeans":
                 n_clusters = analysis_command.get("n_clusters", 3)
-                self.clustering.kmeans_cluster(n_clusters=n_clusters)
+                clustered_df = self.clustering.kmeans_cluster(n_clusters=n_clusters)
             elif cluster_type.lower() == "dbscan":
                 eps = analysis_command.get("eps", 0.5)
                 min_samples = analysis_command.get("min_samples", 5)
-                self.clustering.dbscan_cluster(eps=eps, min_samples=min_samples)
+                clustered_df = self.clustering.dbscan_cluster(eps=eps, min_samples=min_samples)
             elif cluster_type.lower() == "hierarchical":
                 n_clusters = analysis_command.get("n_clusters", 3)
                 linkage = analysis_command.get("linkage", 'ward')
-                self.clustering.hierarchical_cluster(n_clusters=n_clusters, linkage=linkage)
+                clustered_df = self.clustering.hierarchical_cluster(n_clusters=n_clusters, linkage=linkage)
             else:
                 raise ValueError("Unsupported clustering type. Choose 'KMeans', 'DBSCAN', or 'Hierarchical'.")
 
             print(f"{cluster_type} clustering performed.")
-            return self.clustering.df
+            return clustered_df
 
         elif method.startswith("regression"):
             # Example: "Regression_Ridge"
@@ -1197,8 +1372,9 @@ class DataAnalysisManager:
             for model_name, metrics in results.items():
                 print(f"{model_name}: MSE = {metrics['MSE']:.4f}, R2 = {metrics['R2']:.4f}")
 
-            # Plot results
+            # Plot results with regression lines and save plots (only for univariate)
             self.regression.plot_results()
+
             return results
 
         elif method == "kaplan_meier":
@@ -1268,22 +1444,24 @@ class DataAnalysisManager:
 if __name__ == "__main__":
     # ------------------- Example 1: Correlation Analysis (Spearman) -------------------
     print("===== Example 1: Spearman Correlation Analysis =====")
-    # Sample DataFrame for Correlation Analysis
+    # Enhanced Sample DataFrame for Correlation Analysis
     correlation_data = pd.DataFrame({
-        'Advertising': [100, 200, 300, 400, 500],
-        'Sales': [10, 20, 30, 40, 50],
-        'Foot_Traffic': [300, 400, 500, 600, 700],
-        'Promotions': [5, 10, 15, 20, 25]
+        'Advertising': np.random.randint(50, 500, size=100),
+        'Sales': np.random.randint(20, 1000, size=100),
+        'Foot_Traffic': np.random.randint(100, 1000, size=100),
+        'Promotions': np.random.randint(1, 50, size=100),
+        'Customer_Satisfaction': np.random.uniform(1.0, 5.0, size=100),
+        'Website_Visits': np.random.randint(200, 2000, size=100)
     })
 
-    # Initialize DataAnalysisManager with the DataFrame
+    # Initialize DataAnalysisManager with the enhanced DataFrame
     manager_corr = DataAnalysisManager(correlation_data)
 
     # Define the analysis command for Spearman Correlation
     analysis_command_corr = {
         "method": "Correlation_Spearman",
-        "predictor": ["Advertising"],
-        "target": ["Sales"]
+        "predictor": ["Advertising", "Foot_Traffic", "Promotions"],
+        "target": ["Sales", "Customer_Satisfaction", "Website_Visits"]
     }
 
     # Perform the correlation analysis
@@ -1295,48 +1473,53 @@ if __name__ == "__main__":
 
     # ------------------- Example 2: Clustering Analysis (KMeans) -------------------
     print("\n===== Example 2: KMeans Clustering =====")
-    # Sample DataFrame for Clustering Analysis
+    # Enhanced Sample DataFrame for Clustering Analysis
     clustering_data = pd.DataFrame({
-        'customer_id': [1, 2, 3, 4, 5, 6],
-        'Advertising': [100, 200, 300, 400, 500, 600],
-        'Sales': [10, 20, 30, 40, 50, 60],
-        'Foot_Traffic': [300, 400, 500, 600, 700, 800],
-        'Promotions': [5, 10, 15, 20, 25, 30]
+        'customer_id': range(1, 201),
+        'Advertising': np.random.randint(50, 500, size=200),
+        'Sales': np.random.randint(20, 1000, size=200),
+        'Foot_Traffic': np.random.randint(100, 1000, size=200),
+        'Promotions': np.random.randint(1, 50, size=200),
+        'Customer_Satisfaction': np.random.uniform(1.0, 5.0, size=200),
+        'Website_Visits': np.random.randint(200, 2000, size=200)
     })
 
-    # Initialize DataAnalysisManager with the DataFrame
+    # Initialize DataAnalysisManager with the enhanced DataFrame
     manager_cluster = DataAnalysisManager(clustering_data)
 
     # Define the analysis command for KMeans Clustering
     analysis_command_cluster = {
         "method": "Clustering_KMeans",
-        "features": ["Advertising", "Sales"],
-        "n_clusters": 2
+        "features": ["Advertising", "Sales", "Foot_Traffic", "Promotions"],
+        "n_clusters": 4
     }
 
     # Perform the clustering analysis
     clustered_data = manager_cluster.perform_analysis(analysis_command_cluster)
 
     # Display the clustered DataFrame
-    print("\nClustered Data:")
-    print(clustered_data)
+    print("\nClustered Data Sample:")
+    print(clustered_data.head())
 
-    # ------------------- Example 3: Regression Analysis (Ridge) -------------------
-    print("\n===== Example 3: Ridge Regression =====")
-    # Sample DataFrame for Regression Analysis
+    # ------------------- Example 3: Regression Analysis (Ridge) - Multivariate -------------------
+    print("\n===== Example 3: Ridge Regression (Multivariate) =====")
+    # Enhanced Sample DataFrame for Regression Analysis
     regression_data = pd.DataFrame({
-        'Advertising': [100, 200, 300, 400, 500, 600],
-        'Foot_Traffic': [300, 400, 500, 600, 700, 800],
-        'Sales': [10, 20, 30, 40, 50, 60]
+        'Advertising': np.random.randint(100, 1000, size=500),
+        'Foot_Traffic': np.random.randint(200, 2000, size=500),
+        'Promotions': np.random.randint(5, 100, size=500),
+        'Customer_Satisfaction': np.random.uniform(1.0, 5.0, size=500),
+        'Website_Visits': np.random.randint(300, 3000, size=500),
+        'Sales': np.random.randint(50, 2000, size=500)
     })
 
-    # Initialize DataAnalysisManager with the DataFrame
+    # Initialize DataAnalysisManager with the enhanced DataFrame
     manager_reg = DataAnalysisManager(regression_data)
 
     # Define the analysis command for Ridge Regression
     analysis_command_reg = {
         "method": "Regression_Ridge",
-        "predictor": ["Advertising", "Foot_Traffic"],
+        "predictor": ["Advertising", "Foot_Traffic", "Promotions", "Customer_Satisfaction", "Website_Visits"],
         "target": ["Sales"],
         "alpha": 1.0
     }
@@ -1346,14 +1529,15 @@ if __name__ == "__main__":
 
     # Display the evaluation results
     print("\nRegression Model Evaluation:")
-    print(results_reg)
+    for model, metrics in results_reg.items():
+        print(f"{model}: MSE = {metrics['MSE']:.4f}, R2 = {metrics['R2']:.4f}")
 
     # ------------------- Example 4: Survival Analysis (Kaplan-Meier) -------------------
     print("\n===== Example 4: Kaplan-Meier Estimation =====")
-    # Sample Data for Kaplan-Meier Estimation
+    # Enhanced Sample Data for Kaplan-Meier Estimation
     km_data = pd.DataFrame({
-        'durations': [5, 8, 12, 7, 9, 6, 15, 10, 4, 3, 11, 14, 18, 20, 25],  # Retention time in months
-        'event_observed': [1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1]  # 1: churned, 0: not churned
+        'durations': np.random.randint(1, 60, size=300),  # Retention time in months
+        'event_observed': np.random.choice([0, 1], size=300, p=[0.3, 0.7])  # 1: churned, 0: not churned
     })
 
     # Initialize DataAnalysisManager with an empty DataFrame (Kaplan-Meier uses separate data)
@@ -1370,13 +1554,14 @@ if __name__ == "__main__":
 
     # ------------------- Example 5: Survival Analysis (Cox Proportional Hazards Model) -------------------
     print("\n===== Example 5: Cox Proportional Hazards Model =====")
-    # Sample Data for Cox Proportional Hazards Model
+    # Enhanced Sample Data for Cox Proportional Hazards Model
     cox_data = pd.DataFrame({
-        'duration': [5, 8, 12, 7, 9, 6, 15, 10, 4, 3, 11, 14, 18, 20, 25],  # Retention time in months
-        'event': [1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1],         # 1: churned, 0: not churned
-        'age': [25, 34, 45, 23, 30, 37, 50, 29, 40, 22, 28, 33, 47, 55, 60],          # Customer age
-        'income': [50000, 65000, 75000, 55000, 60000, 72000, 80000, 68000, 48000, 45000, 70000, 62000, 85000, 90000, 95000],  # Annual income
-        'purchase_frequency': [12, 15, 18, 10, 14, 20, 22, 16, 8, 5, 13, 17, 25, 28, 30]  # Annual purchase frequency
+        'duration': np.random.randint(1, 120, size=500),  # Retention time in months
+        'event': np.random.choice([0, 1], size=500, p=[0.2, 0.8]),  # 1: churned, 0: not churned
+        'age': np.random.randint(18, 70, size=500),  # Customer age
+        'income': np.random.randint(30000, 120000, size=500),  # Annual income
+        'purchase_frequency': np.random.randint(1, 50, size=500),  # Annual purchase frequency
+        'customer_tenure': np.random.randint(1, 60, size=500)  # Months with the company
     })
 
     # Initialize DataAnalysisManager with an empty DataFrame (Cox model uses separate data)
@@ -1393,15 +1578,13 @@ if __name__ == "__main__":
 
     # ------------------- Example 6: Time Series Forecasting (ARIMA) -------------------
     print("\n===== Example 6: ARIMA Time Series Forecasting =====")
-    # Sample Monthly Sales Data for ARIMA Forecasting
+    # Enhanced Monthly Sales Data for ARIMA Forecasting (5 years)
     arima_data = pd.DataFrame({
-        "Sales": [500, 600, 550, 650, 780, 810, 890, 920, 1000, 1100, 1050, 1150,
-                  1200, 1300, 1250, 1350, 1400, 1500, 1450, 1550, 1600, 1700, 1650, 1750,
-                  1800, 1900, 1850, 1950, 2000, 2100, 2050, 2150, 2200, 2300, 2250, 2350],
-        "Date": pd.date_range(start="2021-01-01", periods=36, freq='MS')  # 'MS' for Month Start
+        "Sales": np.random.poisson(lam=200, size=60) + np.linspace(50, 150, 60).astype(int),  # Adding trend
+        "Date": pd.date_range(start="2018-01-01", periods=60, freq='MS')  # 'MS' for Month Start
     })
 
-    # Initialize DataAnalysisManager with the ARIMA DataFrame
+    # Initialize DataAnalysisManager with the enhanced ARIMA DataFrame
     manager_ts = DataAnalysisManager(arima_data)
 
     # Define the analysis command for ARIMA Forecasting
@@ -1413,7 +1596,8 @@ if __name__ == "__main__":
         "lr": 0.001,            # Not used for ARIMA
         "sales_column": "Sales",
         "date_column": "Date",
-        "frequency": "MS"
+        "frequency": "MS",
+        "cycle_period": 12      # Monthly data
     }
 
     # Perform the forecasting analysis
@@ -1423,24 +1607,27 @@ if __name__ == "__main__":
     print("\nForecasted Sales (ARIMA):")
     print(forecast_ts)
 
-    # ------------------- Example 7: Regression Analysis (Random Forest) -------------------
-    print("\n===== Example 7: Random Forest Regression =====")
-    # Sample DataFrame for Regression Analysis
+    # ------------------- Example 7: Regression Analysis (Random Forest) - Multivariate -------------------
+    print("\n===== Example 7: Random Forest Regression (Multivariate) =====")
+    # Enhanced Sample DataFrame for Regression Analysis
     regression_data_rf = pd.DataFrame({
-        'Advertising': [100, 200, 300, 400, 500, 600],
-        'Foot_Traffic': [300, 400, 500, 600, 700, 800],
-        'Sales': [10, 20, 30, 40, 50, 60]
+        'Advertising': np.random.randint(100, 1000, size=1000),
+        'Foot_Traffic': np.random.randint(200, 2000, size=1000),
+        'Promotions': np.random.randint(5, 100, size=1000),
+        'Customer_Satisfaction': np.random.uniform(1.0, 5.0, size=1000),
+        'Website_Visits': np.random.randint(300, 3000, size=1000),
+        'Sales': np.random.randint(50, 2000, size=1000)
     })
 
-    # Initialize DataAnalysisManager with the DataFrame
+    # Initialize DataAnalysisManager with the enhanced DataFrame
     manager_rf = DataAnalysisManager(regression_data_rf)
 
     # Define the analysis command for Random Forest Regression
     analysis_command_rf = {
         "method": "Regression_RandomForest",
-        "predictor": ["Advertising", "Foot_Traffic"],
+        "predictor": ["Advertising", "Foot_Traffic", "Promotions", "Customer_Satisfaction", "Website_Visits"],
         "target": ["Sales"],
-        "n_estimators": 100,
+        "n_estimators": 200,
         "random_state": 42
     }
 
@@ -1449,24 +1636,24 @@ if __name__ == "__main__":
 
     # Display the evaluation results
     print("\nRandom Forest Regression Evaluation:")
-    print(results_rf)
+    for model, metrics in results_rf.items():
+        print(f"{model}: MSE = {metrics['MSE']:.4f}, R2 = {metrics['R2']:.4f}")
 
-    # ------------------- Example 8: Regression Analysis (Lasso) -------------------
-    print("\n===== Example 8: Lasso Regression =====")
-    # Sample DataFrame for Regression Analysis
+    # ------------------- Example 8: Regression Analysis (Lasso) - Univariate -------------------
+    print("\n===== Example 8: Lasso Regression (Univariate) =====")
+    # Enhanced Sample DataFrame for Regression Analysis
     regression_data_lasso = pd.DataFrame({
-        'Advertising': [100, 200, 300, 400, 500, 600],
-        'Foot_Traffic': [300, 400, 500, 600, 700, 800],
-        'Sales': [10, 20, 30, 40, 50, 60]
+        'Price': np.linspace(10, 100, 200) + np.random.normal(0, 10, 200),  # Adding some noise
+        'Sales': np.linspace(100, 1000, 200) + np.random.normal(0, 50, 200)  # Adding some noise
     })
 
-    # Initialize DataAnalysisManager with the DataFrame
+    # Initialize DataAnalysisManager with the enhanced DataFrame
     manager_lasso = DataAnalysisManager(regression_data_lasso)
 
     # Define the analysis command for Lasso Regression
     analysis_command_lasso = {
         "method": "Regression_Lasso",
-        "predictor": ["Advertising", "Foot_Traffic"],
+        "predictor": ["Price"],
         "target": ["Sales"],
         "alpha": 0.1
     }
@@ -1476,19 +1663,20 @@ if __name__ == "__main__":
 
     # Display the evaluation results
     print("\nLasso Regression Evaluation:")
-    print(results_lasso)
+    for model, metrics in results_lasso.items():
+        print(f"{model}: MSE = {metrics['MSE']:.4f}, R2 = {metrics['R2']:.4f}")
 
     # ------------------- Example 9: Time Series Forecasting (Transformer) -------------------
     print("\n===== Example 9: Transformer Time Series Forecasting =====")
-    # Generate Sample Daily Sales Data with Weekly Seasonality and Trend
-    days = 365
+    # Enhanced Daily Sales Data with Weekly Seasonality and Trend (2 years)
+    days = 730  # 2 years
     base = 500
-    trend_per_day = 0.5
+    trend_per_day = 0.3
     seasonal_period = 7  # Weekly seasonality
-    amplitude = 50
+    amplitude = 30
 
     np.random.seed(42)  # For reproducibility
-    noise = np.random.normal(0, 20, days)  # Less noise for better Transformer performance
+    noise = np.random.normal(0, 15, days)  # Reduced noise for better Transformer performance
     trend = np.linspace(0, trend_per_day * days, days)
     seasonal = amplitude * np.sin(2 * np.pi * np.arange(days) / seasonal_period)
     fluctuating_sales = base + trend + seasonal + noise
@@ -1499,19 +1687,20 @@ if __name__ == "__main__":
         "Date": pd.date_range(start="2021-01-01", periods=days, freq='D')  # 'D' for Daily
     })
 
-    # Initialize DataAnalysisManager with the Transformer DataFrame
+    # Initialize DataAnalysisManager with the enhanced Transformer DataFrame
     manager_transformer = DataAnalysisManager(transformer_data)
 
     # Define the analysis command for Transformer Forecasting
     analysis_command_transformer = {
         "method": "Time_Series_Forecast",
         "steps": 30,               # Forecasting next 30 days
-        "window_size": 30,         # Using the past 30 days to predict the next day
-        "epochs": 200,             # Number of training epochs
+        "window_size": 60,         # Using the past 60 days to predict the next day
+        "epochs": 300,             # Number of training epochs
         "lr": 0.001,               # Learning rate
         "sales_column": "Sales",
         "date_column": "Date",
-        "frequency": "D"
+        "frequency": "D",
+        "cycle_period": 7          # Weekly seasonality
     }
 
     # Perform the forecasting analysis
@@ -1523,50 +1712,67 @@ if __name__ == "__main__":
 
     # ------------------- Example 10: Clustering Analysis (DBSCAN) with Highlighted Customers -------------------
     print("\n===== Example 10: DBSCAN Clustering with Highlighted Customers =====")
-    # Sample DataFrame for Clustering Analysis
+    # Enhanced Sample DataFrame for Clustering Analysis
     clustering_data_dbscan = pd.DataFrame({
-        'customer_id': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        'Advertising': [100, 150, 200, 250, 300, 350, 400, 450, 500, 550],
-        'Sales': [10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
-        'Foot_Traffic': [300, 350, 400, 450, 500, 550, 600, 650, 700, 750],
-        'Promotions': [5, 7, 9, 11, 13, 15, 17, 19, 21, 23]
+        'customer_id': range(1, 501),
+        'Advertising': np.random.randint(50, 500, size=500),
+        'Sales': np.random.randint(20, 1000, size=500),
+        'Foot_Traffic': np.random.randint(100, 1000, size=500),
+        'Promotions': np.random.randint(1, 50, size=500),
+        'Customer_Satisfaction': np.random.uniform(1.0, 5.0, size=500),
+        'Website_Visits': np.random.randint(200, 2000, size=500)
     })
 
-    # Initialize DataAnalysisManager with the DBSCAN DataFrame
+    # Initialize DataAnalysisManager with the enhanced DBSCAN DataFrame
     manager_dbscan = DataAnalysisManager(clustering_data_dbscan)
 
     # Define the analysis command for DBSCAN Clustering
     analysis_command_dbscan = {
         "method": "Clustering_DBSCAN",
-        "features": ["Advertising", "Sales"],
+        "features": ["Advertising", "Sales", "Foot_Traffic", "Promotions"],
         "eps": 0.5,
-        "min_samples": 2
+        "min_samples": 5
     }
 
     # Perform the clustering analysis
     clustered_data_dbscan = manager_dbscan.perform_analysis(analysis_command_dbscan)
 
     # Define customer IDs to highlight
-    highlight_customers = [2, 5, 8]
+    highlight_customers = np.random.choice(clustering_data_dbscan['customer_id'], size=10, replace=False).tolist()
 
     # Plot clusters with highlighted customers
-    manager_dbscan.clustering.plot_clusters('cluster_dbscan', title='DBSCAN Clustering with Highlights', highlight_ids=highlight_customers)
+    clustered_data_dbscan = manager_dbscan.clustering.df  # Updated DataFrame with cluster labels
+    clustered_data_dbscan = clustered_data_dbscan.copy()  # To avoid SettingWithCopyWarning
 
-    # Display the clustered DataFrame
-    print("\nDBSCAN Clustered Data:")
-    print(clustered_data_dbscan)
+    # Re-initialize ClusteringAnalysis to access plot_clusters method with highlights
+    clustering_instance_dbscan = ClusteringAnalysis(clustering_data_dbscan, ["Advertising", "Sales", "Foot_Traffic", "Promotions"])
+    clustering_instance_dbscan.df = clustered_data_dbscan  # Update the DataFrame with cluster labels
+
+    # Plot and save the clusters with highlighted customers
+    filename_dbscan = clustering_instance_dbscan.plot_clusters(
+        'cluster_dbscan',
+        title='DBSCAN Clustering with Highlighted Customers',
+        highlight_ids=highlight_customers
+    )
+    print(f"Saved DBSCAN clustering plot with highlights as {filename_dbscan}")
+
+    # Display the clustered DataFrame sample
+    print("\nDBSCAN Clustered Data Sample:")
+    print(clustered_data_dbscan.head())
 
     # ------------------- Example 11: Multiple Analysis Methods (Correlation, Clustering, Regression) -------------------
     print("\n===== Example 11: Multiple Analysis Methods (Correlation, Clustering, Regression) =====")
-    # Combined Sample DataFrame
+    # Enhanced Combined Sample DataFrame
     combined_data = pd.DataFrame({
-        'Advertising': [100, 200, 300, 400, 500, 600],
-        'Sales': [10, 20, 30, 40, 50, 60],
-        'Foot_Traffic': [300, 400, 500, 600, 700, 800],
-        'Promotions': [5, 10, 15, 20, 25, 30],
-        'Age': [25, 34, 45, 23, 30, 37],
-        'Income': [50000, 65000, 75000, 55000, 60000, 72000],
-        'Purchase_Frequency': [12, 15, 18, 10, 14, 20]
+        'Advertising': np.random.randint(100, 1000, size=1000),
+        'Sales': np.random.randint(50, 2000, size=1000),
+        'Foot_Traffic': np.random.randint(200, 2000, size=1000),
+        'Promotions': np.random.randint(5, 100, size=1000),
+        'Customer_Satisfaction': np.random.uniform(1.0, 5.0, size=1000),
+        'Website_Visits': np.random.randint(300, 3000, size=1000),
+        'Age': np.random.randint(18, 70, size=1000),
+        'Income': np.random.randint(30000, 120000, size=1000),
+        'Purchase_Frequency': np.random.randint(1, 50, size=1000)
     })
 
     # Initialize DataAnalysisManager with the Combined DataFrame
@@ -1575,23 +1781,23 @@ if __name__ == "__main__":
     # 1. Spearman Correlation Analysis
     correlation_command_multiple = {
         "method": "Correlation_Spearman",
-        "predictor": ["Advertising", "Foot_Traffic"],
-        "target": ["Sales", "Promotions"]
+        "predictor": ["Advertising", "Foot_Traffic", "Promotions", "Customer_Satisfaction", "Website_Visits"],
+        "target": ["Sales", "Purchase_Frequency", "Income"]
     }
     correlation_result_multiple = manager_multiple.perform_analysis(correlation_command_multiple)
 
     # 2. KMeans Clustering
     clustering_command_multiple = {
         "method": "Clustering_KMeans",
-        "features": ["Advertising", "Sales"],
-        "n_clusters": 2
+        "features": ["Advertising", "Sales", "Foot_Traffic", "Promotions"],
+        "n_clusters": 5
     }
     clustered_data_multiple = manager_multiple.perform_analysis(clustering_command_multiple)
 
     # 3. Ridge Regression
     regression_command_multiple = {
         "method": "Regression_Ridge",
-        "predictor": ["Advertising", "Foot_Traffic"],
+        "predictor": ["Advertising", "Foot_Traffic", "Promotions", "Customer_Satisfaction", "Website_Visits"],
         "target": ["Sales"],
         "alpha": 1.0
     }
@@ -1600,8 +1806,10 @@ if __name__ == "__main__":
     # Display all results
     print("\nAll Analysis Results:")
     print("Correlation Analysis Result:")
-    print(correlation_result_multiple)
-    print("\nClustering Analysis Result:")
-    print(clustered_data_multiple)
+    print(correlation_result_multiple.head())
+    print("\nClustering Analysis Result Sample:")
+    print(clustered_data_multiple.head())
     print("\nRegression Analysis Result:")
-    print(regression_results_multiple)
+    for model, metrics in regression_results_multiple.items():
+        print(f"{model}: MSE = {metrics['MSE']:.4f}, R2 = {metrics['R2']:.4f}")
+
