@@ -7,7 +7,7 @@ from fake_useragent import UserAgent
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions as EC 
 from selenium.webdriver.chrome.options import Options
 from textblob import TextBlob
 import nltk
@@ -25,12 +25,12 @@ class Logger:
         self.total_progress = 0
         
     def set_total_progress(self, keywords_count, results_per_keyword):
-        # Add keywords_count to account for overall summary of each keyword
-        self.total_progress = (keywords_count * results_per_keyword) + keywords_count
+        # Each keyword gets results_per_keyword results + 1 overall summary
+        self.total_progress = keywords_count * results_per_keyword + 1
         print(f"[PROGRESS] {self.current_progress}/{self.total_progress}")
         
     def update_progress(self):
-        self.current_progress += 1
+        self.current_progress += 1 
         print(f"[PROGRESS] {self.current_progress}/{self.total_progress}")
         
     def start_total_timer(self):
@@ -49,11 +49,10 @@ class Logger:
         
     def end(self, message):
         if message in self.start_times:
-            elapsed = time.time() - self.start_times[message]
+            elapsed = time.time() - self.start_times[message] 
             if message in self.pending_messages:
                 if "Fetching content from:" in message:
-                    # Don't print time for fetching content messages
-                    print("")  # Just move to next line
+                    print("")
                 else:
                     print(f" ({elapsed:.2f}s)")
                 del self.pending_messages[message]
@@ -76,11 +75,11 @@ class WebScraper:
                 'name': 'Google',
                 'url': 'https://www.google.com/search?q=',
                 'result_selector': 'div.g div.yuRUbf a',
-                'title_selector': 'div.g h3', 
+                'title_selector': 'div.g h3',
                 'snippet_selector': 'div.g div.VwiC3b'
             },
             {
-                'name': 'Bing',
+                'name': 'Bing', 
                 'url': 'https://www.bing.com/search?q=',
                 'result_selector': '#b_results h2 a',
                 'title_selector': '#b_results h2',
@@ -90,7 +89,7 @@ class WebScraper:
                 'name': 'DuckDuckGo',
                 'url': 'https://html.duckduckgo.com/html/?q=',
                 'result_selector': 'a.result__a',
-                'title_selector': 'a.result__a',
+                'title_selector': 'a.result__a', 
                 'snippet_selector': 'a.result__snippet'
             }
         ]
@@ -134,12 +133,12 @@ class WebScraper:
             
             sentiment_summary = {
                 'compound_score': round(vader_scores['compound'], 3),
-                'polarity': round(textblob_polarity, 3),
+                'polarity': round(textblob_polarity, 3), 
                 'subjectivity': round(textblob_subjectivity, 3),
                 'sentiment_category': self.get_sentiment_category(vader_scores['compound'], textblob_polarity),
                 'sentiment_distribution': {
                     'positive': round(vader_scores['pos'], 3),
-                    'neutral': round(vader_scores['neu'], 3),
+                    'neutral': round(vader_scores['neu'], 3), 
                     'negative': round(vader_scores['neg'], 3)
                 }
             }
@@ -155,7 +154,7 @@ class WebScraper:
         if avg_score >= 0.3:
             return 'very_positive'
         elif avg_score >= 0.1:
-            return 'positive'
+            return 'positive' 
         elif avg_score <= -0.3:
             return 'very_negative'
         elif avg_score <= -0.1:
@@ -247,7 +246,7 @@ class WebScraper:
                                         keyword_summaries.append(content_summary)
                                         
                                         results_count += 1
-                                        self.logger.update_progress()  # Update progress after each successful fetch
+                                        self.logger.update_progress()
                                         self.logger.end(f"Fetching content from: {href}")
                                     
                                 except Exception as e:
@@ -270,7 +269,6 @@ class WebScraper:
                     overall_sentiment = self.perform_overall_sentiment_analysis(overall_summary)
                     self.logger.end("Performing overall sentiment analysis")
                     
-                    # Update progress after generating overall summary
                     self.logger.update_progress()
                     
                     results.append({
@@ -283,36 +281,31 @@ class WebScraper:
         finally:
             self.logger.log("Closing WebDriver")
             self.driver.quit()
-            return results
+            return results if results else ""
 
 def scrapfast(words=["business strategy 2024 startup profit"], num_res=3):
     try:
         scraper = WebScraper()
-        scraper.logger.start_total_timer()  # Start total timer
+        scraper.logger.start_total_timer()
         
         results = scraper.search_and_scrape(words, num_res)
-        
-        if results:
-            scraper.logger.end_total_timer()  # End total timer
-            return results
+        scraper.logger.end_total_timer()
+        return results if results else ""
             
-        scraper.logger.end_total_timer()  # End total timer in case of no results
-        return None
-        
     except ImportError as e:
         print(f"\nWebScraper module not found: {str(e)}")
-        return None
+        return ""
         
     except ConnectionError as e:
         print(f"\nNetwork connection error: {str(e)}")
-        return None
+        return ""
         
     except Exception as e:
         print(f"\nAn unexpected error occurred: {str(e)}")
-        return None
+        return ""
 
 if __name__ == "__main__":
-    results = scrapfast(["online snack shop 2024 business idea strategy profit start up", "hong kong 2024 startup company new clothing fasion reminder notes"],3)
+    results = scrapfast(["online snack shop 2024 business idea strategy profit start up", "hong kong 2024 startup company new clothing fasion reminder notes"],2)
     print("\nResults:")
     for result in results:
         print(f"\nKeyword: {result['keyword']}")
