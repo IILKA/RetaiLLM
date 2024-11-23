@@ -117,6 +117,8 @@ class WebScraper:
         self.ua = UserAgent()
         self.setup_selenium()
         self.setup_sentiment_analyzers()
+        self.engine_failures = 0
+        self.max_engine_failures = len(self.search_engines)
 
         try:
             self.deepseek = DeepSeek()
@@ -226,9 +228,14 @@ class WebScraper:
                 results_count = 0
                 keyword_urls = []
                 keyword_summaries = []
+                self.engine_failures = 0
 
                 for engine in self.search_engines:
                     if results_count >= num_res:
+                        break
+
+                    if self.engine_failures >= self.max_engine_failures:
+                        self.logger.warning("All search engines failed to return results. Moving to next keyword...")
                         break
 
                     self.logger.log(f"Trying search engine: {engine['name']}")
@@ -237,16 +244,20 @@ class WebScraper:
                         page_source = self.fetch_with_selenium(search_url)
                         
                         if not page_source:
+                            self.engine_failures += 1
                             continue
 
                         soup = BeautifulSoup(page_source, 'html.parser')
                         links = soup.select(engine['result_selector'])
                         
                         if not links:
+                            self.engine_failures += 1
+                            self.logger.warning(f"No results found on {engine['name']}")
                             continue
 
                         self.logger.log(f"Found {len(links)} potential results on {engine['name']}")
                         
+                        result_found = False
                         for link in links:
                             if results_count >= num_res:
                                 break
@@ -267,6 +278,7 @@ class WebScraper:
                                         keyword_summaries.append(content_summary)
                                         
                                         results_count += 1
+                                        result_found = True
                                         self.logger.update_progress()
                                         self.logger.end(f"Fetching content from: {href}")
                                     
@@ -274,8 +286,12 @@ class WebScraper:
                                     self.logger.error(f"Failed to fetch page content: {str(e)}")
                             
                             time.sleep(random.uniform(4, 7))
-                    
+
+                        if not result_found:
+                            self.engine_failures += 1
+                            
                     except Exception as e:
+                        self.engine_failures += 1
                         self.logger.error(f"{engine['name']} search failed: {str(e)}")
                     
                     time.sleep(random.uniform(5, 8))
@@ -298,11 +314,15 @@ class WebScraper:
                         'overall_summary': overall_summary,
                         'sentiment': overall_sentiment
                     })
+                else:
+                    self.logger.warning(f"No results found for keyword: {keyword}")
 
         finally:
             self.logger.log("Closing WebDriver")
             self.driver.quit()
-            return results if results else ""
+            if not results:
+                self.logger.warning("No results found for any keywords")
+            return results
 
 def scrapfast(words=["business strategy 2024 startup profit"], num_res=3):
     try:
@@ -311,7 +331,11 @@ def scrapfast(words=["business strategy 2024 startup profit"], num_res=3):
         
         results = scraper.search_and_scrape(words, num_res)
         scraper.logger.end_total_timer()
-        return results if results else ""
+        
+        if not results:
+            scraper.logger.warning("Search completed but no results were found")
+            return ""
+        return results
             
     except ImportError as e:
         print(f"\nWebScraper module not found: {str(e)}")
