@@ -221,6 +221,7 @@ class WebScraper:
 
     def search_and_scrape(self, keywords=["business strategy 2024 startup profit"], num_res=3):
         results = []
+        keywords = [" ".join(keywords)]
         self.logger.set_total_progress(len(keywords), num_res)
         try:
             for keyword in keywords:
@@ -272,7 +273,7 @@ class WebScraper:
                                         page_soup = BeautifulSoup(page_content, 'html.parser')
                                         content = ' '.join(page_soup.get_text(strip=True).split())
                                         
-                                        content_summary = self.get_content_summary(content)
+                                        content_summary = self.get_content_summary(content[:10000])
                                         
                                         keyword_urls.append(href)
                                         keyword_summaries.append(content_summary)
@@ -350,7 +351,7 @@ def scrapfast(words=["business strategy 2024 startup profit"], num_res=3):
         return ""
 
 if __name__ == "__main__":
-    results = scrapfast(["online snack shop 2024 business idea strategy profit start up", "hong kong 2024 startup company new clothing fasion reminder notes"],3)
+    results = scrapfast(["US", "Shoes"],3)
     print("\nResults:")
     for result in results:
         print(f"\nKeyword: {result['keyword']}")
