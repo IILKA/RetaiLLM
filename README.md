@@ -52,6 +52,21 @@ vllm serve Qwen/Qwen2.5-72B-Instruct \
     --max-num-batched-tokens 8000
 ```
 
+### Client side Installation 
+clone the repo: 
+```
+git clone https://github.com/IILKA/RetaiLLM/
+```
+
+set up the environment: 
+
+```
+conda create -f environment.yaml
+conda activate retaillm
+```
+
+
+
 
 
 
