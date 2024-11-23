@@ -26,7 +26,7 @@ class Logger:
         
     def set_total_progress(self, keywords_count, results_per_keyword):
         # Each keyword gets results_per_keyword results + 1 overall summary
-        self.total_progress = keywords_count * results_per_keyword + 1
+        self.total_progress = keywords_count * (results_per_keyword + 1)
         print(f"[PROGRESS] {self.current_progress}/{self.total_progress}")
         
     def update_progress(self):
@@ -86,11 +86,32 @@ class WebScraper:
                 'snippet_selector': '#b_results .b_caption p'
             },
             {
-                'name': 'DuckDuckGo',
+                'name': 'DuckDuckGo', 
                 'url': 'https://html.duckduckgo.com/html/?q=',
                 'result_selector': 'a.result__a',
-                'title_selector': 'a.result__a', 
+                'title_selector': 'a.result__a',
                 'snippet_selector': 'a.result__snippet'
+            },
+            {
+                'name': 'Qwant',
+                'url': 'https://www.qwant.com/?q=',
+                'result_selector': '.result__url',
+                'title_selector': '.result__title',
+                'snippet_selector': '.result__desc'
+            },
+            {
+                'name': 'Ecosia',
+                'url': 'https://www.ecosia.org/search?q=',
+                'result_selector': '.result__link',
+                'title_selector': '.result__title',
+                'snippet_selector': '.result__snippet'
+            },
+            {
+                'name': 'Startpage',
+                'url': 'https://www.startpage.com/do/search?q=',
+                'result_selector': '.w-gl__result-url',
+                'title_selector': '.w-gl__result-title', 
+                'snippet_selector': '.w-gl__description'
             }
         ]
         self.ua = UserAgent()
@@ -305,7 +326,7 @@ def scrapfast(words=["business strategy 2024 startup profit"], num_res=3):
         return ""
 
 if __name__ == "__main__":
-    results = scrapfast(["online snack shop 2024 business idea strategy profit start up", "hong kong 2024 startup company new clothing fasion reminder notes"],2)
+    results = scrapfast(["online snack shop 2024 business idea strategy profit start up", "hong kong 2024 startup company new clothing fasion reminder notes"],3)
     print("\nResults:")
     for result in results:
         print(f"\nKeyword: {result['keyword']}")
