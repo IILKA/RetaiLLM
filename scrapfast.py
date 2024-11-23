@@ -16,6 +16,7 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from deepseek import DeepSeek
 from datetime import datetime
 
+
 class Logger:
     def __init__(self):
         self.start_times = {}
@@ -23,6 +24,8 @@ class Logger:
         self.total_start_time = None
         self.current_progress = 0
         self.total_progress = 0
+        self.debug = True
+        
         
     def set_total_progress(self, keywords_count, results_per_keyword):
         # Each keyword gets results_per_keyword results + 1 overall summary

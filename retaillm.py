@@ -1,12 +1,14 @@
 from utils.PromptTree import PromptsTree
 from utils.DataNode import DataNode, DataContainer
-from utils.text_match import get_closest_match
+from utils.text_match import get_closest_match, string2df, method2dict
 from LLM import QwenVllm
 import pandas as pd
 import os
 import re
 import ast
 import json
+from scrapfast import scrapfast
+from analysis import DataAnalysisManager 
 
 
 class RetaiLLM: 
@@ -113,8 +115,17 @@ class RetaiLLM:
                                     max_length = user_input_tree["Extract_from_user_input"]["max_length"]
                                 )
                 if self._debug:
+                    print("user_input: ", user_input)
+                    # print(self._wrap_message(user_input_tree["Extract_from_user_input"]["prompt"]))
                     print("data_in_text: ", data_in_text)
-                data = pd.DataFrame(json.loads(data_in_text))
+                    print("type of data_in_text: ", type(data_in_text))
+                
+                pattern = r'"(\w+)":\s*\[([\d,\s]+)\]'
+                matches = re.findall(pattern, data_in_text)
+                result = {key: [int(v) for v in values.split(",")] for key, values in matches}
+                data = pd.DataFrame(result)
+                
+
                 new_data = DataContainer(df=data)
                 #extract a description of the data 
                 if self._debug:
@@ -177,21 +188,34 @@ class RetaiLLM:
                     max_length = generate_keys_prompt["max_length"]
                 )
             )
-            scraped_data = self._test_webscrape(webkeys)
-            GetResponseTree = self.prompt_tree.GetResponseSubTree(
-                                user_input,
-                                summary = scraped_data
-                            )
+
+            #scrape the data from the web
+            results = scrapfast(webkeys)
+            if results == "":
+                GetResponseTree = self.prompt_tree.GetResponseSubTree(
+                                    user_input,
+                                    summary = "I am sorry, I cannot find the data"
+                                )
+            else:
+                urls = results["urls"]
+                summary_text = results["overall_summary"]
+                sentiment = results["sentiment"]
+
+                GetResponseTree = self.prompt_tree.GetResponseSubTree(
+                                    user_input,
+                                    summary = summary_text + " overall sentiment related to this topic: " + sentiment + " sources: " + str(urls)
+                                )
             #feed the scraped data into the model and return the response
             if self._debug:
                 print("entering WEB_SCRAPE")
                 print("webkeys: ", webkeys) 
-                print("scraped_data: ", scraped_data)
+                print("results: ", results)
 
             return self.llm.inference(
                         self._wrap_message(GetResponseTree["response"]["prompt"]),
                         max_length = GetResponseTree["response"]["max_length"]
-                    )
+                    ), sentiment, urls
+        
         elif DataGetMethod == "DB_QUERY":
             #temporary list for test only
             db_datalist = [
@@ -255,8 +279,13 @@ class RetaiLLM:
                             self._wrap_message(GetAnalysisTree["ClassifyDataTools"]["prompt"]),
                             max_length = GetAnalysisTree["ClassifyDataTools"]["max_length"]
                         )
-                    
-        return AnalysisMethod
+        if self._debug:
+            print("AnalysisMethod: ", AnalysisMethod)
+
+        analysis_manager = DataAnalysisManager(self.data_node.Data[self.data_node.activate_id].df)
+        analysis_result = analysis_manager.perform_analysis(method2dict(AnalysisMethod))
+        return analysis_result
+        
 
     
         

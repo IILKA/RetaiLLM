@@ -1,14 +1,26 @@
-import openai
+from openai import OpenAI
+import yaml 
+
+config = yaml.safe_load(open("config.yaml"))
+model_api_key = config["Scraper"]["api_key"]
+model_base_url = config["Scraper"]["base_url"]
+model_name = config["Scraper"]["model_id"]
+
+
 
 class DeepSeek:
     def __init__(self):
-        self.openai = openai
-        self.openai.api_key = "..."
-        self.openai.api_base = "https://api.deepseek.com"
-        self.model = "deepseek-chat"
+
+        self.api_key = model_api_key
+        self.base_url = model_base_url
+        self.model = model_name
+        self.client = OpenAI(
+                    api_key = self.api_key, 
+                    base_url = self.base_url
+                    )
 
     def get_mode_for_task(self, question):
-        response = self.openai.ChatCompletion.create(
+        response = self.client.chat.completions.create(
             model=self.model,
             messages=[
                 {"role": "system", "content": (
@@ -23,19 +35,19 @@ class DeepSeek:
             ],
             temperature=0
         )
-        return response.choices[0].message['content'].strip()
+        return response.choices[0].message.content
         
     def inference_with_msg(self, messages, max_tokens=100, temp=0.3):
-        response = self.openai.ChatCompletion.create(
+        response = self.client.chat.completions.create(
             model=self.model,
             messages=messages,
             max_tokens=max_tokens,
             temperature=temp
         )
-        return response.choices[0].message['content'].strip()
+        return response.choices[0].message.content
 
     def summary_web(self, content, max_tokens):
-        response = self.openai.ChatCompletion.create(
+        response = self.client.chat.completions.create(
             model=self.model,
             messages=[
                 {"role": "system", "content": "Please provide a concise summary of the following content in a website 200 words with point form and without any introduction or conclusion:"},
@@ -44,10 +56,10 @@ class DeepSeek:
             max_tokens=max_tokens,
             temperature=0.3
         )
-        return response.choices[0].message['content'].strip()
+        return response.choices[0].message.content
 
     def summary_content(self, content, max_tokens):
-        response = self.openai.ChatCompletion.create(
+        response = self.client.chat.completions.create(
             model=self.model,
             messages=[
                 {"role": "system", "content": "Please provide a concise summary of the following content that conclude all of the main ideas in the following passages in 500 words with point form and without any introduction or conclusion:"},
@@ -56,7 +68,7 @@ class DeepSeek:
             max_tokens=max_tokens,
             temperature=0.3
         )
-        return response.choices[0].message['content'].strip()
+        return response.choices[0].message.content
 
 
 # # Example usage:

@@ -1,8 +1,8 @@
 Agent:
-  model_id: "Qwen2.5-72B-Instruct"
+  model_id: "deepseek-chat"
   host_locally: False  
-  base_url: "http://36.134.165.224:6006/v1/"
-  api_key: "xxx"
+  base_url: "https://api.deepseek.com"
+  api_key: "sk-686ff11433504a54bac51df6a77c6123"
   menu_return_length: 500
   response_return_length: 500
   debug: True
@@ -10,6 +10,11 @@ Agent:
 Data: 
   data_root_dir: "data/files/"
   data_node_save_dir: "data/data_nodes/"
+
+Scraper: 
+  model_id: "deepseek-chat"
+  base_url: "https://api.deepseek.com"
+  api_key: "sk-686ff11433504a54bac51df6a77c6123"
 
 
   

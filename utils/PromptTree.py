@@ -104,10 +104,9 @@ class PromptsTree:
                         Age: 30, 25, 35
                         City: New York, Los Angeles, Chicago
 
-                        Expected Output:
-                        {{"Name": ["Alice", "Bob", "Charlie"], "Age": [30, 25, 35],"City": ["New York", "Los Angeles", "Chicago"]}}
+                        Expected Output: {{"Name": ["Alice", "Bob", "Charlie"], "Age": [30, 25, 35],"City": ["New York", "Los Angeles", "Chicago"]}}
 
-                        Now, based on the following user input, only provide the JSON object:
+                        Now, based on the following user input, only output the extracted json object:
 
                         **User Input**:
                         {user_input}
@@ -154,7 +153,7 @@ class PromptsTree:
 
                         Example:
                         User Request: "Find articles about climate change policies in Europe."
-                        Output: ["American", "", "Europe", "articles"]
+                        Output: ["American", "Europe", "articles"]
 
                         Now process the following request:
                         User Request: {user_input}
@@ -256,32 +255,20 @@ class PromptsTree:
         return SubPromptTree
 
     def GetAnalysisSubTree(self, user_input, data_info=None):
-        analysis_tags = {
-                'Time Series Analysis': {
-                    "ARIMA": "TimeSeries_ARIMA",
-                    'Seasonal Decomposition': 'TimeSeries_seasonal_decomposition',
-                    'Deep Learning': 'TimeSeries_DL'
-                },
-                'Correlation Analysis': {
-                    'Spearman': 'Correlation_Spearman',
-                    'Multiple Correlation Coefficient': 'Correlation_Multiple'
-                },
-                'Regression': {
-                    'Ridge': 'Regression_Ridge',
-                    'Lasso': 'Regression_Lasso',
-                    'Random Forest': 'Regression_Random_forest'
-                },
-                'Clustering Analysis': {
-                    'KMeans': 'Clustering_KMeans',
-                    'DBSCAN': 'Clustering_DBSCAN',
-                    'Hierarchical Clustering': 'Clustering_Hierarchical'
-                },
-                'Survival Analysis': {
-                    'Kaplan-Meier': 'Survival_KaplanMeier',
-                    'Cox': 'Survival_Cox'
-                }
-            }
-        analysis_tag_list = ["TimeSeries_ARIMA", "TimeSeries_seasonal_decomposition", "TimeSeries_DL", "Correlation_Spearman", "Correlation_Multiple", "Regression_Ridge", "Regression_Lasso", "Regression_Random_forest", "Clustering_KMeans", "Clustering_DBSCAN", "Clustering_Hierarchical", "Survival_KaplanMeier", "Survival_Cox"]
+        analysis_tags_list = [
+            "Time_series_forecast",
+            "Correlation_Spearman",
+            "Correlation_Pearson",
+            "Correlation_Kendall",
+            "Regression_Ridge",
+            "Regression_Lasso",
+            "Regression_RandomForest",
+            "Clustering_KMeans",
+            "Clustering_DBSCAN",
+            "Clustering_Hierarchical",
+            "Kaplan_Meier",
+            "Cox_Proportional_Hazards"
+        ]
         # print(data_info)
         # print(data_info["attribute names"])
         # print("analysis_tag_list", analysis_tag_list)
@@ -296,19 +283,18 @@ class PromptsTree:
                     {{"method": "method_tag", "predictor": ["predictor1", "predictor2", ...], "target": ["target1", "target2", ...]}}
 
                     ###Method Tags:
-                    - TimeSeries_ARIMA: Time Series Analysis using ARIMA model, suitable for simple time series data.
-                    - TimeSeries_seasonal_decomposition: Time Series Analysis using Seasonal Decomposition, suitable for seasonal time series data.
-                    - TimeSeries_DL: Time Series Analysis using Deep Learning, suitable for long and complex time series data.
+                    - Time_series_forecast: Time Series Analysis model, you should output this tag if you think users requires time series analysis.
                     - Correlation_Spearman: Correlation Analysis using Spearman's rank correlation coefficient.
-                    - Correlation_Multiple: Correlation Analysis using Multiple Correlation Coefficient.
+                    - Correlation_Pearson: Correlation Analysis using Pearson's correlation coefficient.
+                    - Correlation_Kendall: Correlation Analysis using Kendall's tau coefficient.
                     - Regression_Ridge: Regression Analysis using Ridge Regression.
                     - Regression_Lasso: Regression Analysis using Lasso Regression.
-                    - Regression_Random_forest: Regression Analysis using Random Forest.
+                    - Regression_RandomForest: Regression Analysis using Random Forest.
                     - Clustering_KMeans: Clustering Analysis using K-Means Clustering.
                     - Clustering_DBSCAN: Clustering Analysis using DBSCAN Clustering.
                     - Clustering_Hierarchical: Clustering Analysis using Hierarchical Clustering.
-                    - Survival_KaplanMeier: Survival Analysis using Kaplan-Meier method.
-                    - Survival_Cox: Survival Analysis using Cox Proportional Hazards model.
+                    - Kaplan_Meier: Survival Analysis using Kaplan-Meier method.
+                    - Cox_Proportional_Hazards: Survival Analysis using Cox Proportional Hazards model.
 
                     ### Examples: 
 
@@ -374,11 +360,11 @@ class PromptsTree:
                     Data Summary: {data_info}
 
                     **Provide** 
-                    - method tag: one of the tags from the list {analysis_tag_list}
+                    - method tag: one of the tags from the list {analysis_tags_list}
                     - predictor variables: list of predictor variables from {data_info["attribute names"]}
                     - target variables: list of target variables from {data_info["attribute names"]}
                 """,
-                "options": [analysis_tags[key] for key in analysis_tags.keys()],
+                "options": analysis_tags_list,
                 "max_length": 50,
                 "model": "Qwen/Qwen2.5-72B-Instruct", 
             }
