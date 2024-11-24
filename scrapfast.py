@@ -15,6 +15,7 @@ from nltk.tokenize import sent_tokenize
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from deepseek import DeepSeek
 from datetime import datetime
+from urllib.parse import unquote, parse_qs, urlparse
 
 class Logger:
     def __init__(self):
@@ -73,34 +74,20 @@ class WebScraper:
     def __init__(self):
         self.logger = Logger()
         self.search_engines = [
-            {
-                'name': 'Google',
-                'url': 'https://www.google.com/search?q=',
-                'result_selector': 'div.g div.yuRUbf a',
-                'title_selector': 'div.g h3',
-                'snippet_selector': 'div.g div.VwiC3b'
-            },
-            {
-                'name': 'Bing',
-                'url': 'https://www.bing.com/search?q=',
-                'result_selector': '#b_results h2 a',
-                'title_selector': '#b_results h2',
-                'snippet_selector': '#b_results .b_caption p'
-            },
-            {
-                'name': 'DuckDuckGo',
-                'url': 'https://html.duckduckgo.com/html/?q=',
-                'result_selector': 'a.result__a',
-                'title_selector': 'a.result__a',
-                'snippet_selector': 'a.result__snippet'
-            },
-            {
-                'name': 'Qwant',
-                'url': 'https://www.qwant.com/?q=',
-                'result_selector': '.result__url',
-                'title_selector': '.result__title',
-                'snippet_selector': '.result__desc'
-            },
+            # {
+            #     'name': 'Google',
+            #     'url': 'https://www.google.com/search?q=',
+            #     'result_selector': 'div.g div.yuRUbf a',
+            #     'title_selector': 'div.g h3',
+            #     'snippet_selector': 'div.g div.VwiC3b'
+            # },
+            # {
+            #     'name': 'Bing',
+            #     'url': 'https://www.bing.com/search?q=',
+            #     'result_selector': '#b_results h2 a',
+            #     'title_selector': '#b_results h2',
+            #     'snippet_selector': '#b_results .b_caption p'
+            # },
             {
                 'name': 'Ecosia',
                 'url': 'https://www.ecosia.org/search?q=',
@@ -114,6 +101,20 @@ class WebScraper:
                 'result_selector': '.w-gl__result-url',
                 'title_selector': '.w-gl__result-title', 
                 'snippet_selector': '.w-gl__description'
+            },
+            {
+                'name': 'Qwant',
+                'url': 'https://www.qwant.com/?q=',
+                'result_selector': '.result__url',
+                'title_selector': '.result__title',
+                'snippet_selector': '.result__desc'
+            },
+            {
+                'name': 'DuckDuckGo',
+                'url': 'https://html.duckduckgo.com/html/?q=',
+                'result_selector': 'a.result__a',
+                'title_selector': 'a.result__a',
+                'snippet_selector': 'a.result__snippet'
             }
         ]
         self.ua = UserAgent()
@@ -127,6 +128,19 @@ class WebScraper:
         except Exception as e:
             self.logger.warning(f"Failed to initialize DeepSeek: {str(e)}")
             self.deepseek = None
+
+    def extract_duckduckgo_url(self, href):
+        """Extract actual URL from DuckDuckGo redirect link"""
+        try:
+            if "duckduckgo.com/l/?" in href:
+                parsed = urlparse(href)
+                params = parse_qs(parsed.query)
+                if 'uddg' in params:
+                    return unquote(params['uddg'][0])
+            return href
+        except Exception as e:
+            self.logger.error(f"Failed to extract DuckDuckGo URL: {str(e)}")
+            return href
 
     def get_content_summary(self, content, keywords, url):
         if self.deepseek is None:
@@ -270,100 +284,105 @@ class WebScraper:
         return overall_summary, overall_sentiment
 
     def search_and_scrape(self, keywords=["business strategy 2024 startup profit"], num_res=3, num_attempt=3):
-        results = []
-        keywords = [" ".join(keywords)]
-        self.logger.set_total_progress(len(keywords), num_res)
-        
-        try:
-            for keyword in keywords:
-                self.logger.log(f"Processing keyword: {keyword}")
-                results_count = 0
-                keyword_urls = []
-                keyword_summaries = []
-                self.engine_failures = 0
-
-                # Continue trying engines until we get enough results or all engines fail
-                engine_index = 0
-                while results_count < num_res and engine_index < len(self.search_engines):
-                    engine = self.search_engines[engine_index]
-                    
-                    success = False
-                    for attempt in range(num_attempt):
-                        self.logger.log(f"Trying search engine: {engine['name']} (Attempt {attempt + 1}/3)")
-                        try:
-                            search_url = f"{engine['url']}{quote(keyword)}"
-                            page_source = self.fetch_with_selenium(search_url)
-                            
-                            if not page_source:
-                                continue
-
-                            soup = BeautifulSoup(page_source, 'html.parser')
-                            links = soup.select(engine['result_selector'])
-                            
-                            if not links:
-                                continue
-
-                            self.logger.log(f"Found {len(links)} potential results on {engine['name']}")
-                            
-                            for link in links:
-                                if results_count >= num_res:
-                                    break
-                                    
-                                href = link.get('href')
-                                if href and href.startswith('http'):
-                                    try:
-                                        self.logger.log(f"Fetching content from: {href}")
-                                        page_content = self.fetch_with_selenium(href)
-                                        
-                                        if page_content:
-                                            page_soup = BeautifulSoup(page_content, 'html.parser')
-                                            content = ' '.join(page_soup.get_text(strip=True).split())
-                                            
-                                            content_summary = self.get_content_summary(content[:10000], keywords, href)
-                                            
-                                            keyword_urls.append(href)
-                                            keyword_summaries.append(content_summary)
-                                            
-                                            results_count += 1
-                                            success = True
-                                            self.logger.update_progress()
-                                            
-                                    except Exception as e:
-                                        self.logger.error(f"Failed to fetch page content: {str(e)}")
-                                
-                                time.sleep(random.uniform(4, 7))
-
-                            if success:
-                                break  # Exit retry loop if results were found
-                                
-                        except Exception as e:
-                            self.logger.error(f"{engine['name']} search failed: {str(e)}")
-                        
-                        if attempt < num_attempt - 1:
-                            time.sleep(random.uniform(5, 8))
-
-                    if not success:
-                        self.engine_failures += 1
-                        
-                    engine_index += 1
-
-                # Process results for this keyword if any were found
-                overall_summary, overall_sentiment = self.analyze_results(keyword_summaries, keywords)
-
-                results.append({
-                    'keyword': keyword,
-                    'urls': keyword_urls,
-                    'overall_summary': overall_summary,
-                    'sentiment': overall_sentiment
-                })
-
-        finally:
-            self.logger.log("Closing WebDriver")
-            self.driver.quit()
+            results = []
+            keywords = [" ".join(keywords)]
+            self.logger.set_total_progress(len(keywords), num_res)
             
-        if not results:
-            self.logger.warning("No results found for any keywords")
-        return results
+            try:
+                for keyword in keywords:
+                    self.logger.log(f"Processing keyword: {keyword}")
+                    results_count = 0
+                    keyword_urls = []
+                    keyword_summaries = []
+                    self.engine_failures = 0
+
+                    engine_index = 0
+                    while results_count < num_res and engine_index < len(self.search_engines):
+                        engine = self.search_engines[engine_index]
+                        
+                        success = False
+                        for attempt in range(num_attempt):
+                            self.logger.log(f"Trying search engine: {engine['name']} (Attempt {attempt + 1}/{num_attempt})")
+                            try:
+                                search_url = f"{engine['url']}{quote(keyword)}"
+                                page_source = self.fetch_with_selenium(search_url)
+                                
+                                if not page_source:
+                                    continue
+
+                                soup = BeautifulSoup(page_source, 'html.parser')
+                                links = soup.select(engine['result_selector'])
+                                
+                                if not links:
+                                    continue
+                                
+                                self.logger.log(f"Found {len(links)} potential results on {engine['name']}")
+                                
+                                for link in links:
+                                    if results_count >= num_res:
+                                        break
+                                        
+                                    href = link.get('href')
+                                    
+                                    # Handle DuckDuckGo redirect links
+                                    if engine['name'] == 'DuckDuckGo':
+                                        href = self.extract_duckduckgo_url(href)
+                                    
+                                    print(f"[LINK] {href}")
+                                    if href and href.startswith('http'):
+                                        try:
+                                            self.logger.log(f"Fetching content from: {href}")
+                                            page_content = self.fetch_with_selenium(href)
+                                            
+                                            if page_content:
+                                                page_soup = BeautifulSoup(page_content, 'html.parser')
+                                                content = ' '.join(page_soup.get_text(strip=True).split())
+                                                
+                                                content_summary = self.get_content_summary(content[:10000], keywords, href)
+                                                
+                                                keyword_urls.append(href)
+                                                keyword_summaries.append(content_summary)
+                                                
+                                                results_count += 1
+                                                success = True
+                                                self.logger.update_progress()
+                                                
+                                        except Exception as e:
+                                            self.logger.error(f"Failed to fetch page content: {str(e)}")
+                                    
+                                    time.sleep(random.uniform(4, 7))
+
+                                if success:
+                                    break
+
+                            except Exception as e:
+                                self.logger.error(f"{engine['name']} search failed: {str(e)}")
+                            
+                            if attempt < num_attempt - 1:
+                                time.sleep(random.uniform(5, 8))
+
+                        if not success:
+                            self.engine_failures += 1
+                            
+                        engine_index += 1
+
+                    # Process results for this keyword if any were found
+                    overall_summary, overall_sentiment = self.analyze_results(keyword_summaries, keywords)
+
+                    results.append({
+                        'keyword': keyword,
+                        'urls': keyword_urls,
+                        'overall_summary': overall_summary,
+                        'sentiment': overall_sentiment
+                    })
+
+            finally:
+                self.logger.log("Closing WebDriver")
+                self.driver.quit()
+                
+            if not results:
+                self.logger.warning("No results found for any keywords")
+            return results
 
 def scrapfast(words=["business strategy 2024 startup profit"], num_res=3, num_attempt=3):
     try:
@@ -391,7 +410,8 @@ def scrapfast(words=["business strategy 2024 startup profit"], num_res=3, num_at
         return ""
 
 if __name__ == "__main__":
-    results = scrapfast(["online", "snack shop 2024", "business idea strategy", " profit start up"],3,3)
+    results = scrapfast(["online", "snack shop 2024", "business idea strategy", " profit start up"],3,1)
+    # results = scrapfast(["US SHOES"],3,3)
     print("\nResults:")
     for result in results:
         print(f"\nKeyword: {result['keyword']}")
