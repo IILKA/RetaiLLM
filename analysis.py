@@ -100,22 +100,20 @@ class ClusteringAnalysis:
         - visualize (bool): Whether to visualize the clustering results.
         
         Returns:
-        - dict: Contains the updated DataFrame, the file path of the saved plot if visualization is True, and a short summary.
+        - dict: Contains a notification that the plot has been generated and a short summary.
         """
         self._scale_features()
         kmeans = KMeans(n_clusters=n_clusters, random_state=random_state)
         self.df['cluster_kmeans'] = kmeans.fit_predict(self.scaled_features)
         
-        result = {}
         summary = f"KMeans clustering performed with {n_clusters} clusters."
+
         if visualize:
             filename = self.plot_clusters('cluster_kmeans', title='KMeans Clustering Results')
-            description = f"KMeans clustering performed with {n_clusters} clusters. Plot saved as {filename}."
-            result['file_path'] = filename
-            result['description'] = description
-            summary += f" Cluster plot saved at {filename}."
-        
-        return {"data": self.df.copy(), "plot": result, "summary": summary} if visualize else {"data": self.df.copy(), "summary": summary}
+            summary += " A clustering visualization plot has been generated."
+            return {"file_path": filename, "summary": summary}
+        else:
+            return {"file_path": None, "summary": summary}
 
     def dbscan_cluster(self, eps: float = 0.5, min_samples: int = 5, visualize: bool = True):
         """
@@ -127,22 +125,21 @@ class ClusteringAnalysis:
         - visualize (bool): Whether to visualize the clustering results.
         
         Returns:
-        - dict: Contains the updated DataFrame, the file path of the saved plot if visualization is True, and a short summary.
+        - dict: Contains a notification that the plot has been generated and a short summary.
         """
         self._scale_features()
         dbscan = DBSCAN(eps=eps, min_samples=min_samples)
         self.df['cluster_dbscan'] = dbscan.fit_predict(self.scaled_features)
         
-        result = {}
-        summary = f"DBSCAN clustering performed with eps={eps} and min_samples={min_samples}."
+        num_clusters = len(set(self.df['cluster_dbscan'])) - (1 if -1 in self.df['cluster_dbscan'] else 0)
+        summary = f"DBSCAN clustering performed with eps={eps} and min_samples={min_samples}. Number of clusters found: {num_clusters}."
+
         if visualize:
             filename = self.plot_clusters('cluster_dbscan', title='DBSCAN Clustering Results')
-            description = f"DBSCAN clustering performed with eps={eps} and min_samples={min_samples}. Plot saved as {filename}."
-            result['file_path'] = filename
-            result['description'] = description
-            summary += f" Cluster plot saved at {filename}."
-        
-        return {"data": self.df.copy(), "plot": result, "summary": summary} if visualize else {"data": self.df.copy(), "summary": summary}
+            summary += " A clustering visualization plot has been generated."
+            return {"file_path": filename, "summary": summary}
+        else:
+            return {"file_path": None, "summary": summary}
 
     def hierarchical_cluster(self, n_clusters: int = 3, linkage: str = 'ward', visualize: bool = True):
         """
@@ -154,22 +151,20 @@ class ClusteringAnalysis:
         - visualize (bool): Whether to visualize the clustering results.
         
         Returns:
-        - dict: Contains the updated DataFrame, the file path of the saved plot if visualization is True, and a short summary.
+        - dict: Contains a notification that the plot has been generated and a short summary.
         """
         self._scale_features()
         hierarchical = AgglomerativeClustering(n_clusters=n_clusters, linkage=linkage)
         self.df['cluster_hierarchical'] = hierarchical.fit_predict(self.scaled_features)
         
-        result = {}
         summary = f"Hierarchical clustering performed with {n_clusters} clusters and '{linkage}' linkage."
+
         if visualize:
             filename = self.plot_clusters('cluster_hierarchical', title='Hierarchical Clustering Results')
-            description = f"Hierarchical clustering performed with {n_clusters} clusters and '{linkage}' linkage. Plot saved as {filename}."
-            result['file_path'] = filename
-            result['description'] = description
-            summary += f" Cluster plot saved at {filename}."
-        
-        return {"data": self.df.copy(), "plot": result, "summary": summary} if visualize else {"data": self.df.copy(), "summary": summary}
+            summary += " A clustering visualization plot has been generated."
+            return {"file_path": filename, "summary": summary}
+        else:
+            return {"file_path": None, "summary": summary}
 
     def plot_clusters(self, cluster_column: str, title: str = 'Clustering Results', highlight_ids: list = None):
         """
@@ -291,7 +286,7 @@ class CorrelationAnalyzer:
         - cmap (str): The color map to use for the heatmap.
         
         Returns:
-        - dict: Contains the file path of the saved plot, a description, and a short summary.
+        - dict: Contains a notification that the plot has been generated and a short summary.
         """
         if method == 'pearson':
             if self.pearson_corr is None:
@@ -322,9 +317,14 @@ class CorrelationAnalyzer:
         plt.savefig(filename)
         plt.close()
         
-        description = f"Saved {method.capitalize()} correlation heatmap as {filename}."
-        summary = f"{method.capitalize()} correlation heatmap saved at {filename}."
-        return {"file_path": filename, "description": description, "summary": summary}
+        # Find the highest correlation pair (excluding self-correlation)
+        corr_values = corr.abs().where(~np.eye(corr.shape[0], dtype=bool))
+        max_corr = corr_values.unstack().dropna().sort_values(ascending=False).max()
+        max_pair = corr_values.unstack().idxmax()
+        summary = f"Highest {method.capitalize()} correlation is between {max_pair[0]} and {max_pair[1]} with a coefficient of {corr.loc[max_pair[0], max_pair[1]]:.2f}."
+        summary += " A correlation heatmap visualization plot has been generated."
+        
+        return {"file_path": filename, "summary": summary}
 
     def pairwise_correlation(self, method: str = 'pearson') -> pd.DataFrame:
         """
@@ -363,7 +363,7 @@ class CorrelationAnalyzer:
         - figsize (tuple): The size of the figure.
         
         Returns:
-        - dict: Contains the file path of the saved plot, a description, and a short summary.
+        - dict: Contains a notification that the plot has been generated and a short summary.
         """
         sns.pairplot(self.df, kind=kind, hue=hue, diag_kind='kde', corner=True)
         title = 'Pairwise Relationships'
@@ -376,9 +376,8 @@ class CorrelationAnalyzer:
         plt.savefig(filename)
         plt.close()
         
-        description = f"Saved pairwise relationships plot as {filename}."
-        summary = f"Pairwise relationships plot saved at {filename}."
-        return {"file_path": filename, "description": description, "summary": summary}
+        summary = "A pairwise relationships plot has been generated."
+        return {"file_path": filename, "summary": summary}
 
 # ========================= Regression Analysis =========================
 
@@ -516,9 +515,11 @@ class RegressionAnalysis:
         coefficients = model.coef_
         intercept = model.intercept_
         coef_dict = dict(zip(self.X.columns, coefficients))
-        description = f"Ridge regression trained with alpha={alpha}."
-        summary = f"Ridge regression model trained with alpha={alpha}.\nIntercept: {intercept:.4f}\nCoefficients: {coef_dict}"
-        return {"model": "Ridge", "description": description, "summary": summary}
+        summary = f"Ridge regression model trained with alpha={alpha}."
+        summary += " A regression visualization plot has been generated."
+        # Feature Importance Plot
+        filename = self.plot_feature_importance('Ridge', coef_dict)
+        return {"file_path": filename, "summary": summary}
 
     def train_lasso(self, alpha: float = 0.1):
         model = Lasso(alpha=alpha)
@@ -527,31 +528,38 @@ class RegressionAnalysis:
         coefficients = model.coef_
         intercept = model.intercept_
         coef_dict = dict(zip(self.X.columns, coefficients))
-        description = f"Lasso regression trained with alpha={alpha}."
-        summary = f"Lasso regression model trained with alpha={alpha}.\nIntercept: {intercept:.4f}\nCoefficients: {coef_dict}"
-        return {"model": "Lasso", "description": description, "summary": summary}
+        summary = f"Lasso regression model trained with alpha={alpha}."
+        summary += " A regression visualization plot has been generated."
+        # Feature Importance Plot
+        filename = self.plot_feature_importance('Lasso', coef_dict)
+        return {"file_path": filename, "summary": summary}
 
     def train_svm(self, C: float = 1.0, kernel: str = 'rbf'):
         model = SVR(C=C, kernel=kernel)
         model.fit(self.X_train, self.y_train)
         self.models['SVM'] = model
-        description = f"SVM regression trained with C={C} and kernel='{kernel}'."
         summary = f"SVM regression model trained with C={C} and kernel='{kernel}'."
-        return {"model": "SVM", "description": description, "summary": summary}
+        summary += " A regression visualization plot has been generated."
+        # Actual vs Predicted Plot
+        filename = self.plot_actual_vs_predicted('SVM')
+        return {"file_path": filename, "summary": summary}
 
     def train_random_forest(self, n_estimators: int = 100, random_state: int = 42):
         model = RandomForestRegressor(n_estimators=n_estimators, random_state=random_state)
         model.fit(self.X_train, self.y_train)
         self.models['RandomForest'] = model
-        description = f"Random Forest regression trained with {n_estimators} estimators and random_state={random_state}."
         summary = f"Random Forest regression model trained with {n_estimators} estimators and random_state={random_state}."
-        return {"model": "RandomForest", "description": description, "summary": summary}
+        summary += " A feature importance visualization plot has been generated."
+        # Feature Importance Plot
+        filename = self.plot_feature_importance('RandomForest', model.feature_importances_)
+        return {"file_path": filename, "summary": summary}
 
-    def train_transformer(self, steps: int = 6, epochs: int = 100, batch_size: int = 16, learning_rate: float = 1e-3, window_size: int = 24, patience: int = 20):
+    def train_transformer(self, steps: int = 6, epochs: int = 200, batch_size: int = 16, learning_rate: float = 1e-3, window_size: int = 24, patience: int = 20):
         """
         Trains a Transformer-based regression model.
 
         Parameters:
+        - steps (int): Number of future observations to predict.
         - epochs (int): Number of training epochs.
         - batch_size (int): Batch size for training.
         - learning_rate (float): Learning rate for the optimizer.
@@ -647,7 +655,7 @@ class RegressionAnalysis:
 
         # Forecasting
         model.eval()
-        sales = self.data[self.sales_column].values
+        sales = self.data[self.target].values
         sales_scaled = scaler_X.transform(self.X_train).flatten()
         forecast_scaled = []
 
@@ -683,16 +691,21 @@ class RegressionAnalysis:
         # Plot and save the forecast
         plot_info = self.plot_forecast(forecast_series, 'Transformer')
 
-        description = "Transformer forecasting completed."
-        summary = f"Transformer forecasting completed for {steps} future periods."
-        return {"forecast": forecast_series, "plot_info": plot_info, "description": description, "summary": summary}
+        # Prepare summary with forecasted values
+        forecast_values = forecast_series.to_dict()
+        forecast_summary = "Forecasted values:\n"
+        for date, value in forecast_values.items():
+            forecast_summary += f"[{date.date()}: {value:.2f}]\n"
+        forecast_summary += "A time series forecast visualization plot has been generated."
+
+        return {"file_path": plot_info["file_path"], "summary": forecast_summary}
 
     def evaluate_models(self):
         """
         Evaluates all trained models and stores the results.
 
         Returns:
-        - dict: Contains evaluation metrics and descriptions for each model, along with a summary.
+        - dict: Contains evaluation metrics and a summary.
         """
         evaluation_results = {}
         summaries = []
@@ -710,7 +723,7 @@ class RegressionAnalysis:
                         'Intercept': intercept,
                         'Coefficients': coef_dict
                     }
-                    summary_str = f"{name} Model - MSE: {evaluation_results[name]['MSE']:.4f}, R2: {evaluation_results[name]['R2']:.4f}, Intercept: {intercept:.4f}, Coefficients: {coef_dict}"
+                    summary_str = f"{name} Model - Intercept: {intercept:.4f}, Coefficients: {coef_dict}"
                 else:
                     evaluation_results[name] = {
                         'MSE': mean_squared_error(self.y_test, predictions),
@@ -751,14 +764,78 @@ class RegressionAnalysis:
                 mse = mean_squared_error(self.y_test.iloc[window_size:], predictions)
                 r2 = r2_score(self.y_test.iloc[window_size:], predictions)
                 evaluation_results[name] = {'MSE': mse, 'R2': r2}
-                summaries.append(f"{name} Model - MSE: {mse:.4f}, R2: {r2:.4f}")
-                continue  # Transformer parameters are not standard coefficients
-
+                summary_str = f"{name} Model - MSE: {mse:.4f}, R2: {r2:.4f}"
             evaluation_results[name]['summary'] = summary_str
             summaries.append(summary_str)
         self.results = evaluation_results
         summary = "Model evaluations completed. " + "; ".join(summaries)
-        return {"evaluation": evaluation_results, "summary": summary}
+        return {"file_path": None, "summary": summary}
+
+    def plot_feature_importance(self, model_name: str, importances):
+        """
+        Plots feature importances for models that support it (e.g., Random Forest, Ridge, Lasso).
+        
+        Parameters:
+        - model_name (str): Name of the model.
+        - importances (dict or array-like): Feature importances or coefficients.
+        
+        Returns:
+        - str: The filepath of the saved plot.
+        """
+        plt.figure(figsize=(10, 6))
+        features = self.X.columns
+        if model_name in ['Ridge', 'Lasso']:
+            # Ensure coefficients are ordered according to features
+            if isinstance(importances, dict):
+                coef = [importances[feature] for feature in features]
+            else:
+                coef = importances
+            sns.barplot(x=features, y=coef, palette='viridis')
+            plt.axhline(0, color='red', linestyle='--')
+            plt.title(f'{model_name} Coefficients')
+            plt.xlabel('Features')
+            plt.ylabel('Coefficient Value')
+        elif model_name == 'RandomForest':
+            # For Random Forest, importances are all positive
+            importances = importances
+            sns.barplot(x=features, y=importances, palette='viridis')
+            plt.title('Random Forest Feature Importances')
+            plt.xlabel('Features')
+            plt.ylabel('Importance')
+        else:
+            raise ValueError("Feature importance plotting not supported for this model.")
+
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        filename = f"plots/{model_name.lower()}_feature_importances_{get_timestamp()}.png"
+        plt.savefig(filename)
+        plt.close()
+        return filename
+
+
+    def plot_actual_vs_predicted(self, model_name: str):
+        """
+        Plots actual vs predicted values for regression models and saves it as a file.
+        
+        Parameters:
+        - model_name (str): Name of the model.
+        
+        Returns:
+        - str: The filepath of the saved plot.
+        """
+        predictions = self.models[model_name].predict(self.X_test)
+        plt.figure(figsize=(10, 6))
+        sns.scatterplot(x=self.y_test, y=predictions, alpha=0.6)
+        sns.lineplot(x=self.y_test, y=self.y_test, color='red')  # Perfect prediction line
+        plt.title(f'Actual vs Predicted Sales ({model_name})')
+        plt.xlabel('Actual Sales')
+        plt.ylabel('Predicted Sales')
+        plt.grid(True)
+        plt.tight_layout()
+        filename = f"plots/{model_name.lower()}_actual_vs_predicted_{get_timestamp()}.png"
+        plt.savefig(filename)
+        plt.close()
+        return filename
 
     def plot_results(self):
         """
@@ -767,7 +844,7 @@ class RegressionAnalysis:
         Saves the plots as files.
 
         Returns:
-        - list of dict: Each dictionary contains the file path, description, and summary of the saved plot.
+        - list of dict: Each dictionary contains the file path and summary of the saved plot.
         """
         # Ensure the plots directory exists
         os.makedirs('plots', exist_ok=True)
@@ -891,15 +968,75 @@ class RegressionAnalysis:
                 plt.savefig(filename)
                 plt.close()
                 
-                description = f"Saved regression plot for {name} as {filename}."
-                summary = f"Regression plot for {name} saved at {filename}."
-                plot_results.append({"file_path": filename, "description": description, "summary": summary})
+                # Prepare summary
+                if name != 'Transformer':
+                    summary = f"{name} Model - Intercept: {intercept:.4f}, Coefficients: {coef_dict}"
+                else:
+                    summary = f"{name} Model - No intercept or coefficients available."
+    
+                summary += " A regression visualization plot has been generated."
+                plot_results.append({"file_path": filename, "summary": summary})
             else:
-                # Multivariate regression: Output predictions
-                # No plot is generated for multivariate regression in this context
-                continue
-
+                # Multivariate regression: Generate Actual vs Predicted Plot
+                if name != 'Transformer':
+                    predictions = model.predict(self.X_test)
+                else:
+                    predictions = predictions_test
+                plt.figure(figsize=(10, 6))
+                sns.scatterplot(x=self.y_test, y=predictions, alpha=0.6)
+                sns.lineplot(x=self.y_test, y=self.y_test, color='red')  # Perfect prediction line
+                plt.title(f'Actual vs Predicted Sales ({name})')
+                plt.xlabel('Actual Sales')
+                plt.ylabel('Predicted Sales')
+                plt.grid(True)
+                plt.tight_layout()
+                filename = f"plots/{name.lower()}_actual_vs_predicted_{get_timestamp()}.png"
+                plt.savefig(filename)
+                plt.close()
+                
+                # Prepare summary
+                if name != 'Transformer':
+                    summary = f"{name} Model - Coefficients: {coef_dict}"
+                else:
+                    summary = f"{name} Model - No intercept or coefficients available."
+    
+                summary += " An actual vs. predicted visualization plot has been generated."
+                plot_results.append({"file_path": filename, "summary": summary})
+        
         return plot_results
+
+    def plot_forecast(self, forecast: pd.Series, method: str):
+        """
+        Plots historical sales data along with the forecasted values and saves the plot as a file.
+
+        Parameters:
+        - forecast (pd.Series): Forecasted sales values.
+        - method (str): Forecasting method used ('ARIMA' or 'Transformer').
+
+        Returns:
+        - dict: Contains the file path of the saved plot and a short summary.
+        """
+        plt.figure(figsize=(12,6))
+        plt.plot(self.data[self.sales_column], label='Historical Sales')
+        plt.plot(forecast, label=f'Forecasted Sales ({method})', linestyle='--')
+        plt.xlabel('Date')
+        plt.ylabel('Sales')
+        plt.title(f'Sales Forecast using {method}')
+        plt.legend()
+        plt.grid(True)
+        
+        # Generate filename with timestamp
+        timestamp = get_timestamp()
+        filename = f"plots/sales_forecast_{method.lower()}_{timestamp}.png"
+        plt.tight_layout()
+        plt.savefig(filename)
+        plt.close()
+        
+        summary = f"Forecasted values for the next periods:\n"
+        for date, value in forecast.to_dict().items():
+            summary += f"[{date.date()}: {value:.2f}]\n"
+        summary += " A time series forecast visualization plot has been generated."
+        return {"file_path": filename, "summary": summary}
 
     def get_results(self) -> dict:
         """
@@ -932,8 +1069,8 @@ class KaplanMeierEstimator:
         """Fit the Kaplan-Meier model."""
         self.km_fit.fit(durations=self.data['durations'], event_observed=self.data['event_observed'])
         description = "Kaplan-Meier model fitted."
-        summary = "Kaplan-Meier model successfully fitted to the data."
-        return {"description": description, "summary": summary}
+        summary = f"Median survival time: {self.km_fit.median_survival_time_:.2f} months."
+        return {"file_path": None, "summary": summary}
 
     def plot_survival_curve(self):
         """Plot the Kaplan-Meier survival curve and save it as a file."""
@@ -951,9 +1088,8 @@ class KaplanMeierEstimator:
         plt.savefig(filename)
         plt.close()
         
-        description = f"Saved Kaplan-Meier survival curve as {filename}."
-        summary = f"Kaplan-Meier survival curve plot saved at {filename}."
-        return {"file_path": filename, "description": description, "summary": summary}
+        summary = "A Kaplan-Meier survival curve visualization plot has been generated."
+        return {"file_path": filename, "summary": summary}
 
 class CoxProportionalHazardsModel:
     def __init__(self, data: pd.DataFrame):
@@ -978,9 +1114,13 @@ class CoxProportionalHazardsModel:
         """Fit the Cox proportional hazards model."""
         self.cox_model.fit(self.data, duration_col='duration', event_col='event')
         summary = self.cox_model.summary.to_string()
-        description = "Cox Proportional Hazards model fitted."
-        summary_str = "Cox Proportional Hazards model successfully fitted."
-        return {"summary": summary, "description": description, "summary_str": summary_str}
+        significant = self.cox_model.summary[self.cox_model.summary['p'] < 0.05]
+        significant_covariates = significant[['coef', 'exp(coef)', 'p']].to_dict('records')
+        summary_str = "Significant covariates:\n"
+        for covariate in significant_covariates:
+            summary_str += f"{covariate['coef']} | Hazard Ratio: {covariate['exp(coef)']:.4f} | p-value: {covariate['p']:.4f}\n"
+        summary_str += " A Cox proportional hazards model visualization plot has been generated."
+        return {"file_path": None, "summary": summary_str}
 
     def plot_survival_curve(self, covariates: dict = None):
         """
@@ -996,15 +1136,13 @@ class CoxProportionalHazardsModel:
             sample = pd.DataFrame([covariates])
             survival_function = self.cox_model.predict_survival_function(sample)
             plt.step(survival_function.index, survival_function.iloc[:, 0], where="post", label=str(covariates))
-            description = f"Cox survival curve plotted for covariates: {covariates}."
-            summary = f"Cox survival curve for covariates {covariates} saved."
+            summary = f"Survival curve for covariates {covariates} has been generated."
         else:
             # Plot the baseline survival curve
             survival_function = self.cox_model.predict_survival_function(self.data)
             for column in survival_function.columns:
                 plt.step(survival_function.index, survival_function[column], where="post", alpha=0.3)
-            description = "Cox baseline survival curves plotted."
-            summary = "Cox baseline survival curves plot saved."
+            summary = "Baseline survival curves have been generated."
         
         plt.title('Cox Proportional Hazards Model Survival Curve')
         plt.xlabel('Time (months)')
@@ -1025,9 +1163,8 @@ class CoxProportionalHazardsModel:
         plt.savefig(filename)
         plt.close()
         
-        description += f" Plot saved as {filename}."
-        summary += f" Plot saved at {filename}."
-        return {"file_path": filename, "description": description, "summary": summary}
+        summary += " A Cox proportional hazards model visualization plot has been generated."
+        return {"file_path": filename, "summary": summary}
 
 # ========================= Time Series Forecasting =========================
 
@@ -1082,6 +1219,9 @@ class TimeSeriesForecaster:
         self.predictions = None
         self.future_dates = None
 
+        # Ensure the plots directory exists
+        os.makedirs("plots", exist_ok=True)
+
     def determine_method(self) -> str:
         """
         Determines the forecasting method based on the number of complete cycles in the data.
@@ -1105,7 +1245,7 @@ class TimeSeriesForecaster:
         - steps (int): Number of future periods to forecast.
 
         Returns:
-        - dict: Contains the forecasted sales series, plot info, a description, and a summary.
+        - dict: Contains the forecasted sales series, plot info, and a short summary.
         """
         # Seasonal decomposition
         decomposition = seasonal_decompose(self.data[self.sales_column], period=self.cycle_period, model='additive', extrapolate_trend='freq')
@@ -1123,9 +1263,7 @@ class TimeSeriesForecaster:
         except Exception as e:
             print(f"ARIMA model fitting failed: {e}")
             return {
-                "forecast": pd.Series([np.nan]*steps, index=pd.date_range(start=self.data.index[-1] + pd.tseries.frequencies.to_offset(self.frequency), periods=steps, freq=self.frequency)), 
-                "plot_info": {"file_path": None, "description": "ARIMA model fitting failed.", "summary": "ARIMA model fitting failed."}, 
-                "description": "ARIMA model fitting failed.",
+                "file_path": None,
                 "summary": "ARIMA model fitting failed."
             }
 
@@ -1156,9 +1294,14 @@ class TimeSeriesForecaster:
         # Plot and save the forecast
         plot_info = self.plot_forecast(forecast_series, 'ARIMA')
 
-        description = "ARIMA forecasting completed."
-        summary = f"ARIMA forecasting completed for {steps} future periods."
-        return {"forecast": forecast_series, "plot_info": plot_info, "description": description, "summary": summary}
+        # Prepare summary with forecasted values
+        forecast_values = forecast_series.to_dict()
+        forecast_summary = "Forecasted values:\n"
+        for date, value in forecast_values.items():
+            forecast_summary += f"[{date.date()}: {value:.2f}]\n"
+        forecast_summary += "A time series forecast visualization plot has been generated."
+
+        return {"file_path": plot_info["file_path"], "summary": forecast_summary}
 
     def prepare_transformer_data(self, window_size: int = 24) -> DataLoader:
         """
@@ -1205,7 +1348,7 @@ class TimeSeriesForecaster:
         - patience (int): Number of epochs to wait for improvement before stopping.
 
         Returns:
-        - dict: Contains the forecasted sales series, plot info, a description, and a summary.
+        - dict: Contains the forecasted sales series, plot info, and a short summary.
         """
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -1289,24 +1432,26 @@ class TimeSeriesForecaster:
         forecast_dates = [last_date + (freq_offset * (i+1)) for i in range(steps)]
         forecast_series = pd.Series(forecast, index=forecast_dates)
 
-        scaler_X = StandardScaler()
-        scaler_y = StandardScaler()
-
         self.predictions = forecast_series
         self.future_dates = forecast_dates
         self.models['Transformer'] = {
             'model': model,
-            'scaler_X': scaler_X,
-            'scaler_y': scaler_y,
+            'scaler_X': None,  # Not used in this context
+            'scaler_y': self.scaler,
             'window_size': window_size
         }
 
         # Plot and save the forecast
         plot_info = self.plot_forecast(forecast_series, 'Transformer')
 
-        description = "Transformer forecasting completed."
-        summary = f"Transformer forecasting completed for {steps} future periods."
-        return {"forecast": forecast_series, "plot_info": plot_info, "description": description, "summary": summary}
+        # Prepare summary with forecasted values
+        forecast_values = forecast_series.to_dict()
+        forecast_summary = "Forecasted values:\n"
+        for date, value in forecast_values.items():
+            forecast_summary += f"[{date.date()}: {value:.2f}]\n"
+        forecast_summary += "A time series forecast visualization plot has been generated."
+
+        return {"file_path": plot_info["file_path"], "summary": forecast_summary}
 
     def plot_forecast(self, forecast: pd.Series, method: str):
         """
@@ -1317,7 +1462,7 @@ class TimeSeriesForecaster:
         - method (str): Forecasting method used ('ARIMA' or 'Transformer').
 
         Returns:
-        - dict: Contains the file path of the saved plot, a description, and a short summary.
+        - dict: Contains the file path of the saved plot and a short summary.
         """
         plt.figure(figsize=(12,6))
         plt.plot(self.data[self.sales_column], label='Historical Sales')
@@ -1335,9 +1480,8 @@ class TimeSeriesForecaster:
         plt.savefig(filename)
         plt.close()
         
-        description = f"Saved {method} forecast plot as {filename}."
-        summary = f"{method} forecast plot saved at {filename}."
-        return {"file_path": filename, "description": description, "summary": summary}
+        summary = f"Forecasted values for the next periods have been generated."
+        return {"file_path": filename, "summary": summary}
 
     def run_forecast(self, steps: int = 6, window_size: int = 24, epochs: int = 200, lr: float = 0.001) -> dict:
         """
@@ -1350,7 +1494,7 @@ class TimeSeriesForecaster:
         - lr (float): Learning rate for the Transformer optimizer.
 
         Returns:
-        - dict: Contains the forecasted sales, plot information, a description, and a summary.
+        - dict: Contains the plot file path and a short summary.
         """
         method = self.determine_method()
         description_method = f"Selected Forecasting Method: {method}."
@@ -1362,9 +1506,9 @@ class TimeSeriesForecaster:
         else:
             raise ValueError("Unsupported forecasting method.")
 
-        forecast['description'] = description_method
-        forecast['summary'] = f"{description_method} Forecasting results are available."
+        forecast['summary'] = f"{description_method} {forecast['summary']}"
         return forecast
+
 
 # ========================= Data Analysis Manager =========================
 
@@ -1396,7 +1540,7 @@ class DataAnalysisManager:
                                    Example: {"method": "Clustering_DBSCAN", "features": ["Advertising", "Sales"], "eps": 0.5, "min_samples": 2}
 
         Returns:
-        - dict: Contains the results of the analysis, including file paths, descriptions, and summaries.
+        - dict: Contains the file path of the saved plot and a short summary.
         """
         method = analysis_command.get("method", "").lower()
         if not method:
@@ -1425,30 +1569,24 @@ class DataAnalysisManager:
                 corr_result = self.correlation.calculate_pearson()
                 corr_matrix = corr_result["correlation_matrix"]
                 plot_info = self.correlation.visualize_correlation(method='pearson')
-                description = corr_result["description"]
+                summary = plot_info["summary"]
             elif corr_type.lower() == "spearman":
                 corr_result = self.correlation.calculate_spearman()
                 corr_matrix = corr_result["correlation_matrix"]
                 plot_info = self.correlation.visualize_correlation(method='spearman')
-                description = corr_result["description"]
+                summary = plot_info["summary"]
             elif corr_type.lower() == "kendall":
                 corr_result = self.correlation.calculate_kendall()
                 corr_matrix = corr_result["correlation_matrix"]
                 plot_info = self.correlation.visualize_correlation(method='kendall')
-                description = corr_result["description"]
+                summary = plot_info["summary"]
             else:
                 raise ValueError("Unsupported correlation type. Choose 'Pearson', 'Spearman', or 'Kendall'.")
 
-            # Optionally, return pairwise correlations with p-values
-            pairwise_corr = self.correlation.pairwise_correlation(method=corr_type.lower())
-
             # Prepare the result
             result = {
-                "correlation_matrix": corr_matrix,
-                "heatmap_plot": plot_info,
-                "pairwise_correlations": pairwise_corr,
-                "description": description,
-                "summary": plot_info["summary"]
+                "file_path": plot_info["file_path"],
+                "summary": summary
             }
             return result
 
@@ -1468,24 +1606,22 @@ class DataAnalysisManager:
             # Perform specified clustering
             if cluster_type.lower() == "kmeans":
                 n_clusters = analysis_command.get("n_clusters", 3)
-                clustered_df_result = self.clustering.kmeans_cluster(n_clusters=n_clusters)
+                clustered_result = self.clustering.kmeans_cluster(n_clusters=n_clusters)
             elif cluster_type.lower() == "dbscan":
                 eps = analysis_command.get("eps", 0.5)
                 min_samples = analysis_command.get("min_samples", 5)
-                clustered_df_result = self.clustering.dbscan_cluster(eps=eps, min_samples=min_samples)
+                clustered_result = self.clustering.dbscan_cluster(eps=eps, min_samples=min_samples)
             elif cluster_type.lower() == "hierarchical":
                 n_clusters = analysis_command.get("n_clusters", 3)
                 linkage = analysis_command.get("linkage", 'ward')
-                clustered_df_result = self.clustering.hierarchical_cluster(n_clusters=n_clusters, linkage=linkage)
+                clustered_result = self.clustering.hierarchical_cluster(n_clusters=n_clusters, linkage=linkage)
             else:
                 raise ValueError("Unsupported clustering type. Choose 'KMeans', 'DBSCAN', or 'Hierarchical'.")
 
             # Prepare the result
             result = {
-                "clustered_data": clustered_df_result["data"],
-                "plot_info": clustered_df_result["plot"] if "plot" in clustered_df_result else None,
-                "description": "Clustering analysis completed.",
-                "summary": clustered_df_result["summary"] if "summary" in clustered_df_result else "Clustering analysis completed without visualization."
+                "file_path": clustered_result["file_path"],
+                "summary": clustered_result["summary"]
             }
             return result
 
@@ -1527,27 +1663,27 @@ class DataAnalysisManager:
                 lr = analysis_command.get("lr", 1e-3)
                 window_size = analysis_command.get("window_size", 24)
                 patience = analysis_command.get("patience", 20)
-                train_info = self.regression.train_transformer(epochs=epochs, batch_size=batch_size, learning_rate=lr, window_size=window_size, patience=patience)
+                train_info = self.regression.train_transformer(steps=6, epochs=epochs, batch_size=batch_size, learning_rate=lr, window_size=window_size, patience=patience)
             else:
                 raise ValueError("Unsupported regression type. Choose 'Ridge', 'Lasso', 'SVM', 'RandomForest', or 'Transformer'.")
 
             # Evaluate models
             evaluation = self.regression.evaluate_models()
-            results = self.regression.get_results()
 
             # Plot results with regression lines and save plots (only for univariate)
             plot_info = self.regression.plot_results()
 
             # Prepare the result
-            result = {
-                "feature_selection": feature_info,
-                "train_test_split": split_info,
-                "training_info": train_info,
-                "evaluation": evaluation,
-                "plots": plot_info,
-                "description": "Regression analysis completed.",
-                "summary": f"Regression analysis with {regression_type} completed. Evaluation metrics: {evaluation['summary']}"
-            }
+            if plot_info:
+                result = {
+                    "file_path": plot_info[0]["file_path"],
+                    "summary": plot_info[0]["summary"]
+                }
+            else:
+                result = {
+                    "file_path": None,
+                    "summary": "Regression analysis completed without generating plots."
+                }
             return result
 
         elif method == "kaplan_meier":
@@ -1565,14 +1701,12 @@ class DataAnalysisManager:
             self.kaplan_meier = KaplanMeierEstimator(data=data)
             fit_info = self.kaplan_meier.fit()
             plot_info = self.kaplan_meier.plot_survival_curve()
-            description = fit_info["description"]
+            summary = fit_info["summary"]
 
             # Prepare the result
             result = {
-                "km_fit": self.kaplan_meier.km_fit,
-                "plot_info": plot_info,
-                "description": description,
-                "summary": plot_info["summary"]
+                "file_path": plot_info["file_path"],
+                "summary": summary
             }
             return result
 
@@ -1590,10 +1724,8 @@ class DataAnalysisManager:
 
             # Prepare the result
             result = {
-                "cox_summary": fit_info["summary"],
-                "plot_info": plot_info,
-                "description": fit_info["description"],
-                "summary": plot_info["summary"]
+                "file_path": plot_info["file_path"],
+                "summary": summary
             }
             return result
 
@@ -1602,7 +1734,7 @@ class DataAnalysisManager:
             steps = analysis_command.get("steps", 6)
             window_size = analysis_command.get("window_size", 24)
             epochs = analysis_command.get("epochs", 200)
-            lr = analysis_command.get("lr", 0.001)
+            lr = analysis_command.get("lr", 1e-3)
             cycle_period = analysis_command.get("cycle_period", None)
 
             sales_column = analysis_command.get("sales_column", "Sales")
@@ -1625,16 +1757,13 @@ class DataAnalysisManager:
                 epochs=epochs,
                 lr=lr
             )
-            description = forecast.pop("description", "")
-            summary = forecast.pop("summary", "")
-            forecast_series = forecast.get("forecast", pd.Series())
-            plot_info = forecast.get("plot_info", {})
+            # Corrected lines: Directly get 'summary' without popping
+            summary = forecast.get("summary", "")
+            plot_info = forecast.get("file_path", None)
 
             # Prepare the result
             result = {
-                "forecast": forecast_series,
-                "plot_info": plot_info,
-                "description": description,
+                "file_path": plot_info,
                 "summary": summary
             }
             return result
@@ -1670,15 +1799,9 @@ if __name__ == "__main__":
     # Perform the correlation analysis
     result_corr = manager_corr.perform_analysis(analysis_command_corr)
 
-    # Display the pairwise correlations
-    print("\nPairwise Correlations:")
-    print(result_corr["pairwise_correlations"])
-
-    # Display heatmap plot information
-    print("\nHeatmap Plot Information:")
-    print(f"File Path: {result_corr['heatmap_plot']['file_path']}")
-    print(f"Description: {result_corr['heatmap_plot']['description']}")
-    print(f"Summary: {result_corr['heatmap_plot']['summary']}")
+    # Display the summary
+    print("\nSummary:")
+    print(result_corr["summary"])
 
     # ------------------- Example 2: Clustering Analysis (KMeans) -------------------
     print("\n===== Example 2: KMeans Clustering =====")
@@ -1704,25 +1827,11 @@ if __name__ == "__main__":
     }
 
     # Perform the clustering analysis
-    clustered_data = manager_cluster.perform_analysis(analysis_command_cluster)
+    clustered_result = manager_cluster.perform_analysis(analysis_command_cluster)
 
-    # Display the clustered DataFrame
-    print("\nClustered Data Sample:")
-    try:
-        print(clustered_data["clustered_data"].head())
-    except KeyError:
-        print("Error: 'clustered_data' key not found in the clustering result.")
-
-    # Display plot information
-    if clustered_data.get("plot_info"):
-        plot_info_cluster = clustered_data["plot_info"]
-        print("\nCluster Plot Information:")
-        print(f"File Path: {plot_info_cluster['file_path']}")
-        print(f"Description: {plot_info_cluster['description']}")
-        # Access 'summary' directly from the main result dictionary
-        print(f"Summary: {clustered_data['summary']}")
-    else:
-        print("\nNo plot information available for clustering analysis.")
+    # Display the summary
+    print("\nSummary:")
+    print(clustered_result["summary"])
 
     # ------------------- Example 3: Regression Analysis (Ridge) - Multivariate -------------------
     print("\n===== Example 3: Ridge Regression (Multivariate) =====")
@@ -1750,28 +1859,9 @@ if __name__ == "__main__":
     # Perform the regression analysis
     results_reg = manager_reg.perform_analysis(analysis_command_reg)
 
-    # Display the evaluation results
-    print("\nRegression Model Evaluation:")
-    for model, metrics in results_reg["evaluation"]["evaluation"].items():
-        print(f"{model}:")
-        print(f"  MSE: {metrics['MSE']:.4f}")
-        print(f"  R2: {metrics['R2']:.4f}")
-        if 'Intercept' in metrics:
-            print(f"  Intercept: {metrics['Intercept']:.4f}")
-        if 'Coefficients' in metrics:
-            print(f"  Coefficients:")
-            for feature, coef in metrics['Coefficients'].items():
-                print(f"    {feature}: {coef:.4f}")
-
-    # Display plot information
-    if results_reg.get("plots"):
-        for plot in results_reg["plots"]:
-            print(f"\nPlot Information:")
-            print(f"File Path: {plot['file_path']}")
-            print(f"Description: {plot['description']}")
-            print(f"Summary: {plot['summary']}")
-    else:
-        print("\nNo plots available for regression analysis.")
+    # Display the summary
+    print("\nSummary:")
+    print(results_reg["summary"])
 
     # ------------------- Example 4: Survival Analysis (Kaplan-Meier) -------------------
     print("\n===== Example 4: Kaplan-Meier Estimation =====")
@@ -1793,16 +1883,9 @@ if __name__ == "__main__":
     # Perform the Kaplan-Meier analysis
     km_result = manager_km.perform_analysis(analysis_command_km)
 
-    # Display KM fit information
-    print("\nKaplan-Meier Fit Description:")
-    print(km_result["description"])
-    print(f"Summary: {km_result['summary']}")
-
-    # Display plot information
-    print("\nKaplan-Meier Plot Information:")
-    print(f"File Path: {km_result['plot_info']['file_path']}")
-    print(f"Description: {km_result['plot_info']['description']}")
-    print(f"Summary: {km_result['plot_info']['summary']}")
+    # Display the summary
+    print("\nSummary:")
+    print(km_result["summary"])
 
     # ------------------- Example 5: Survival Analysis (Cox Proportional Hazards Model) -------------------
     print("\n===== Example 5: Cox Proportional Hazards Model =====")
@@ -1828,16 +1911,9 @@ if __name__ == "__main__":
     # Perform the Cox Proportional Hazards analysis
     cox_result = manager_cox.perform_analysis(analysis_command_cox)
 
-    # Display Cox model summary
-    print("\nCox Proportional Hazards Model Summary:")
-    print(cox_result["cox_summary"])
-    print(f"Summary: {cox_result['summary']}")
-
-    # Display plot information
-    print("\nCox Proportional Hazards Plot Information:")
-    print(f"File Path: {cox_result['plot_info']['file_path']}")
-    print(f"Description: {cox_result['plot_info']['description']}")
-    print(f"Summary: {cox_result['plot_info']['summary']}")
+    # Display the summary
+    print("\nSummary:")
+    print(cox_result["summary"])
 
     # ------------------- Example 6: Time Series Forecasting (ARIMA) -------------------
     print("\n===== Example 6: ARIMA Time Series Forecasting =====")
@@ -1866,15 +1942,9 @@ if __name__ == "__main__":
     # Perform the forecasting analysis
     forecast_ts = manager_ts.perform_analysis(analysis_command_ts)
 
-    # Display the forecasted sales
-    print("\nForecasted Sales (ARIMA):")
-    print(forecast_ts["forecast"])
-
-    # Display plot information
-    print("\nARIMA Forecast Plot Information:")
-    print(f"File Path: {forecast_ts['plot_info']['file_path']}")
-    print(f"Description: {forecast_ts['plot_info']['description']}")
-    print(f"Summary: {forecast_ts['plot_info']['summary']}")
+    # Display the summary
+    print("\nSummary:")
+    print(forecast_ts["summary"])
 
     # ------------------- Example 7: Regression Analysis (Random Forest) - Multivariate -------------------
     print("\n===== Example 7: Random Forest Regression (Multivariate) =====")
@@ -1903,22 +1973,9 @@ if __name__ == "__main__":
     # Perform the regression analysis
     results_rf = manager_rf.perform_analysis(analysis_command_rf)
 
-    # Display the evaluation results
-    print("\nRandom Forest Regression Evaluation:")
-    for model, metrics in results_rf["evaluation"]["evaluation"].items():
-        print(f"{model}:")
-        print(f"  MSE: {metrics['MSE']:.4f}")
-        print(f"  R2: {metrics['R2']:.4f}")
-
-    # Display plot information
-    if results_rf.get("plots"):
-        for plot in results_rf["plots"]:
-            print(f"\nPlot Information:")
-            print(f"File Path: {plot['file_path']}")
-            print(f"Description: {plot['description']}")
-            print(f"Summary: {plot['summary']}")
-    else:
-        print("\nNo plots available for regression analysis.")
+    # Display the summary
+    print("\nSummary:")
+    print(results_rf["summary"])
 
     # ------------------- Example 8: Regression Analysis (Lasso) - Univariate -------------------
     print("\n===== Example 8: Lasso Regression (Univariate) =====")
@@ -1942,28 +1999,9 @@ if __name__ == "__main__":
     # Perform the regression analysis
     results_lasso = manager_lasso.perform_analysis(analysis_command_lasso)
 
-    # Display the evaluation results
-    print("\nLasso Regression Evaluation:")
-    for model, metrics in results_lasso["evaluation"]["evaluation"].items():
-        print(f"{model}:")
-        print(f"  MSE: {metrics['MSE']:.4f}")
-        print(f"  R2: {metrics['R2']:.4f}")
-        if 'Intercept' in metrics:
-            print(f"  Intercept: {metrics['Intercept']:.4f}")
-        if 'Coefficients' in metrics:
-            print(f"  Coefficients:")
-            for feature, coef in metrics['Coefficients'].items():
-                print(f"    {feature}: {coef:.4f}")
-
-    # Display plot information
-    if results_lasso.get("plots"):
-        for plot in results_lasso["plots"]:
-            print(f"\nPlot Information:")
-            print(f"File Path: {plot['file_path']}")
-            print(f"Description: {plot['description']}")
-            print(f"Summary: {plot['summary']}")
-    else:
-        print("\nNo plots available for Lasso regression analysis.")
+    # Display the summary
+    print("\nSummary:")
+    print(results_lasso["summary"])
 
     # ------------------- Example 9: Time Series Forecasting (Transformer) -------------------
     print("\n===== Example 9: Transformer Time Series Forecasting =====")
@@ -2005,15 +2043,9 @@ if __name__ == "__main__":
     # Perform the forecasting analysis
     forecast_transformer = manager_transformer.perform_analysis(analysis_command_transformer)
 
-    # Display the forecasted sales
-    print("\nForecasted Sales (Transformer):")
-    print(forecast_transformer["forecast"])
-
-    # Display plot information
-    print("\nTransformer Forecast Plot Information:")
-    print(f"File Path: {forecast_transformer['plot_info']['file_path']}")
-    print(f"Description: {forecast_transformer['plot_info']['description']}")
-    print(f"Summary: {forecast_transformer['plot_info']['summary']}")
+    # Display the summary
+    print("\nSummary:")
+    print(forecast_transformer["summary"])
 
     # ------------------- Example 10: Clustering Analysis (DBSCAN) with Highlighted Customers -------------------
     print("\n===== Example 10: DBSCAN Clustering with Highlighted Customers =====")
@@ -2040,17 +2072,20 @@ if __name__ == "__main__":
     }
 
     # Perform the clustering analysis
-    clustered_data_dbscan = manager_dbscan.perform_analysis(analysis_command_dbscan)
+    clustered_result_dbscan = manager_dbscan.perform_analysis(analysis_command_dbscan)
 
     # Define customer IDs to highlight
     highlight_customers = np.random.choice(clustering_data_dbscan['customer_id'], size=10, replace=False).tolist()
 
     # Plot clusters with highlighted customers
-    clustered_df_dbscan = clustered_data_dbscan["clustered_data"].copy()
+    clustered_df_dbscan = clustering_data_dbscan.copy()
+    scaler = StandardScaler()
+    scaled_features_dbscan = scaler.fit_transform(clustered_df_dbscan[["Advertising", "Sales", "Foot_Traffic", "Promotions"]])
+    dbscan = DBSCAN(eps=0.5, min_samples=5)
+    clustered_df_dbscan['cluster_dbscan'] = dbscan.fit_predict(scaled_features_dbscan)
 
-    # Re-initialize ClusteringAnalysis to access plot_clusters method with highlights
-    clustering_instance_dbscan = ClusteringAnalysis(clustering_data_dbscan, ["Advertising", "Sales", "Foot_Traffic", "Promotions"])
-    clustering_instance_dbscan.df = clustered_df_dbscan  # Update the DataFrame with cluster labels
+    # Initialize ClusteringAnalysis instance
+    clustering_instance_dbscan = ClusteringAnalysis(clustering_df := clustered_df_dbscan, ["Advertising", "Sales", "Foot_Traffic", "Promotions"], customer_id_column='customer_id')
 
     # Plot and save the clusters with highlighted customers
     filename_dbscan = clustering_instance_dbscan.plot_clusters(
@@ -2058,15 +2093,9 @@ if __name__ == "__main__":
         title='DBSCAN Clustering with Highlighted Customers',
         highlight_ids=highlight_customers
     )
-    description_dbscan = f"DBSCAN clustering performed with eps=0.5 and min_samples=5. Plot with highlighted customers saved as {filename_dbscan}."
-    summary_dbscan = f"DBSCAN clustering with highlighted customers saved at {filename_dbscan}."
-    print(f"Saved DBSCAN clustering plot with highlights as {filename_dbscan}")
-    print(f"Description: {description_dbscan}")
-    print(f"Summary: {summary_dbscan}")
-
-    # Display the clustered DataFrame sample
-    print("\nDBSCAN Clustered Data Sample:")
-    print(clustered_df_dbscan.head())
+    summary_dbscan = f"DBSCAN clustering with eps=0.5 and min_samples=5. Number of clusters found: {len(set(clustered_df_dbscan['cluster_dbscan'])) - (1 if -1 in clustered_df_dbscan['cluster_dbscan'] else 0)}. A clustering visualization plot has been generated."
+    print("\nSummary:")
+    print(summary_dbscan)
 
     # ------------------- Example 11: Multiple Analysis Methods (Correlation, Clustering, Regression) -------------------
     print("\n===== Example 11: Multiple Analysis Methods (Correlation, Clustering, Regression) =====")
@@ -2100,7 +2129,7 @@ if __name__ == "__main__":
         "features": ["Advertising", "Sales", "Foot_Traffic", "Promotions"],
         "n_clusters": 5
     }
-    clustered_data_multiple = manager_multiple.perform_analysis(clustering_command_multiple)
+    clustered_result_multiple = manager_multiple.perform_analysis(clustering_command_multiple)
 
     # 3. Ridge Regression
     regression_command_multiple = {
@@ -2109,47 +2138,15 @@ if __name__ == "__main__":
         "target": ["Sales"],
         "alpha": 1.0
     }
-    regression_results_multiple = manager_multiple.perform_analysis(regression_command_multiple)
+    regression_result_multiple = manager_multiple.perform_analysis(regression_command_multiple)
 
-    # Display all results
-    print("\nAll Analysis Results:")
-    print("\nCorrelation Analysis Result:")
-    print(correlation_result_multiple["pairwise_correlations"].head())
+    # Display all summaries
+    print("\nSummary:")
+    print("1. Correlation Analysis:")
+    print(correlation_result_multiple["summary"])
 
-    print("\nCorrelation Heatmap Plot Information:")
-    print(f"File Path: {correlation_result_multiple['heatmap_plot']['file_path']}")
-    print(f"Description: {correlation_result_multiple['heatmap_plot']['description']}")
-    print(f"Summary: {correlation_result_multiple['heatmap_plot']['summary']}")
+    print("\n2. Clustering Analysis:")
+    print(clustered_result_multiple["summary"])
 
-    print("\nClustering Analysis Result Sample:")
-    print(clustered_data_multiple["clustered_data"].head())
-
-    if clustered_data_multiple.get("plot_info"):
-        plot_info_multiple = clustered_data_multiple["plot_info"]
-        print("\nClustering Plot Information:")
-        print(f"File Path: {plot_info_multiple['file_path']}")
-        print(f"Description: {plot_info_multiple['description']}")
-        print(f"Summary: {clustered_data_multiple['summary']}")
-    else:
-        print("\nNo plot information available for clustering analysis.")
-
-    print("\nRegression Analysis Result:")
-    for model, metrics in regression_results_multiple["evaluation"]["evaluation"].items():
-        print(f"{model}:")
-        print(f"  MSE: {metrics['MSE']:.4f}")
-        print(f"  R2: {metrics['R2']:.4f}")
-        if 'Intercept' in metrics:
-            print(f"  Intercept: {metrics['Intercept']:.4f}")
-        if 'Coefficients' in metrics:
-            print(f"  Coefficients:")
-            for feature, coef in metrics['Coefficients'].items():
-                print(f"    {feature}: {coef:.4f}")
-
-    if regression_results_multiple.get("plots"):
-        for plot in regression_results_multiple["plots"]:
-            print(f"\nPlot Information:")
-            print(f"File Path: {plot['file_path']}")
-            print(f"Description: {plot['description']}")
-            print(f"Summary: {plot['summary']}")
-    else:
-        print("\nNo plots available for regression analysis.")
+    print("\n3. Regression Analysis:")
+    print(regression_result_multiple["summary"])
