@@ -74,20 +74,20 @@ class WebScraper:
     def __init__(self):
         self.logger = Logger()
         self.search_engines = [
-            # {
-            #     'name': 'Google',
-            #     'url': 'https://www.google.com/search?q=',
-            #     'result_selector': 'div.g div.yuRUbf a',
-            #     'title_selector': 'div.g h3',
-            #     'snippet_selector': 'div.g div.VwiC3b'
-            # },
-            # {
-            #     'name': 'Bing',
-            #     'url': 'https://www.bing.com/search?q=',
-            #     'result_selector': '#b_results h2 a',
-            #     'title_selector': '#b_results h2',
-            #     'snippet_selector': '#b_results .b_caption p'
-            # },
+            {
+                'name': 'Google',
+                'url': 'https://www.google.com/search?q=',
+                'result_selector': 'div.g div.yuRUbf a',
+                'title_selector': 'div.g h3',
+                'snippet_selector': 'div.g div.VwiC3b'
+            },
+            {
+                'name': 'Bing',
+                'url': 'https://www.bing.com/search?q=',
+                'result_selector': '#b_results h2 a',
+                'title_selector': '#b_results h2',
+                'snippet_selector': '#b_results .b_caption p'
+            },
             {
                 'name': 'Ecosia',
                 'url': 'https://www.ecosia.org/search?q=',
