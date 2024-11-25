@@ -46,7 +46,7 @@ class DeepSeek:
         )
         return response.choices[0].message.content
 
-    def summary_web(self, content, keywords, max_tokens):
+    def summary_web(self, content, keywords, max_tokens, temp=0.3):
         response = self.client.chat.completions.create(
             model=self.model,
             messages=[
@@ -54,7 +54,7 @@ class DeepSeek:
                 {"role": "user", "content": content}
             ],
             max_tokens=max_tokens,
-            temperature=0.3
+            temperature=temp
         )
         return response.choices[0].message.content
 
@@ -62,7 +62,7 @@ class DeepSeek:
         response = self.client.chat.completions.create(
             model=self.model,
             messages=[
-                {"role": "system", "content": f"Please provide a 500 words sconcise summary of the following content the following passages about {keywords} in 500 words with point form and without any introduction or conclusion:"},
+                {"role": "system", "content": f"Please provide a 500 words concise summary of the following content the following passages about {keywords} in 500 words with point form and without any introduction or conclusion:"},
                 {"role": "user", "content": content}
             ],
             max_tokens=max_tokens,
