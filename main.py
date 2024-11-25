@@ -33,8 +33,7 @@ def main():
             debug = agent_config["debug"]
         )
         response = retaillm.chat(user_input)
-        print(response)
-
+        print("response", response)
 # if __name__ == "__main__":
 #     app.run(host="0.0.0.0", port = 8080, debug=True)
 

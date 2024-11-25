@@ -1,0 +1,2076 @@
+[
+    {
+        "userinput": "Forecast the next 6 months of sales based on historical data.",
+        "data_info": {
+            "description": "sales and date",
+            "attribute names": ["Sales", "Date"],
+            "dtypes": ["timestamp", "int64"],
+            "shape": [36, 2],
+            "data_head": {
+                "Sales": [500, 600, 550, 650, 780],
+                "Date": ["2021-01-01", "2021-01-02", "2021-01-03", "2021-01-04", "2021-01-05"]
+            }
+        },
+        "return": {
+            "method": "Time_series_forecast",
+            "predictor": ["Sales"],
+            "target": ["Sales"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between advertising spend and sales.",
+        "data_info": {
+            "description": "sales and advertising data",
+            "attribute names": ["Sales", "Advertising"],
+            "dtypes": ["int64", "int64"],
+            "shape": [128, 2],
+            "data_head": {
+                "Sales": [500, 600, 550, 650, 780],
+                "Advertising": [100, 120, 110, 130, 150]
+            }
+        },
+        "return": {
+            "method": "Correlation_Spearman",
+            "predictor": ["Advertising"],
+            "target": ["Sales"]
+        }
+    },
+    {
+        "userinput": "Segment customers based on their annual spending and purchase frequency.",
+        "data_info": {
+            "description": "customer segmentation data",
+            "attribute names": ["CustomerID", "Spending", "Frequency"],
+            "dtypes": ["int64", "int64", "int64"],
+            "shape": [200, 3],
+            "data_head": {
+                "CustomerID": [1, 2, 3, 4, 5],
+                "Spending": [500, 600, 550, 650, 780],
+                "Frequency": [2, 3, 2, 4, 5]
+            }
+        },
+        "return": {
+            "method": "Clustering_KMeans",
+            "predictor": ["Spending", "Frequency"],
+            "target": ["CustomerID"]
+        }
+    },
+    {
+        "userinput": "Predict the likelihood of customer churn based on their usage patterns.",
+        "data_info": {
+            "description": "customer churn data",
+            "attribute names": ["Churn", "UsagePatterns"],
+            "dtypes": ["int64", "int64"],
+            "shape": [150, 2],
+            "data_head": {
+                "Churn": [0, 1, 0, 1, 0],
+                "UsagePatterns": [10, 5, 8, 3, 7]
+            }
+        },
+        "return": {
+            "method": "Regression_RandomForest",
+            "predictor": ["UsagePatterns"],
+            "target": ["Churn"]
+        }
+    },
+    {
+        "userinput": "Identify clusters of products based on their sales volume and profit margin.",
+        "data_info": {
+            "description": "product clustering data",
+            "attribute names": ["ProductID", "SalesVolume", "ProfitMargin"],
+            "dtypes": ["int64", "int64", "float64"],
+            "shape": [100, 3],
+            "data_head": {
+                "ProductID": [1, 2, 3, 4, 5],
+                "SalesVolume": [100, 150, 200, 120, 180],
+                "ProfitMargin": [0.25, 0.30, 0.20, 0.28, 0.32]
+            }
+        },
+        "return": {
+            "method": "Clustering_DBSCAN",
+            "predictor": ["SalesVolume", "ProfitMargin"],
+            "target": ["ProductID"]
+        }
+    },
+    {
+        "userinput": "Analyze the survival rate of patients based on their treatment duration.",
+        "data_info": {
+            "description": "patient survival data",
+            "attribute names": ["PatientID", "TreatmentDuration", "SurvivalRate"],
+            "dtypes": ["int64", "int64", "float64"],
+            "shape": [50, 3],
+            "data_head": {
+                "PatientID": [1, 2, 3, 4, 5],
+                "TreatmentDuration": [30, 45, 60, 35, 50],
+                "SurvivalRate": [0.75, 0.80, 0.65, 0.70, 0.85]
+            }
+        },
+        "return": {
+            "method": "Kaplan_Meier",
+            "predictor": ["TreatmentDuration"],
+            "target": ["SurvivalRate"]
+        }
+    },
+    {
+        "userinput": "Determine the impact of temperature on crop yield.",
+        "data_info": {
+            "description": "crop yield data",
+            "attribute names": ["Temperature", "CropYield"],
+            "dtypes": ["float64", "int64"],
+            "shape": [40, 2],
+            "data_head": {
+                "Temperature": [20.5, 22.0, 21.5, 23.0, 24.5],
+                "CropYield": [500, 600, 550, 650, 780]
+            }
+        },
+        "return": {
+            "method": "Correlation_Pearson",
+            "predictor": ["Temperature"],
+            "target": ["CropYield"]
+        }
+    },
+    {
+        "userinput": "Predict the price of houses based on their size and location.",
+        "data_info": {
+            "description": "house pricing data",
+            "attribute names": ["Price", "Size", "Location"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "Price": [200000, 250000, 300000, 220000, 280000],
+                "Size": [1500, 2000, 2500, 1800, 2200],
+                "Location": ["Urban", "Suburban", "Urban", "Rural", "Suburban"]
+            }
+        },
+        "return": {
+            "method": "Regression_Ridge",
+            "predictor": ["Size", "Location"],
+            "target": ["Price"]
+        }
+    },
+    {
+        "userinput": "Cluster articles based on their content similarity.",
+        "data_info": {
+            "description": "article clustering data",
+            "attribute names": ["ArticleID", "Content"],
+            "dtypes": ["int64", "str"],
+            "shape": [60, 2],
+            "data_head": {
+                "ArticleID": [1, 2, 3, 4, 5],
+                "Content": ["Lorem ipsum dolor sit amet", "Consectetur adipiscing elit", "Sed do eiusmod tempor incididunt", "Ut labore et dolore magna aliqua", "Ut enim ad minim veniam"]
+            }
+        },
+        "return": {
+            "method": "Clustering_Hierarchical",
+            "predictor": ["Content"],
+            "target": ["ArticleID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between employee satisfaction and job performance.",
+        "data_info": {
+            "description": "employee performance data",
+            "attribute names": ["Satisfaction", "JobPerformance"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "Satisfaction": [7, 8, 6, 9, 5],
+                "JobPerformance": [8, 9, 7, 10, 6]
+            }
+        },
+        "return": {
+            "method": "Correlation_Kendall",
+            "predictor": ["Satisfaction"],
+            "target": ["JobPerformance"]
+        }
+    },
+    {
+        "userinput": "Predict the risk of loan default based on credit score and income.",
+        "data_info": {
+            "description": "loan default data",
+            "attribute names": ["LoanDefault", "CreditScore", "Income"],
+            "dtypes": ["int64", "int64", "int64"],
+            "shape": [120, 3],
+            "data_head": {
+                "LoanDefault": [0, 1, 0, 1, 0],
+                "CreditScore": [700, 650, 720, 680, 710],
+                "Income": [50000, 45000, 55000, 48000, 52000]
+            }
+        },
+        "return": {
+            "method": "Regression_Lasso",
+            "predictor": ["CreditScore", "Income"],
+            "target": ["LoanDefault"]
+        }
+    },
+    {
+        "userinput": "Forecast the stock price of a company based on historical data.",
+        "data_info": {
+            "description": "stock price data",
+            "attribute names": ["StockPrice", "Date"],
+            "dtypes": ["float64", "timestamp"],
+            "shape": [50, 2],
+            "data_head": {
+                "StockPrice": [100.5, 102.0, 101.5, 103.0, 104.5],
+                "Date": ["2021-01-01", "2021-01-02", "2021-01-03", "2021-01-04", "2021-01-05"]
+            }
+        },
+        "return": {
+            "method": "Time_series_forecast",
+            "predictor": ["StockPrice"],
+            "target": ["StockPrice"]
+        }
+    },
+    {
+        "userinput": "Segment customers based on their online behavior and purchase history.",
+        "data_info": {
+            "description": "customer segmentation data",
+            "attribute names": ["CustomerID", "OnlineBehavior", "PurchaseHistory"],
+            "dtypes": ["int64", "int64", "int64"],
+            "shape": [150, 3],
+            "data_head": {
+                "CustomerID": [1, 2, 3, 4, 5],
+                "OnlineBehavior": [10, 15, 20, 12, 18],
+                "PurchaseHistory": [5, 8, 10, 6, 9]
+            }
+        },
+        "return": {
+            "method": "Clustering_KMeans",
+            "predictor": ["OnlineBehavior", "PurchaseHistory"],
+            "target": ["CustomerID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between education level and income.",
+        "data_info": {
+            "description": "education and income data",
+            "attribute names": ["EducationLevel", "Income"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "EducationLevel": [12, 16, 14, 18, 12],
+                "Income": [30000, 50000, 40000, 60000, 35000]
+            }
+        },
+        "return": {
+            "method": "Correlation_Spearman",
+            "predictor": ["EducationLevel"],
+            "target": ["Income"]
+        }
+    },
+    {
+        "userinput": "Predict the sales of a product based on its price and advertising budget.",
+        "data_info": {
+            "description": "product sales data",
+            "attribute names": ["Sales", "Price", "AdvertisingBudget"],
+            "dtypes": ["int64", "int64", "int64"],
+            "shape": [120, 3],
+            "data_head": {
+                "Sales": [500, 600, 550, 650, 780],
+                "Price": [100, 120, 110, 130, 150],
+                "AdvertisingBudget": [5000, 6000, 5500, 6500, 7800]
+            }
+        },
+        "return": {
+            "method": "Regression_RandomForest",
+            "predictor": ["Price", "AdvertisingBudget"],
+            "target": ["Sales"]
+        }
+    },
+    {
+        "userinput": "Cluster movies based on their genre and viewer ratings.",
+        "data_info": {
+            "description": "movie clustering data",
+            "attribute names": ["MovieID", "Genre", "ViewerRatings"],
+            "dtypes": ["int64", "str", "float64"],
+            "shape": [80, 3],
+            "data_head": {
+                "MovieID": [1, 2, 3, 4, 5],
+                "Genre": ["Action", "Comedy", "Drama", "Action", "Comedy"],
+                "ViewerRatings": [7.5, 8.0, 7.0, 7.8, 8.2]
+            }
+        },
+        "return": {
+            "method": "Clustering_DBSCAN",
+            "predictor": ["Genre", "ViewerRatings"],
+            "target": ["MovieID"]
+        }
+    },
+    {
+        "userinput": "Analyze the survival rate of patients based on their age and treatment type.",
+        "data_info": {
+            "description": "patient survival data",
+            "attribute names": ["PatientID", "Age", "TreatmentType", "SurvivalRate"],
+            "dtypes": ["int64", "int64", "str", "float64"],
+            "shape": [50, 4],
+            "data_head": {
+                "PatientID": [1, 2, 3, 4, 5],
+                "Age": [45, 50, 60, 55, 40],
+                "TreatmentType": ["A", "B", "A", "B", "A"],
+                "SurvivalRate": [0.75, 0.80, 0.65, 0.70, 0.85]
+            }
+        },
+        "return": {
+            "method": "Cox_Proportional_Hazards",
+            "predictor": ["Age", "TreatmentType"],
+            "target": ["SurvivalRate"]
+        }
+    },
+    {
+        "userinput": "Determine the impact of rainfall on crop yield.",
+        "data_info": {
+            "description": "crop yield data",
+            "attribute names": ["Rainfall", "CropYield"],
+            "dtypes": ["float64", "int64"],
+            "shape": [40, 2],
+            "data_head": {
+                "Rainfall": [50.5, 52.0, 51.5, 53.0, 54.5],
+                "CropYield": [500, 600, 550, 650, 780]
+            }
+        },
+        "return": {
+            "method": "Correlation_Pearson",
+            "predictor": ["Rainfall"],
+            "target": ["CropYield"]
+        }
+    },
+    {
+        "userinput": "Predict the price of cars based on their mileage and age.",
+        "data_info": {
+            "description": "car pricing data",
+            "attribute names": ["Price", "Mileage", "Age"],
+            "dtypes": ["int64", "int64", "int64"],
+            "shape": [80, 3],
+            "data_head": {
+                "Price": [20000, 25000, 30000, 22000, 28000],
+                "Mileage": [50000, 45000, 55000, 48000, 52000],
+                "Age": [3, 5, 2, 4, 6]
+            }
+        },
+        "return": {
+            "method": "Regression_Ridge",
+            "predictor": ["Mileage", "Age"],
+            "target": ["Price"]
+        }
+    },
+    {
+        "userinput": "Cluster articles based on their topic and author.",
+        "data_info": {
+            "description": "article clustering data",
+            "attribute names": ["ArticleID", "Topic", "Author"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [60, 3],
+            "data_head": {
+                "ArticleID": [1, 2, 3, 4, 5],
+                "Topic": ["Technology", "Health", "Technology", "Politics", "Health"],
+                "Author": ["John Doe", "Jane Smith", "John Doe", "Jane Smith", "John Doe"]
+            }
+        },
+        "return": {
+            "method": "Clustering_Hierarchical",
+            "predictor": ["Topic", "Author"],
+            "target": ["ArticleID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between exercise frequency and health outcomes.",
+        "data_info": {
+            "description": "exercise and health data",
+            "attribute names": ["ExerciseFrequency", "HealthOutcomes"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "ExerciseFrequency": [3, 5, 4, 6, 2],
+                "HealthOutcomes": [8, 9, 7, 10, 6]
+            }
+        },
+        "return": {
+            "method": "Correlation_Kendall",
+            "predictor": ["ExerciseFrequency"],
+            "target": ["HealthOutcomes"]
+        }
+    },
+    {
+        "userinput": "Predict the risk of credit card fraud based on transaction history.",
+        "data_info": {
+            "description": "credit card fraud data",
+            "attribute names": ["FraudRisk", "TransactionHistory"],
+            "dtypes": ["int64", "int64"],
+            "shape": [120, 2],
+            "data_head": {
+                "FraudRisk": [0, 1, 0, 1, 0],
+                "TransactionHistory": [100, 50, 80, 30, 70]
+            }
+        },
+        "return": {
+            "method": "Regression_Lasso",
+            "predictor": ["TransactionHistory"],
+            "target": ["FraudRisk"]
+        }
+    },
+    {
+        "userinput": "Forecast the demand for a product based on historical sales data.",
+        "data_info": {
+            "description": "product demand data",
+            "attribute names": ["Demand", "Sales"],
+            "dtypes": ["int64", "int64"],
+            "shape": [50, 2],
+            "data_head": {
+                "Demand": [100, 150, 200, 120, 180],
+                "Sales": [500, 600, 550, 650, 780]
+            }
+        },
+        "return": {
+            "method": "Time_series_forecast",
+            "predictor": ["Sales"],
+            "target": ["Demand"]
+        }
+    },
+    {
+        "userinput": "Segment customers based on their social media activity and purchase behavior.",
+        "data_info": {
+            "description": "customer segmentation data",
+            "attribute names": ["CustomerID", "SocialMediaActivity", "PurchaseBehavior"],
+            "dtypes": ["int64", "int64", "int64"],
+            "shape": [150, 3],
+            "data_head": {
+                "CustomerID": [1, 2, 3, 4, 5],
+                "SocialMediaActivity": [10, 15, 20, 12, 18],
+                "PurchaseBehavior": [5, 8, 10, 6, 9]
+            }
+        },
+        "return": {
+            "method": "Clustering_KMeans",
+            "predictor": ["SocialMediaActivity", "PurchaseBehavior"],
+            "target": ["CustomerID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between job satisfaction and employee retention.",
+        "data_info": {
+            "description": "employee retention data",
+            "attribute names": ["JobSatisfaction", "EmployeeRetention"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "JobSatisfaction": [7, 8, 6, 9, 5],
+                "EmployeeRetention": [8, 9, 7, 10, 6]
+            }
+        },
+        "return": {
+            "method": "Correlation_Spearman",
+            "predictor": ["JobSatisfaction"],
+            "target": ["EmployeeRetention"]
+        }
+    },
+    {
+        "userinput": "Predict the sales of a product based on its features and market trends.",
+        "data_info": {
+            "description": "product sales data",
+            "attribute names": ["Sales", "Features", "MarketTrends"],
+            "dtypes": ["int64", "int64", "int64"],
+            "shape": [120, 3],
+            "data_head": {
+                "Sales": [500, 600, 550, 650, 780],
+                "Features": [10, 12, 11, 13, 15],
+                "MarketTrends": [5000, 6000, 5500, 6500, 7800]
+            }
+        },
+        "return": {
+            "method": "Regression_RandomForest",
+            "predictor": ["Features", "MarketTrends"],
+            "target": ["Sales"]
+        }
+    },
+    {
+        "userinput": "Cluster movies based on their director and box office performance.",
+        "data_info": {
+            "description": "movie clustering data",
+            "attribute names": ["MovieID", "Director", "BoxOfficePerformance"],
+            "dtypes": ["int64", "str", "int64"],
+            "shape": [80, 3],
+            "data_head": {
+                "MovieID": [1, 2, 3, 4, 5],
+                "Director": ["John Doe", "Jane Smith", "John Doe", "Jane Smith", "John Doe"],
+                "BoxOfficePerformance": [1000000, 1500000, 2000000, 1200000, 1800000]
+            }
+        },
+        "return": {
+            "method": "Clustering_DBSCAN",
+            "predictor": ["Director", "BoxOfficePerformance"],
+            "target": ["MovieID"]
+        }
+    },
+    {
+        "userinput": "Analyze the survival rate of patients based on their gender and treatment duration.",
+        "data_info": {
+            "description": "patient survival data",
+            "attribute names": ["PatientID", "Gender", "TreatmentDuration", "SurvivalRate"],
+            "dtypes": ["int64", "str", "int64", "float64"],
+            "shape": [50, 4],
+            "data_head": {
+                "PatientID": [1, 2, 3, 4, 5],
+                "Gender": ["Male", "Female", "Male", "Female", "Male"],
+                "TreatmentDuration": [30, 45, 60, 35, 50],
+                "SurvivalRate": [0.75, 0.80, 0.65, 0.70, 0.85]
+            }
+        },
+        "return": {
+            "method": "Cox_Proportional_Hazards",
+            "predictor": ["Gender", "TreatmentDuration"],
+            "target": ["SurvivalRate"]
+        }
+    },
+    {
+        "userinput": "Determine the impact of temperature on energy consumption.",
+        "data_info": {
+            "description": "energy consumption data",
+            "attribute names": ["Temperature", "EnergyConsumption"],
+            "dtypes": ["float64", "int64"],
+            "shape": [40, 2],
+            "data_head": {
+                "Temperature": [20.5, 22.0, 21.5, 23.0, 24.5],
+                "EnergyConsumption": [500, 600, 550, 650, 780]
+            }
+        },
+        "return": {
+            "method": "Correlation_Pearson",
+            "predictor": ["Temperature"],
+            "target": ["EnergyConsumption"]
+        }
+    },
+    {
+        "userinput": "Predict the price of cars based on their make and model.",
+        "data_info": {
+            "description": "car pricing data",
+            "attribute names": ["Price", "Make", "Model"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "Price": [20000, 25000, 30000, 22000, 28000],
+                "Make": ["Toyota", "Honda", "Toyota", "Honda", "Toyota"],
+                "Model": ["Corolla", "Civic", "Corolla", "Civic", "Corolla"]
+            }
+        },
+        "return": {
+            "method": "Regression_Ridge",
+            "predictor": ["Make", "Model"],
+            "target": ["Price"]
+        }
+    },
+    {
+        "userinput": "Cluster articles based on their topic and publication date.",
+        "data_info": {
+            "description": "article clustering data",
+            "attribute names": ["ArticleID", "Topic", "PublicationDate"],
+            "dtypes": ["int64", "str", "timestamp"],
+            "shape": [60, 3],
+            "data_head": {
+                "ArticleID": [1, 2, 3, 4, 5],
+                "Topic": ["Technology", "Health", "Technology", "Politics", "Health"],
+                "PublicationDate": ["2021-01-01", "2021-01-02", "2021-01-03", "2021-01-04", "2021-01-05"]
+            }
+        },
+        "return": {
+            "method": "Clustering_Hierarchical",
+            "predictor": ["Topic", "PublicationDate"],
+            "target": ["ArticleID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between exercise intensity and health outcomes.",
+        "data_info": {
+            "description": "exercise and health data",
+            "attribute names": ["ExerciseIntensity", "HealthOutcomes"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "ExerciseIntensity": [3, 5, 4, 6, 2],
+                "HealthOutcomes": [8, 9, 7, 10, 6]
+            }
+        },
+        "return": {
+            "method": "Correlation_Kendall",
+            "predictor": ["ExerciseIntensity"],
+            "target": ["HealthOutcomes"]
+        }
+    },
+    {
+        "userinput": "Predict the risk of credit card fraud based on transaction amount and location.",
+        "data_info": {
+            "description": "credit card fraud data",
+            "attribute names": ["FraudRisk", "TransactionAmount", "Location"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "FraudRisk": [0, 1, 0, 1, 0],
+                "TransactionAmount": [100, 50, 80, 30, 70],
+                "Location": ["Urban", "Suburban", "Urban", "Rural", "Suburban"]
+            }
+        },
+        "return": {
+            "method": "Regression_Lasso",
+            "predictor": ["TransactionAmount", "Location"],
+            "target": ["FraudRisk"]
+        }
+    },
+    {
+        "userinput": "Forecast the demand for a product based on market trends.",
+        "data_info": {
+            "description": "product demand data",
+            "attribute names": ["Demand", "MarketTrends"],
+            "dtypes": ["int64", "int64"],
+            "shape": [50, 2],
+            "data_head": {
+                "Demand": [100, 150, 200, 120, 180],
+                "MarketTrends": [5000, 6000, 5500, 6500, 7800]
+            }
+        },
+        "return": {
+            "method": "Time_series_forecast",
+            "predictor": ["MarketTrends"],
+            "target": ["Demand"]
+        }
+    },
+    {
+        "userinput": "Segment customers based on their online shopping behavior and demographics.",
+        "data_info": {
+            "description": "customer segmentation data",
+            "attribute names": ["CustomerID", "OnlineShoppingBehavior", "Demographics"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [150, 3],
+            "data_head": {
+                "CustomerID": [1, 2, 3, 4, 5],
+                "OnlineShoppingBehavior": [10, 15, 20, 12, 18],
+                "Demographics": ["Young", "Middle-aged", "Young", "Middle-aged", "Young"]
+            }
+        },
+        "return": {
+            "method": "Clustering_KMeans",
+            "predictor": ["OnlineShoppingBehavior", "Demographics"],
+            "target": ["CustomerID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between education level and job satisfaction.",
+        "data_info": {
+            "description": "education and job satisfaction data",
+            "attribute names": ["EducationLevel", "JobSatisfaction"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "EducationLevel": [12, 16, 14, 18, 12],
+                "JobSatisfaction": [7, 8, 6, 9, 5]
+            }
+        },
+        "return": {
+            "method": "Correlation_Spearman",
+            "predictor": ["EducationLevel"],
+            "target": ["JobSatisfaction"]
+        }
+    },
+    {
+        "userinput": "Predict the sales of a product based on its brand and advertising strategy.",
+        "data_info": {
+            "description": "product sales data",
+            "attribute names": ["Sales", "Brand", "AdvertisingStrategy"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "Sales": [500, 600, 550, 650, 780],
+                "Brand": ["BrandA", "BrandB", "BrandA", "BrandB", "BrandA"],
+                "AdvertisingStrategy": ["Digital", "TV", "Digital", "TV", "Digital"]
+            }
+        },
+        "return": {
+            "method": "Regression_RandomForest",
+            "predictor": ["Brand", "AdvertisingStrategy"],
+            "target": ["Sales"]
+        }
+    },
+    {
+        "userinput": "Cluster movies based on their genre and director.",
+        "data_info": {
+            "description": "movie clustering data",
+            "attribute names": ["MovieID", "Genre", "Director"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "MovieID": [1, 2, 3, 4, 5],
+                "Genre": ["Action", "Comedy", "Drama", "Action", "Comedy"],
+                "Director": ["John Doe", "Jane Smith", "John Doe", "Jane Smith", "John Doe"]
+            }
+        },
+        "return": {
+            "method": "Clustering_DBSCAN",
+            "predictor": ["Genre", "Director"],
+            "target": ["MovieID"]
+        }
+    },
+    {
+        "userinput": "Analyze the survival rate of patients based on their age and treatment type.",
+        "data_info": {
+            "description": "patient survival data",
+            "attribute names": ["PatientID", "Age", "TreatmentType", "SurvivalRate"],
+            "dtypes": ["int64", "int64", "str", "float64"],
+            "shape": [50, 4],
+            "data_head": {
+                "PatientID": [1, 2, 3, 4, 5],
+                "Age": [45, 50, 60, 55, 40],
+                "TreatmentType": ["A", "B", "A", "B", "A"],
+                "SurvivalRate": [0.75, 0.80, 0.65, 0.70, 0.85]
+            }
+        },
+        "return": {
+            "method": "Cox_Proportional_Hazards",
+            "predictor": ["Age", "TreatmentType"],
+            "target": ["SurvivalRate"]
+        }
+    },
+    {
+        "userinput": "Determine the impact of temperature on energy consumption.",
+        "data_info": {
+            "description": "energy consumption data",
+            "attribute names": ["Temperature", "EnergyConsumption"],
+            "dtypes": ["float64", "int64"],
+            "shape": [40, 2],
+            "data_head": {
+                "Temperature": [20.5, 22.0, 21.5, 23.0, 24.5],
+                "EnergyConsumption": [500, 600, 550, 650, 780]
+            }
+        },
+        "return": {
+            "method": "Correlation_Pearson",
+            "predictor": ["Temperature"],
+            "target": ["EnergyConsumption"]
+        }
+    },
+    {
+        "userinput": "Predict the price of cars based on their make and model.",
+        "data_info": {
+            "description": "car pricing data",
+            "attribute names": ["Price", "Make", "Model"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "Price": [20000, 25000, 30000, 22000, 28000],
+                "Make": ["Toyota", "Honda", "Toyota", "Honda", "Toyota"],
+                "Model": ["Corolla", "Civic", "Corolla", "Civic", "Corolla"]
+            }
+        },
+        "return": {
+            "method": "Regression_Ridge",
+            "predictor": ["Make", "Model"],
+            "target": ["Price"]
+        }
+    },
+    {
+        "userinput": "Cluster articles based on their topic and publication date.",
+        "data_info": {
+            "description": "article clustering data",
+            "attribute names": ["ArticleID", "Topic", "PublicationDate"],
+            "dtypes": ["int64", "str", "timestamp"],
+            "shape": [60, 3],
+            "data_head": {
+                "ArticleID": [1, 2, 3, 4, 5],
+                "Topic": ["Technology", "Health", "Technology", "Politics", "Health"],
+                "PublicationDate": ["2021-01-01", "2021-01-02", "2021-01-03", "2021-01-04", "2021-01-05"]
+            }
+        },
+        "return": {
+            "method": "Clustering_Hierarchical",
+            "predictor": ["Topic", "PublicationDate"],
+            "target": ["ArticleID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between exercise intensity and health outcomes.",
+        "data_info": {
+            "description": "exercise and health data",
+            "attribute names": ["ExerciseIntensity", "HealthOutcomes"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "ExerciseIntensity": [3, 5, 4, 6, 2],
+                "HealthOutcomes": [8, 9, 7, 10, 6]
+            }
+        },
+        "return": {
+            "method": "Correlation_Kendall",
+            "predictor": ["ExerciseIntensity"],
+            "target": ["HealthOutcomes"]
+        }
+    },
+    {
+        "userinput": "Predict the risk of credit card fraud based on transaction amount and location.",
+        "data_info": {
+            "description": "credit card fraud data",
+            "attribute names": ["FraudRisk", "TransactionAmount", "Location"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "FraudRisk": [0, 1, 0, 1, 0],
+                "TransactionAmount": [100, 50, 80, 30, 70],
+                "Location": ["Urban", "Suburban", "Urban", "Rural", "Suburban"]
+            }
+        },
+        "return": {
+            "method": "Regression_Lasso",
+            "predictor": ["TransactionAmount", "Location"],
+            "target": ["FraudRisk"]
+        }
+    },
+    {
+        "userinput": "Forecast the demand for a product based on market trends.",
+        "data_info": {
+            "description": "product demand data",
+            "attribute names": ["Demand", "MarketTrends"],
+            "dtypes": ["int64", "int64"],
+            "shape": [50, 2],
+            "data_head": {
+                "Demand": [100, 150, 200, 120, 180],
+                "MarketTrends": [5000, 6000, 5500, 6500, 7800]
+            }
+        },
+        "return": {
+            "method": "Time_series_forecast",
+            "predictor": ["MarketTrends"],
+            "target": ["Demand"]
+        }
+    },
+    {
+        "userinput": "Segment customers based on their online shopping behavior and demographics.",
+        "data_info": {
+            "description": "customer segmentation data",
+            "attribute names": ["CustomerID", "OnlineShoppingBehavior", "Demographics"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [150, 3],
+            "data_head": {
+                "CustomerID": [1, 2, 3, 4, 5],
+                "OnlineShoppingBehavior": [10, 15, 20, 12, 18],
+                "Demographics": ["Young", "Middle-aged", "Young", "Middle-aged", "Young"]
+            }
+        },
+        "return": {
+            "method": "Clustering_KMeans",
+            "predictor": ["OnlineShoppingBehavior", "Demographics"],
+            "target": ["CustomerID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between education level and job satisfaction.",
+        "data_info": {
+            "description": "education and job satisfaction data",
+            "attribute names": ["EducationLevel", "JobSatisfaction"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "EducationLevel": [12, 16, 14, 18, 12],
+                "JobSatisfaction": [7, 8, 6, 9, 5]
+            }
+        },
+        "return": {
+            "method": "Correlation_Spearman",
+            "predictor": ["EducationLevel"],
+            "target": ["JobSatisfaction"]
+        }
+    },
+    {
+        "userinput": "Predict the sales of a product based on its brand and advertising strategy.",
+        "data_info": {
+            "description": "product sales data",
+            "attribute names": ["Sales", "Brand", "AdvertisingStrategy"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "Sales": [500, 600, 550, 650, 780],
+                "Brand": ["BrandA", "BrandB", "BrandA", "BrandB", "BrandA"],
+                "AdvertisingStrategy": ["Digital", "TV", "Digital", "TV", "Digital"]
+            }
+        },
+        "return": {
+            "method": "Regression_RandomForest",
+            "predictor": ["Brand", "AdvertisingStrategy"],
+            "target": ["Sales"]
+        }
+    },
+    {
+        "userinput": "Cluster movies based on their genre and director.",
+        "data_info": {
+            "description": "movie clustering data",
+            "attribute names": ["MovieID", "Genre", "Director"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "MovieID": [1, 2, 3, 4, 5],
+                "Genre": ["Action", "Comedy", "Drama", "Action", "Comedy"],
+                "Director": ["John Doe", "Jane Smith", "John Doe", "Jane Smith", "John Doe"]
+            }
+        },
+        "return": {
+            "method": "Clustering_DBSCAN",
+            "predictor": ["Genre", "Director"],
+            "target": ["MovieID"]
+        }
+    },
+    {
+        "userinput": "Analyze the survival rate of patients based on their age and treatment type.",
+        "data_info": {
+            "description": "patient survival data",
+            "attribute names": ["PatientID", "Age", "TreatmentType", "SurvivalRate"],
+            "dtypes": ["int64", "int64", "str", "float64"],
+            "shape": [50, 4],
+            "data_head": {
+                "PatientID": [1, 2, 3, 4, 5],
+                "Age": [45, 50, 60, 55, 40],
+                "TreatmentType": ["A", "B", "A", "B", "A"],
+                "SurvivalRate": [0.75, 0.80, 0.65, 0.70, 0.85]
+            }
+        },
+        "return": {
+            "method": "Cox_Proportional_Hazards",
+            "predictor": ["Age", "TreatmentType"],
+            "target": ["SurvivalRate"]
+        }
+    },
+    {
+        "userinput": "Determine the impact of temperature on energy consumption.",
+        "data_info": {
+            "description": "energy consumption data",
+            "attribute names": ["Temperature", "EnergyConsumption"],
+            "dtypes": ["float64", "int64"],
+            "shape": [40, 2],
+            "data_head": {
+                "Temperature": [20.5, 22.0, 21.5, 23.0, 24.5],
+                "EnergyConsumption": [500, 600, 550, 650, 780]
+            }
+        },
+        "return": {
+            "method": "Correlation_Pearson",
+            "predictor": ["Temperature"],
+            "target": ["EnergyConsumption"]
+        }
+    },
+    {
+        "userinput": "Predict the price of cars based on their make and model.",
+        "data_info": {
+            "description": "car pricing data",
+            "attribute names": ["Price", "Make", "Model"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "Price": [20000, 25000, 30000, 22000, 28000],
+                "Make": ["Toyota", "Honda", "Toyota", "Honda", "Toyota"],
+                "Model": ["Corolla", "Civic", "Corolla", "Civic", "Corolla"]
+            }
+        },
+        "return": {
+            "method": "Regression_Ridge",
+            "predictor": ["Make", "Model"],
+            "target": ["Price"]
+        }
+    },
+    {
+        "userinput": "Cluster articles based on their topic and publication date.",
+        "data_info": {
+            "description": "article clustering data",
+            "attribute names": ["ArticleID", "Topic", "PublicationDate"],
+            "dtypes": ["int64", "str", "timestamp"],
+            "shape": [60, 3],
+            "data_head": {
+                "ArticleID": [1, 2, 3, 4, 5],
+                "Topic": ["Technology", "Health", "Technology", "Politics", "Health"],
+                "PublicationDate": ["2021-01-01", "2021-01-02", "2021-01-03", "2021-01-04", "2021-01-05"]
+            }
+        },
+        "return": {
+            "method": "Clustering_Hierarchical",
+            "predictor": ["Topic", "PublicationDate"],
+            "target": ["ArticleID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between exercise intensity and health outcomes.",
+        "data_info": {
+            "description": "exercise and health data",
+            "attribute names": ["ExerciseIntensity", "HealthOutcomes"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "ExerciseIntensity": [3, 5, 4, 6, 2],
+                "HealthOutcomes": [8, 9, 7, 10, 6]
+            }
+        },
+        "return": {
+            "method": "Correlation_Kendall",
+            "predictor": ["ExerciseIntensity"],
+            "target": ["HealthOutcomes"]
+        }
+    },
+    {
+        "userinput": "Predict the risk of credit card fraud based on transaction amount and location.",
+        "data_info": {
+            "description": "credit card fraud data",
+            "attribute names": ["FraudRisk", "TransactionAmount", "Location"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "FraudRisk": [0, 1, 0, 1, 0],
+                "TransactionAmount": [100, 50, 80, 30, 70],
+                "Location": ["Urban", "Suburban", "Urban", "Rural", "Suburban"]
+            }
+        },
+        "return": {
+            "method": "Regression_Lasso",
+            "predictor": ["TransactionAmount", "Location"],
+            "target": ["FraudRisk"]
+        }
+    },
+    {
+        "userinput": "Forecast the demand for a product based on market trends.",
+        "data_info": {
+            "description": "product demand data",
+            "attribute names": ["Demand", "MarketTrends"],
+            "dtypes": ["int64", "int64"],
+            "shape": [50, 2],
+            "data_head": {
+                "Demand": [100, 150, 200, 120, 180],
+                "MarketTrends": [5000, 6000, 5500, 6500, 7800]
+            }
+        },
+        "return": {
+            "method": "Time_series_forecast",
+            "predictor": ["MarketTrends"],
+            "target": ["Demand"]
+        }
+    },
+    {
+        "userinput": "Segment customers based on their online shopping behavior and demographics.",
+        "data_info": {
+            "description": "customer segmentation data",
+            "attribute names": ["CustomerID", "OnlineShoppingBehavior", "Demographics"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [150, 3],
+            "data_head": {
+                "CustomerID": [1, 2, 3, 4, 5],
+                "OnlineShoppingBehavior": [10, 15, 20, 12, 18],
+                "Demographics": ["Young", "Middle-aged", "Young", "Middle-aged", "Young"]
+            }
+        },
+        "return": {
+            "method": "Clustering_KMeans",
+            "predictor": ["OnlineShoppingBehavior", "Demographics"],
+            "target": ["CustomerID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between education level and job satisfaction.",
+        "data_info": {
+            "description": "education and job satisfaction data",
+            "attribute names": ["EducationLevel", "JobSatisfaction"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "EducationLevel": [12, 16, 14, 18, 12],
+                "JobSatisfaction": [7, 8, 6, 9, 5]
+            }
+        },
+        "return": {
+            "method": "Correlation_Spearman",
+            "predictor": ["EducationLevel"],
+            "target": ["JobSatisfaction"]
+        }
+    },
+    {
+        "userinput": "Predict the sales of a product based on its brand and advertising strategy.",
+        "data_info": {
+            "description": "product sales data",
+            "attribute names": ["Sales", "Brand", "AdvertisingStrategy"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "Sales": [500, 600, 550, 650, 780],
+                "Brand": ["BrandA", "BrandB", "BrandA", "BrandB", "BrandA"],
+                "AdvertisingStrategy": ["Digital", "TV", "Digital", "TV", "Digital"]
+            }
+        },
+        "return": {
+            "method": "Regression_RandomForest",
+            "predictor": ["Brand", "AdvertisingStrategy"],
+            "target": ["Sales"]
+        }
+    },
+    {
+        "userinput": "Cluster movies based on their genre and director.",
+        "data_info": {
+            "description": "movie clustering data",
+            "attribute names": ["MovieID", "Genre", "Director"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "MovieID": [1, 2, 3, 4, 5],
+                "Genre": ["Action", "Comedy", "Drama", "Action", "Comedy"],
+                "Director": ["John Doe", "Jane Smith", "John Doe", "Jane Smith", "John Doe"]
+            }
+        },
+        "return": {
+            "method": "Clustering_DBSCAN",
+            "predictor": ["Genre", "Director"],
+            "target": ["MovieID"]
+        }
+    },
+    {
+        "userinput": "Analyze the survival rate of patients based on their age and treatment type.",
+        "data_info": {
+            "description": "patient survival data",
+            "attribute names": ["PatientID", "Age", "TreatmentType", "SurvivalRate"],
+            "dtypes": ["int64", "int64", "str", "float64"],
+            "shape": [50, 4],
+            "data_head": {
+                "PatientID": [1, 2, 3, 4, 5],
+                "Age": [45, 50, 60, 55, 40],
+                "TreatmentType": ["A", "B", "A", "B", "A"],
+                "SurvivalRate": [0.75, 0.80, 0.65, 0.70, 0.85]
+            }
+        },
+        "return": {
+            "method": "Cox_Proportional_Hazards",
+            "predictor": ["Age", "TreatmentType"],
+            "target": ["SurvivalRate"]
+        }
+    },
+    {
+        "userinput": "Determine the impact of temperature on energy consumption.",
+        "data_info": {
+            "description": "energy consumption data",
+            "attribute names": ["Temperature", "EnergyConsumption"],
+            "dtypes": ["float64", "int64"],
+            "shape": [40, 2],
+            "data_head": {
+                "Temperature": [20.5, 22.0, 21.5, 23.0, 24.5],
+                "EnergyConsumption": [500, 600, 550, 650, 780]
+            }
+        },
+        "return": {
+            "method": "Correlation_Pearson",
+            "predictor": ["Temperature"],
+            "target": ["EnergyConsumption"]
+        }
+    },
+    {
+        "userinput": "Predict the price of cars based on their make and model.",
+        "data_info": {
+            "description": "car pricing data",
+            "attribute names": ["Price", "Make", "Model"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "Price": [20000, 25000, 30000, 22000, 28000],
+                "Make": ["Toyota", "Honda", "Toyota", "Honda", "Toyota"],
+                "Model": ["Corolla", "Civic", "Corolla", "Civic", "Corolla"]
+            }
+        },
+        "return": {
+            "method": "Regression_Ridge",
+            "predictor": ["Make", "Model"],
+            "target": ["Price"]
+        }
+    },
+    {
+        "userinput": "Cluster articles based on their topic and publication date.",
+        "data_info": {
+            "description": "article clustering data",
+            "attribute names": ["ArticleID", "Topic", "PublicationDate"],
+            "dtypes": ["int64", "str", "timestamp"],
+            "shape": [60, 3],
+            "data_head": {
+                "ArticleID": [1, 2, 3, 4, 5],
+                "Topic": ["Technology", "Health", "Technology", "Politics", "Health"],
+                "PublicationDate": ["2021-01-01", "2021-01-02", "2021-01-03", "2021-01-04", "2021-01-05"]
+            }
+        },
+        "return": {
+            "method": "Clustering_Hierarchical",
+            "predictor": ["Topic", "PublicationDate"],
+            "target": ["ArticleID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between exercise intensity and health outcomes.",
+        "data_info": {
+            "description": "exercise and health data",
+            "attribute names": ["ExerciseIntensity", "HealthOutcomes"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "ExerciseIntensity": [3, 5, 4, 6, 2],
+                "HealthOutcomes": [8, 9, 7, 10, 6]
+            }
+        },
+        "return": {
+            "method": "Correlation_Kendall",
+            "predictor": ["ExerciseIntensity"],
+            "target": ["HealthOutcomes"]
+        }
+    },
+    {
+        "userinput": "Predict the risk of credit card fraud based on transaction amount and location.",
+        "data_info": {
+            "description": "credit card fraud data",
+            "attribute names": ["FraudRisk", "TransactionAmount", "Location"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "FraudRisk": [0, 1, 0, 1, 0],
+                "TransactionAmount": [100, 50, 80, 30, 70],
+                "Location": ["Urban", "Suburban", "Urban", "Rural", "Suburban"]
+            }
+        },
+        "return": {
+            "method": "Regression_Lasso",
+            "predictor": ["TransactionAmount", "Location"],
+            "target": ["FraudRisk"]
+        }
+    },
+    {
+        "userinput": "Forecast the demand for a product based on market trends.",
+        "data_info": {
+            "description": "product demand data",
+            "attribute names": ["Demand", "MarketTrends"],
+            "dtypes": ["int64", "int64"],
+            "shape": [50, 2],
+            "data_head": {
+                "Demand": [100, 150, 200, 120, 180],
+                "MarketTrends": [5000, 6000, 5500, 6500, 7800]
+            }
+        },
+        "return": {
+            "method": "Time_series_forecast",
+            "predictor": ["MarketTrends"],
+            "target": ["Demand"]
+        }
+    },
+    {
+        "userinput": "Segment customers based on their online shopping behavior and demographics.",
+        "data_info": {
+            "description": "customer segmentation data",
+            "attribute names": ["CustomerID", "OnlineShoppingBehavior", "Demographics"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [150, 3],
+            "data_head": {
+                "CustomerID": [1, 2, 3, 4, 5],
+                "OnlineShoppingBehavior": [10, 15, 20, 12, 18],
+                "Demographics": ["Young", "Middle-aged", "Young", "Middle-aged", "Young"]
+            }
+        },
+        "return": {
+            "method": "Clustering_KMeans",
+            "predictor": ["OnlineShoppingBehavior", "Demographics"],
+            "target": ["CustomerID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between education level and job satisfaction.",
+        "data_info": {
+            "description": "education and job satisfaction data",
+            "attribute names": ["EducationLevel", "JobSatisfaction"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "EducationLevel": [12, 16, 14, 18, 12],
+                "JobSatisfaction": [7, 8, 6, 9, 5]
+            }
+        },
+        "return": {
+            "method": "Correlation_Spearman",
+            "predictor": ["EducationLevel"],
+            "target": ["JobSatisfaction"]
+        }
+    },
+    {
+        "userinput": "Predict the sales of a product based on its brand and advertising strategy.",
+        "data_info": {
+            "description": "product sales data",
+            "attribute names": ["Sales", "Brand", "AdvertisingStrategy"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "Sales": [500, 600, 550, 650, 780],
+                "Brand": ["BrandA", "BrandB", "BrandA", "BrandB", "BrandA"],
+                "AdvertisingStrategy": ["Digital", "TV", "Digital", "TV", "Digital"]
+            }
+        },
+        "return": {
+            "method": "Regression_RandomForest",
+            "predictor": ["Brand", "AdvertisingStrategy"],
+            "target": ["Sales"]
+        }
+    },
+    {
+        "userinput": "Cluster movies based on their genre and director.",
+        "data_info": {
+            "description": "movie clustering data",
+            "attribute names": ["MovieID", "Genre", "Director"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "MovieID": [1, 2, 3, 4, 5],
+                "Genre": ["Action", "Comedy", "Drama", "Action", "Comedy"],
+                "Director": ["John Doe", "Jane Smith", "John Doe", "Jane Smith", "John Doe"]
+            }
+        },
+        "return": {
+            "method": "Clustering_DBSCAN",
+            "predictor": ["Genre", "Director"],
+            "target": ["MovieID"]
+        }
+    },
+    {
+        "userinput": "Analyze the survival rate of patients based on their age and treatment type.",
+        "data_info": {
+            "description": "patient survival data",
+            "attribute names": ["PatientID", "Age", "TreatmentType", "SurvivalRate"],
+            "dtypes": ["int64", "int64", "str", "float64"],
+            "shape": [50, 4],
+            "data_head": {
+                "PatientID": [1, 2, 3, 4, 5],
+                "Age": [45, 50, 60, 55, 40],
+                "TreatmentType": ["A", "B", "A", "B", "A"],
+                "SurvivalRate": [0.75, 0.80, 0.65, 0.70, 0.85]
+            }
+        },
+        "return": {
+            "method": "Cox_Proportional_Hazards",
+            "predictor": ["Age", "TreatmentType"],
+            "target": ["SurvivalRate"]
+        }
+    },
+    {
+        "userinput": "Determine the impact of temperature on energy consumption.",
+        "data_info": {
+            "description": "energy consumption data",
+            "attribute names": ["Temperature", "EnergyConsumption"],
+            "dtypes": ["float64", "int64"],
+            "shape": [40, 2],
+            "data_head": {
+                "Temperature": [20.5, 22.0, 21.5, 23.0, 24.5],
+                "EnergyConsumption": [500, 600, 550, 650, 780]
+            }
+        },
+        "return": {
+            "method": "Correlation_Pearson",
+            "predictor": ["Temperature"],
+            "target": ["EnergyConsumption"]
+        }
+    },
+    {
+        "userinput": "Predict the price of cars based on their make and model.",
+        "data_info": {
+            "description": "car pricing data",
+            "attribute names": ["Price", "Make", "Model"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "Price": [20000, 25000, 30000, 22000, 28000],
+                "Make": ["Toyota", "Honda", "Toyota", "Honda", "Toyota"],
+                "Model": ["Corolla", "Civic", "Corolla", "Civic", "Corolla"]
+            }
+        },
+        "return": {
+            "method": "Regression_Ridge",
+            "predictor": ["Make", "Model"],
+            "target": ["Price"]
+        }
+    },
+    {
+        "userinput": "Cluster articles based on their topic and publication date.",
+        "data_info": {
+            "description": "article clustering data",
+            "attribute names": ["ArticleID", "Topic", "PublicationDate"],
+            "dtypes": ["int64", "str", "timestamp"],
+            "shape": [60, 3],
+            "data_head": {
+                "ArticleID": [1, 2, 3, 4, 5],
+                "Topic": ["Technology", "Health", "Technology", "Politics", "Health"],
+                "PublicationDate": ["2021-01-01", "2021-01-02", "2021-01-03", "2021-01-04", "2021-01-05"]
+            }
+        },
+        "return": {
+            "method": "Clustering_Hierarchical",
+            "predictor": ["Topic", "PublicationDate"],
+            "target": ["ArticleID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between exercise intensity and health outcomes.",
+        "data_info": {
+            "description": "exercise and health data",
+            "attribute names": ["ExerciseIntensity", "HealthOutcomes"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "ExerciseIntensity": [3, 5, 4, 6, 2],
+                "HealthOutcomes": [8, 9, 7, 10, 6]
+            }
+        },
+        "return": {
+            "method": "Correlation_Kendall",
+            "predictor": ["ExerciseIntensity"],
+            "target": ["HealthOutcomes"]
+        }
+    },
+    {
+        "userinput": "Predict the risk of credit card fraud based on transaction amount and location.",
+        "data_info": {
+            "description": "credit card fraud data",
+            "attribute names": ["FraudRisk", "TransactionAmount", "Location"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "FraudRisk": [0, 1, 0, 1, 0],
+                "TransactionAmount": [100, 50, 80, 30, 70],
+                "Location": ["Urban", "Suburban", "Urban", "Rural", "Suburban"]
+            }
+        },
+        "return": {
+            "method": "Regression_Lasso",
+            "predictor": ["TransactionAmount", "Location"],
+            "target": ["FraudRisk"]
+        }
+    },
+    {
+        "userinput": "Forecast the demand for a product based on market trends.",
+        "data_info": {
+            "description": "product demand data",
+            "attribute names": ["Demand", "MarketTrends"],
+            "dtypes": ["int64", "int64"],
+            "shape": [50, 2],
+            "data_head": {
+                "Demand": [100, 150, 200, 120, 180],
+                "MarketTrends": [5000, 6000, 5500, 6500, 7800]
+            }
+        },
+        "return": {
+            "method": "Time_series_forecast",
+            "predictor": ["MarketTrends"],
+            "target": ["Demand"]
+        }
+    },
+    {
+        "userinput": "Segment customers based on their online shopping behavior and demographics.",
+        "data_info": {
+            "description": "customer segmentation data",
+            "attribute names": ["CustomerID", "OnlineShoppingBehavior", "Demographics"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [150, 3],
+            "data_head": {
+                "CustomerID": [1, 2, 3, 4, 5],
+                "OnlineShoppingBehavior": [10, 15, 20, 12, 18],
+                "Demographics": ["Young", "Middle-aged", "Young", "Middle-aged", "Young"]
+            }
+        },
+        "return": {
+            "method": "Clustering_KMeans",
+            "predictor": ["OnlineShoppingBehavior", "Demographics"],
+            "target": ["CustomerID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between education level and job satisfaction.",
+        "data_info": {
+            "description": "education and job satisfaction data",
+            "attribute names": ["EducationLevel", "JobSatisfaction"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "EducationLevel": [12, 16, 14, 18, 12],
+                "JobSatisfaction": [7, 8, 6, 9, 5]
+            }
+        },
+        "return": {
+            "method": "Correlation_Spearman",
+            "predictor": ["EducationLevel"],
+            "target": ["JobSatisfaction"]
+        }
+    },
+    {
+        "userinput": "Predict the sales of a product based on its brand and advertising strategy.",
+        "data_info": {
+            "description": "product sales data",
+            "attribute names": ["Sales", "Brand", "AdvertisingStrategy"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "Sales": [500, 600, 550, 650, 780],
+                "Brand": ["BrandA", "BrandB", "BrandA", "BrandB", "BrandA"],
+                "AdvertisingStrategy": ["Digital", "TV", "Digital", "TV", "Digital"]
+            }
+        },
+        "return": {
+            "method": "Regression_RandomForest",
+            "predictor": ["Brand", "AdvertisingStrategy"],
+            "target": ["Sales"]
+        }
+    },
+    {
+        "userinput": "Cluster movies based on their genre and director.",
+        "data_info": {
+            "description": "movie clustering data",
+            "attribute names": ["MovieID", "Genre", "Director"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "MovieID": [1, 2, 3, 4, 5],
+                "Genre": ["Action", "Comedy", "Drama", "Action", "Comedy"],
+                "Director": ["John Doe", "Jane Smith", "John Doe", "Jane Smith", "John Doe"]
+            }
+        },
+        "return": {
+            "method": "Clustering_DBSCAN",
+            "predictor": ["Genre", "Director"],
+            "target": ["MovieID"]
+        }
+    },
+    {
+        "userinput": "Analyze the survival rate of patients based on their age and treatment type.",
+        "data_info": {
+            "description": "patient survival data",
+            "attribute names": ["PatientID", "Age", "TreatmentType", "SurvivalRate"],
+            "dtypes": ["int64", "int64", "str", "float64"],
+            "shape": [50, 4],
+            "data_head": {
+                "PatientID": [1, 2, 3, 4, 5],
+                "Age": [45, 50, 60, 55, 40],
+                "TreatmentType": ["A", "B", "A", "B", "A"],
+                "SurvivalRate": [0.75, 0.80, 0.65, 0.70, 0.85]
+            }
+        },
+        "return": {
+            "method": "Cox_Proportional_Hazards",
+            "predictor": ["Age", "TreatmentType"],
+            "target": ["SurvivalRate"]
+        }
+    },
+    {
+        "userinput": "Determine the impact of temperature on energy consumption.",
+        "data_info": {
+            "description": "energy consumption data",
+            "attribute names": ["Temperature", "EnergyConsumption"],
+            "dtypes": ["float64", "int64"],
+            "shape": [40, 2],
+            "data_head": {
+                "Temperature": [20.5, 22.0, 21.5, 23.0, 24.5],
+                "EnergyConsumption": [500, 600, 550, 650, 780]
+            }
+        },
+        "return": {
+            "method": "Correlation_Pearson",
+            "predictor": ["Temperature"],
+            "target": ["EnergyConsumption"]
+        }
+    },
+    {
+        "userinput": "Predict the price of cars based on their make and model.",
+        "data_info": {
+            "description": "car pricing data",
+            "attribute names": ["Price", "Make", "Model"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "Price": [20000, 25000, 30000, 22000, 28000],
+                "Make": ["Toyota", "Honda", "Toyota", "Honda", "Toyota"],
+                "Model": ["Corolla", "Civic", "Corolla", "Civic", "Corolla"]
+            }
+        },
+        "return": {
+            "method": "Regression_Ridge",
+            "predictor": ["Make", "Model"],
+            "target": ["Price"]
+        }
+    },
+    {
+        "userinput": "Cluster articles based on their topic and publication date.",
+        "data_info": {
+            "description": "article clustering data",
+            "attribute names": ["ArticleID", "Topic", "PublicationDate"],
+            "dtypes": ["int64", "str", "timestamp"],
+            "shape": [60, 3],
+            "data_head": {
+                "ArticleID": [1, 2, 3, 4, 5],
+                "Topic": ["Technology", "Health", "Technology", "Politics", "Health"],
+                "PublicationDate": ["2021-01-01", "2021-01-02", "2021-01-03", "2021-01-04", "2021-01-05"]
+            }
+        },
+        "return": {
+            "method": "Clustering_Hierarchical",
+            "predictor": ["Topic", "PublicationDate"],
+            "target": ["ArticleID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between exercise intensity and health outcomes.",
+        "data_info": {
+            "description": "exercise and health data",
+            "attribute names": ["ExerciseIntensity", "HealthOutcomes"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "ExerciseIntensity": [3, 5, 4, 6, 2],
+                "HealthOutcomes": [8, 9, 7, 10, 6]
+            }
+        },
+        "return": {
+            "method": "Correlation_Kendall",
+            "predictor": ["ExerciseIntensity"],
+            "target": ["HealthOutcomes"]
+        }
+    },
+    {
+        "userinput": "Predict the risk of credit card fraud based on transaction amount and location.",
+        "data_info": {
+            "description": "credit card fraud data",
+            "attribute names": ["FraudRisk", "TransactionAmount", "Location"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "FraudRisk": [0, 1, 0, 1, 0],
+                "TransactionAmount": [100, 50, 80, 30, 70],
+                "Location": ["Urban", "Suburban", "Urban", "Rural", "Suburban"]
+            }
+        },
+        "return": {
+            "method": "Regression_Lasso",
+            "predictor": ["TransactionAmount", "Location"],
+            "target": ["FraudRisk"]
+        }
+    },
+    {
+        "userinput": "Forecast the demand for a product based on market trends.",
+        "data_info": {
+            "description": "product demand data",
+            "attribute names": ["Demand", "MarketTrends"],
+            "dtypes": ["int64", "int64"],
+            "shape": [50, 2],
+            "data_head": {
+                "Demand": [100, 150, 200, 120, 180],
+                "MarketTrends": [5000, 6000, 5500, 6500, 7800]
+            }
+        },
+        "return": {
+            "method": "Time_series_forecast",
+            "predictor": ["MarketTrends"],
+            "target": ["Demand"]
+        }
+    },
+    {
+        "userinput": "Segment customers based on their online shopping behavior and demographics.",
+        "data_info": {
+            "description": "customer segmentation data",
+            "attribute names": ["CustomerID", "OnlineShoppingBehavior", "Demographics"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [150, 3],
+            "data_head": {
+                "CustomerID": [1, 2, 3, 4, 5],
+                "OnlineShoppingBehavior": [10, 15, 20, 12, 18],
+                "Demographics": ["Young", "Middle-aged", "Young", "Middle-aged", "Young"]
+            }
+        },
+        "return": {
+            "method": "Clustering_KMeans",
+            "predictor": ["OnlineShoppingBehavior", "Demographics"],
+            "target": ["CustomerID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between education level and job satisfaction.",
+        "data_info": {
+            "description": "education and job satisfaction data",
+            "attribute names": ["EducationLevel", "JobSatisfaction"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "EducationLevel": [12, 16, 14, 18, 12],
+                "JobSatisfaction": [7, 8, 6, 9, 5]
+            }
+        },
+        "return": {
+            "method": "Correlation_Spearman",
+            "predictor": ["EducationLevel"],
+            "target": ["JobSatisfaction"]
+        }
+    },
+    {
+        "userinput": "Predict the sales of a product based on its brand and advertising strategy.",
+        "data_info": {
+            "description": "product sales data",
+            "attribute names": ["Sales", "Brand", "AdvertisingStrategy"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "Sales": [500, 600, 550, 650, 780],
+                "Brand": ["BrandA", "BrandB", "BrandA", "BrandB", "BrandA"],
+                "AdvertisingStrategy": ["Digital", "TV", "Digital", "TV", "Digital"]
+            }
+        },
+        "return": {
+            "method": "Regression_RandomForest",
+            "predictor": ["Brand", "AdvertisingStrategy"],
+            "target": ["Sales"]
+        }
+    },
+    {
+        "userinput": "Cluster movies based on their genre and director.",
+        "data_info": {
+            "description": "movie clustering data",
+            "attribute names": ["MovieID", "Genre", "Director"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "MovieID": [1, 2, 3, 4, 5],
+                "Genre": ["Action", "Comedy", "Drama", "Action", "Comedy"],
+                "Director": ["John Doe", "Jane Smith", "John Doe", "Jane Smith", "John Doe"]
+            }
+        },
+        "return": {
+            "method": "Clustering_DBSCAN",
+            "predictor": ["Genre", "Director"],
+            "target": ["MovieID"]
+        }
+    },
+    {
+        "userinput": "Analyze the survival rate of patients based on their age and treatment type.",
+        "data_info": {
+            "description": "patient survival data",
+            "attribute names": ["PatientID", "Age", "TreatmentType", "SurvivalRate"],
+            "dtypes": ["int64", "int64", "str", "float64"],
+            "shape": [50, 4],
+            "data_head": {
+                "PatientID": [1, 2, 3, 4, 5],
+                "Age": [45, 50, 60, 55, 40],
+                "TreatmentType": ["A", "B", "A", "B", "A"],
+                "SurvivalRate": [0.75, 0.80, 0.65, 0.70, 0.85]
+            }
+        },
+        "return": {
+            "method": "Cox_Proportional_Hazards",
+            "predictor": ["Age", "TreatmentType"],
+            "target": ["SurvivalRate"]
+        }
+    },
+    {
+        "userinput": "Determine the impact of temperature on energy consumption.",
+        "data_info": {
+            "description": "energy consumption data",
+            "attribute names": ["Temperature", "EnergyConsumption"],
+            "dtypes": ["float64", "int64"],
+            "shape": [40, 2],
+            "data_head": {
+                "Temperature": [20.5, 22.0, 21.5, 23.0, 24.5],
+                "EnergyConsumption": [500, 600, 550, 650, 780]
+            }
+        },
+        "return": {
+            "method": "Correlation_Pearson",
+            "predictor": ["Temperature"],
+            "target": ["EnergyConsumption"]
+        }
+    },
+    {
+        "userinput": "Predict the price of cars based on their make and model.",
+        "data_info": {
+            "description": "car pricing data",
+            "attribute names": ["Price", "Make", "Model"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "Price": [20000, 25000, 30000, 22000, 28000],
+                "Make": ["Toyota", "Honda", "Toyota", "Honda", "Toyota"],
+                "Model": ["Corolla", "Civic", "Corolla", "Civic", "Corolla"]
+            }
+        },
+        "return": {
+            "method": "Regression_Ridge",
+            "predictor": ["Make", "Model"],
+            "target": ["Price"]
+        }
+    },
+    {
+        "userinput": "Cluster articles based on their topic and publication date.",
+        "data_info": {
+            "description": "article clustering data",
+            "attribute names": ["ArticleID", "Topic", "PublicationDate"],
+            "dtypes": ["int64", "str", "timestamp"],
+            "shape": [60, 3],
+            "data_head": {
+                "ArticleID": [1, 2, 3, 4, 5],
+                "Topic": ["Technology", "Health", "Technology", "Politics", "Health"],
+                "PublicationDate": ["2021-01-01", "2021-01-02", "2021-01-03", "2021-01-04", "2021-01-05"]
+            }
+        },
+        "return": {
+            "method": "Clustering_Hierarchical",
+            "predictor": ["Topic", "PublicationDate"],
+            "target": ["ArticleID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between exercise intensity and health outcomes.",
+        "data_info": {
+            "description": "exercise and health data",
+            "attribute names": ["ExerciseIntensity", "HealthOutcomes"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "ExerciseIntensity": [3, 5, 4, 6, 2],
+                "HealthOutcomes": [8, 9, 7, 10, 6]
+            }
+        },
+        "return": {
+            "method": "Correlation_Kendall",
+            "predictor": ["ExerciseIntensity"],
+            "target": ["HealthOutcomes"]
+        }
+    },
+    {
+        "userinput": "Predict the risk of credit card fraud based on transaction amount and location.",
+        "data_info": {
+            "description": "credit card fraud data",
+            "attribute names": ["FraudRisk", "TransactionAmount", "Location"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "FraudRisk": [0, 1, 0, 1, 0],
+                "TransactionAmount": [100, 50, 80, 30, 70],
+                "Location": ["Urban", "Suburban", "Urban", "Rural", "Suburban"]
+            }
+        },
+        "return": {
+            "method": "Regression_Lasso",
+            "predictor": ["TransactionAmount", "Location"],
+            "target": ["FraudRisk"]
+        }
+    },
+    {
+        "userinput": "Forecast the demand for a product based on market trends.",
+        "data_info": {
+            "description": "product demand data",
+            "attribute names": ["Demand", "MarketTrends"],
+            "dtypes": ["int64", "int64"],
+            "shape": [50, 2],
+            "data_head": {
+                "Demand": [100, 150, 200, 120, 180],
+                "MarketTrends": [5000, 6000, 5500, 6500, 7800]
+            }
+        },
+        "return": {
+            "method": "Time_series_forecast",
+            "predictor": ["MarketTrends"],
+            "target": ["Demand"]
+        }
+    },
+    {
+        "userinput": "Segment customers based on their online shopping behavior and demographics.",
+        "data_info": {
+            "description": "customer segmentation data",
+            "attribute names": ["CustomerID", "OnlineShoppingBehavior", "Demographics"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [150, 3],
+            "data_head": {
+                "CustomerID": [1, 2, 3, 4, 5],
+                "OnlineShoppingBehavior": [10, 15, 20, 12, 18],
+                "Demographics": ["Young", "Middle-aged", "Young", "Middle-aged", "Young"]
+            }
+        },
+        "return": {
+            "method": "Clustering_KMeans",
+            "predictor": ["OnlineShoppingBehavior", "Demographics"],
+            "target": ["CustomerID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between education level and job satisfaction.",
+        "data_info": {
+            "description": "education and job satisfaction data",
+            "attribute names": ["EducationLevel", "JobSatisfaction"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "EducationLevel": [12, 16, 14, 18, 12],
+                "JobSatisfaction": [7, 8, 6, 9, 5]
+            }
+        },
+        "return": {
+            "method": "Correlation_Spearman",
+            "predictor": ["EducationLevel"],
+            "target": ["JobSatisfaction"]
+        }
+    },
+    {
+        "userinput": "Predict the sales of a product based on its brand and advertising strategy.",
+        "data_info": {
+            "description": "product sales data",
+            "attribute names": ["Sales", "Brand", "AdvertisingStrategy"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "Sales": [500, 600, 550, 650, 780],
+                "Brand": ["BrandA", "BrandB", "BrandA", "BrandB", "BrandA"],
+                "AdvertisingStrategy": ["Digital", "TV", "Digital", "TV", "Digital"]
+            }
+        },
+        "return": {
+            "method": "Regression_RandomForest",
+            "predictor": ["Brand", "AdvertisingStrategy"],
+            "target": ["Sales"]
+        }
+    },
+    {
+        "userinput": "Cluster movies based on their genre and director.",
+        "data_info": {
+            "description": "movie clustering data",
+            "attribute names": ["MovieID", "Genre", "Director"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "MovieID": [1, 2, 3, 4, 5],
+                "Genre": ["Action", "Comedy", "Drama", "Action", "Comedy"],
+                "Director": ["John Doe", "Jane Smith", "John Doe", "Jane Smith", "John Doe"]
+            }
+        },
+        "return": {
+            "method": "Clustering_DBSCAN",
+            "predictor": ["Genre", "Director"],
+            "target": ["MovieID"]
+        }
+    },
+    {
+        "userinput": "Analyze the survival rate of patients based on their age and treatment type.",
+        "data_info": {
+            "description": "patient survival data",
+            "attribute names": ["PatientID", "Age", "TreatmentType", "SurvivalRate"],
+            "dtypes": ["int64", "int64", "str", "float64"],
+            "shape": [50, 4],
+            "data_head": {
+                "PatientID": [1, 2, 3, 4, 5],
+                "Age": [45, 50, 60, 55, 40],
+                "TreatmentType": ["A", "B", "A", "B", "A"],
+                "SurvivalRate": [0.75, 0.80, 0.65, 0.70, 0.85]
+            }
+        },
+        "return": {
+            "method": "Cox_Proportional_Hazards",
+            "predictor": ["Age", "TreatmentType"],
+            "target": ["SurvivalRate"]
+        }
+    },
+    {
+        "userinput": "Determine the impact of temperature on energy consumption.",
+        "data_info": {
+            "description": "energy consumption data",
+            "attribute names": ["Temperature", "EnergyConsumption"],
+            "dtypes": ["float64", "int64"],
+            "shape": [40, 2],
+            "data_head": {
+                "Temperature": [20.5, 22.0, 21.5, 23.0, 24.5],
+                "EnergyConsumption": [500, 600, 550, 650, 780]
+            }
+        },
+        "return": {
+            "method": "Correlation_Pearson",
+            "predictor": ["Temperature"],
+            "target": ["EnergyConsumption"]
+        }
+    },
+    {
+        "userinput": "Predict the price of cars based on their make and model.",
+        "data_info": {
+            "description": "car pricing data",
+            "attribute names": ["Price", "Make", "Model"],
+            "dtypes": ["int64", "str", "str"],
+            "shape": [80, 3],
+            "data_head": {
+                "Price": [20000, 25000, 30000, 22000, 28000],
+                "Make": ["Toyota", "Honda", "Toyota", "Honda", "Toyota"],
+                "Model": ["Corolla", "Civic", "Corolla", "Civic", "Corolla"]
+            }
+        },
+        "return": {
+            "method": "Regression_Ridge",
+            "predictor": ["Make", "Model"],
+            "target": ["Price"]
+        }
+    },
+    {
+        "userinput": "Cluster articles based on their topic and publication date.",
+        "data_info": {
+            "description": "article clustering data",
+            "attribute names": ["ArticleID", "Topic", "PublicationDate"],
+            "dtypes": ["int64", "str", "timestamp"],
+            "shape": [60, 3],
+            "data_head": {
+                "ArticleID": [1, 2, 3, 4, 5],
+                "Topic": ["Technology", "Health", "Technology", "Politics", "Health"],
+                "PublicationDate": ["2021-01-01", "2021-01-02", "2021-01-03", "2021-01-04", "2021-01-05"]
+            }
+        },
+        "return": {
+            "method": "Clustering_Hierarchical",
+            "predictor": ["Topic", "PublicationDate"],
+            "target": ["ArticleID"]
+        }
+    },
+    {
+        "userinput": "Analyze the relationship between exercise intensity and health outcomes.",
+        "data_info": {
+            "description": "exercise and health data",
+            "attribute names": ["ExerciseIntensity", "HealthOutcomes"],
+            "dtypes": ["int64", "int64"],
+            "shape": [100, 2],
+            "data_head": {
+                "ExerciseIntensity": [3, 5, 4, 6, 2],
+                "HealthOutcomes": [8, 9, 7, 10, 6]
+            }
+        },
+        "return": {
+            "method": "Correlation_Kendall",
+            "predictor": ["ExerciseIntensity"],
+            "target": ["HealthOutcomes"]
+        }
+    },
+    {
+        "userinput": "Predict the risk of credit card fraud based on transaction amount and location.",
+        "data_info": {
+            "description": "credit card fraud data",
+            "attribute names": ["FraudRisk", "TransactionAmount", "Location"],
+            "dtypes": ["int64", "int64", "str"],
+            "shape": [120, 3],
+            "data_head": {
+                "FraudRisk": [0, 1, 0, 1, 0],
+                "TransactionAmount": [100, 50, 80, 30, 70],
+                "Location": ["Urban", "Suburban", "Urban", "Rural", "Suburban"]
+            }
+        },
+        "return": {
+            "method": "Regression_Lasso",
+            "predictor": ["TransactionAmount", "Location"],
+            "target": ["FraudRisk"]
+        }
+    },
+    {
+        "userinput": "Forecast the demand for a product based on market trends.",
+        "data_info": {
+            "description": "product demand data",
+            "attribute names": ["Demand", "MarketTrends"],
+            "dtypes": ["int64", "int64"],
+            "shape": [50, 2],
+            "data_head": {
+                "Demand": [100, 150, 200, 120, 180],
+                "MarketTrends": [5000, 6000, 5500, 6500, 7800]
+            }
+        },
+        "return": {
+            "method": "Time_series_forecast",
+            "predictor": ["MarketTrends"],
+            "target": ["Demand"]
+        }
+    }
+]
