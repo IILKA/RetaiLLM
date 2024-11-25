@@ -123,71 +123,13 @@ class WebScraper:
         self.engine_failures = 0
         self.max_engine_failures = len(self.search_engines)
         self.scraped_urls = set()
+        self.warning = []
 
         try:
             self.deepseek = DeepSeek()
         except Exception as e:
             self.logger.warning(f"Failed to initialize DeepSeek: {str(e)}")
-            self.deepseek = None
-
-class WebScraper:
-    def __init__(self):
-        self.logger = Logger()
-        self.search_engines = [
-            {
-                'name': 'Google',
-                'url': 'https://www.google.com/search?q=',
-                'result_selector': 'div.g div.yuRUbf a',
-                'title_selector': 'div.g h3',
-                'snippet_selector': 'div.g div.VwiC3b'
-            },
-            {
-                'name': 'Bing',
-                'url': 'https://www.bing.com/search?q=',
-                'result_selector': '#b_results h2 a',
-                'title_selector': '#b_results h2',
-                'snippet_selector': '#b_results .b_caption p'
-            },
-            {
-                'name': 'Ecosia',
-                'url': 'https://www.ecosia.org/search?q=',
-                'result_selector': '.result__link',
-                'title_selector': '.result__title',
-                'snippet_selector': '.result__snippet'
-            },
-            {
-                'name': 'Startpage',
-                'url': 'https://www.startpage.com/do/search?q=',
-                'result_selector': '.w-gl__result-url',
-                'title_selector': '.w-gl__result-title', 
-                'snippet_selector': '.w-gl__description'
-            },
-            {
-                'name': 'Qwant',
-                'url': 'https://www.qwant.com/?q=',
-                'result_selector': '.result__url',
-                'title_selector': '.result__title',
-                'snippet_selector': '.result__desc'
-            },
-            {
-                'name': 'DuckDuckGo',
-                'url': 'https://html.duckduckgo.com/html/?q=',
-                'result_selector': 'a.result__a',
-                'title_selector': 'a.result__a',
-                'snippet_selector': 'a.result__snippet'
-            }
-        ]
-        self.ua = UserAgent()
-        self.setup_selenium()
-        self.setup_sentiment_analyzers()
-        self.engine_failures = 0
-        self.max_engine_failures = len(self.search_engines)
-        self.scraped_urls = set()
-
-        try:
-            self.deepseek = DeepSeek()
-        except Exception as e:
-            self.logger.warning(f"Failed to initialize DeepSeek: {str(e)}")
+            self.warning.append(f"Failed to initialize DeepSeek: {str(e)}")
             self.deepseek = None
 
     def extract_duckduckgo_url(self, href):
@@ -217,6 +159,7 @@ class WebScraper:
             return summary
         except Exception as e:
             self.logger.warning(f"Summary generation failed: {str(e)}")
+            self.warning.append(f"Summary generation failed: {str(e)}")
             return content
 
     def setup_sentiment_analyzers(self):
@@ -225,6 +168,7 @@ class WebScraper:
             nltk.download('punkt', quiet=True)
         except:
             self.logger.warning("NLTK punkt download failed, but continuing...")
+            self.warning.append("NLTK punkt download failed, but continuing...")
         self.vader = SentimentIntensityAnalyzer()
         self.logger.end("Setting up sentiment analyzers")
 
@@ -326,23 +270,44 @@ class WebScraper:
         return None
     
     def scrape_website_content(self, url):
-        """New method using LangChain for faster web scraping"""
+        """Method using LangChain for web scraping with word count validation"""
         try:
             loader = WebBaseLoader(url)
             docs = loader.load()
             text_splitter = RecursiveCharacterTextSplitter()
             documents = text_splitter.split_documents(docs)
             content = "\n\n".join(doc.page_content for doc in documents)
+            
+            # Check word count
+            word_count = len(content.split())
+            if word_count < 500:
+                self.logger.end(f"Fetching content from: {url}", word_count)
+                self.logger.warning(f"Content from {url} has insufficient words ({word_count} words)")
+                self.warning.append(f"Content from {url} has insufficient words ({word_count} words)")
+                return None
+                
             return content
         except Exception as e:
             self.logger.error(f"LangChain scraping failed: {str(e)}")
             # Fallback to selenium if LangChain fails
-            return self.fetch_with_selenium(url)
-    
+            try:
+                content = self.fetch_with_selenium(url)
+                if content:
+                    word_count = len(content.split())
+                    if word_count < 500:
+                        self.logger.end(f"Fetching content from: {url}", word_count)
+                        self.logger.warning(f"Selenium content from {url} has insufficient words ({word_count} words)")
+                        self.warning.append(f"Selenium content from {url} has insufficient words ({word_count} words)")
+                        return None
+                    return content
+            except Exception as selenium_error:
+                self.logger.error(f"Selenium scraping failed: {str(selenium_error)}")
+                return None
+        
     def analyze_results(self, keyword_summaries, keywords, summary):
         if not keyword_summaries:
             return "", ""
-        overall_summary = ""
+        overall_summary = "\n\n\n".join(keyword_summaries)
         if summary:
             combined_summaries = " ".join(keyword_summaries)
             combined_word_count = len(combined_summaries.split())
@@ -359,14 +324,13 @@ class WebScraper:
         results = []
         keywords = [" ".join(keywords)]
         self.logger.set_total_progress(len(keywords), num_res)
-            
         try:
             for keyword in keywords:
                 self.logger.log(f"Processing keyword: {keyword}")
                 results_count = 0
                 keyword_urls = []
                 keyword_summaries = []
-                keyword_contents = []  # New list to store raw content
+                keyword_contents = []
                 self.engine_failures = 0
 
                 engine_index = 0
@@ -406,21 +370,27 @@ class WebScraper:
                                 try:
                                     self.logger.start(f"Fetching content from: {href}")
                                     content = self.scrape_website_content(href)
+                                    
+                                    # Skip if content is None (insufficient words)
+                                    if not content:
+                                        self.logger.warning(f"Skipping {href} due to insufficient content")
+                                        self.warning.append(f"Skipping {href} due to insufficient content")
+                                        continue
+                                        
                                     word_count = len(content.split())
                                     self.logger.end(f"Fetching content from: {href}", word_count)
                                     
-                                    if content:
-                                        self.scraped_urls.add(href)
-                                        if summary:
-                                            content_summary = self.get_content_summary(content[:10000], keywords, href)
-                                            keyword_summaries.append(content_summary)
-                                        else:
-                                            keyword_summaries.append(content)
-                                        keyword_urls.append(href)
-                                        keyword_contents.append(content)  # Store the raw content
-                                        results_count += 1
-                                        success = True
-                                        self.logger.update_progress()
+                                    self.scraped_urls.add(href)
+                                    if summary:
+                                        content_summary = self.get_content_summary(content[:10000], keywords, href)
+                                        keyword_summaries.append(content_summary)
+                                    else:
+                                        keyword_summaries.append(content)
+                                    keyword_urls.append(href)
+                                    keyword_contents.append(content)
+                                    results_count += 1
+                                    success = True
+                                    self.logger.update_progress()
                                         
                                 except Exception as e:
                                     self.logger.error(f"Failed to fetch page content: {str(e)}")
@@ -440,13 +410,19 @@ class WebScraper:
                         self.engine_failures += 1
                         
                     engine_index += 1
+                    
+                if self.logger.current_progress != num_res:
+                    self.logger.warning(f"Failed find more potential results on possible engine")
+                    self.warning.append(f"Failed find more potential results on possible engine")
                 overall_summary, overall_sentiment = self.analyze_results(keyword_summaries, keywords, summary)
+                self.logger.update_progress()
                 results.append({
                     'keyword': keyword,
                     'urls': keyword_urls,
-                    'content': keyword_contents,  # Add the content list to results
+                    'content': keyword_contents,
                     'overall_summary': overall_summary,
                     'sentiment': overall_sentiment,
+                    'warning': self.warning
                 })       
 
         finally:
@@ -481,12 +457,13 @@ def scrapfast(words=["business strategy 2024 startup profit"], num_res=3, num_at
 
 if __name__ == "__main__":
     results = scrapfast(["online", "snack shop 2024", "business idea strategy", " profit start up"])
-    # results = scrapfast(["online", "snack shop 2024", "business idea strategy", " profit start up"],3,1, False)
+    # results = scrapfast(["online", "snack shop 2024", "business idea strategy", " profit start up"],20 ,1, False)
     # results = scrapfast(["US SHOES"],3,1,False)
     print("\nResults:")
     for result in results:
         print(f"\nKeyword: {result['keyword']}")
         print(f"URLs: {result['urls']}")
-        print(f"Contents: {result['content']}")
-        print(f"Overall Summary: {result['overall_summary']}")
+        # print(f"Contents: {result['content']}")
+        # print(f"Overall Summary: {result['overall_summary']}")
         print(f"Sentiment: {result['sentiment']}")
+        print(f"Warning: {result['warning']}")
