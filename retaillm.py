@@ -7,7 +7,7 @@ import os
 import re
 import ast
 import json
-from scrapfast import scrapfast
+from scrapwithlangchain import scrapfast
 from analysis import DataAnalysisManager 
 
 
