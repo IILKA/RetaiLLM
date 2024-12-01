@@ -112,7 +112,7 @@ function App() {
 
   return (
     <div className="App" style={{backdropFilter: "blur(10px)"}}>
-      <div style={{ height: "80vh", width: "80vh", borderRadius: "30px"}}>
+      <div style={{ height: "90vh", width: "80vh", borderRadius: "30px"}}>
         <MainContainer style={{ borderRadius: "30px", backgroundColor: "#2A403D", border: "none"}}>
           <ChatContainer style={{backgroundColor: "#2A403D"}}>       
             <MessageList

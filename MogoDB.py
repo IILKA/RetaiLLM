@@ -1,5 +1,6 @@
 import pymongo
 import pandas as pd
+import uuid
 
 class MongoDBClient:
     def __init__(self, user, password, server, db_name):
@@ -26,7 +27,8 @@ class MongoDBClient:
             for line in self.db[col].find({"line": {"$regex": name}}):
                 id = line["_id"]
                 content = line["line"]
-                data.append({"collection": col, "id": id, "content": content})
+                namecol = str(uuid.uuid4()) + col
+                data.append({"collection": namecol, "id": id, "content": content})
 
         df = pd.DataFrame(data, columns=["collection", "id", "content"])
         return df
@@ -44,5 +46,5 @@ db_name = "4011"
 mongo_client = MongoDBClient(user, password, server, db_name)
 #mongo_client.list_collections()
 #mongo_client.search_text("inventory")
-df = mongo_client.get_df("inventory")
+df = mongo_client.get_df("strategy")
 print(df)
