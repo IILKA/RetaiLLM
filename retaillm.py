@@ -7,7 +7,7 @@ import os
 import re
 import ast
 import json
-from scrapfast import scrapfast
+from scrapwithlangchain import scrapfast
 from analysis import DataAnalysisManager 
 
 
@@ -149,7 +149,10 @@ class RetaiLLM:
                 # the file path is assumed to be relative to the root directory
                 data_file_path = os.path.join(self.root_dir, data_file_path)
                 new_data = DataContainer()
-                new_data.from_file(file_path = data_file_path)
+                try:
+                    new_data.from_file(file_path = data_file_path)
+                except:
+                    return "The filepath provided is not correct"
                 #extract a description of the data 
                 description = self._extract_description(user_input, new_data.get_info())
                 new_data.description = description
@@ -166,13 +169,16 @@ class RetaiLLM:
         elif DataGetMethod == "PREVIOUS_CONVO_DATA":
             previous_convo_tree = GetDataTree["PREVIOUS_CONVO_DATA"]
             #choose from previous data should return the id of the data  
-            new_data_id = get_closest_match(
-                        self.llm.inference(
-                            self._wrap_message(previous_convo_tree["choose_from_previous"]["prompt"]),
-                            max_length = previous_convo_tree["choose_from_previous"]["max_length"]
-                        ),
-                        self.data_node.get_data_list(id_only = True)
-                    )
+            try:
+                new_data_id = get_closest_match(
+                            self.llm.inference(
+                                self._wrap_message(previous_convo_tree["choose_from_previous"]["prompt"]),
+                                max_length = previous_convo_tree["choose_from_previous"]["max_length"]
+                            ),
+                            self.data_node.get_data_list(id_only = True)
+                        )
+            except:
+                return "I am sorry, I cannot find the previous data"
             #change the activated id to the new_data_id
             self.data_node.update_activate_id(new_data_id)
             if self._debug:

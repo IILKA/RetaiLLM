@@ -1,0 +1,2917 @@
+[
+    {
+        "userinput": "What are the latest retail trends?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you remind me of the sales figures we discussed last week?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "userinput": "How can you assist me with retail analysis?",
+        "method": "MENU"
+    },
+    {
+        "userinput": "Fetch the sales data from <data>sales_data.csv</data>",
+        "method": "USER_INPUT"
+    },
+    {
+        "userinput": "What is the average customer spend?",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the top 5 products this month?",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "Can you summarize our last retail strategy meeting?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "userinput": "What are the best practices for inventory management?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "How do I calculate the profit margin?",
+        "method": "NO_DATA"
+    },
+    {
+        "userinput": "Retrieve the customer feedback data for the last quarter.",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the latest promotions on retail websites?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you help me with retail data analysis?",
+        "method": "MENU"
+    },
+    {
+        "userinput": "Fetch the inventory levels from <data>inventory_data.csv</data>",
+        "method": "USER_INPUT"
+    },
+    {
+        "userinput": "What is the total revenue for the year?",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the key metrics for retail performance?",
+        "method": "NO_DATA"
+    },
+    {
+        "userinput": "What are the most popular retail apps?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you remind me of the inventory levels we discussed last month?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "userinput": "How can you help me optimize my retail operations?",
+        "method": "MENU"
+    },
+    {
+        "userinput": "Fetch the customer demographics from <data>customer_data.csv</data>",
+        "method": "USER_INPUT"
+    },
+    {
+        "userinput": "What is the average order value?",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the top 3 retail markets?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you summarize our last retail performance review?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "userinput": "What are the best practices for customer retention?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "How do I improve my retail store layout?",
+        "method": "NO_DATA"
+    },
+    {
+        "userinput": "Retrieve the sales data for the last six months.",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the latest retail technologies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you help me with retail strategy?",
+        "method": "MENU"
+    },
+    {
+        "userinput": "Fetch the product reviews from <data>reviews_data.csv</data>",
+        "method": "USER_INPUT"
+    },
+    {
+        "userinput": "What is the customer satisfaction rate?",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the top 5 retail challenges?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you remind me of the sales targets we discussed last quarter?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "userinput": "What are the best practices for retail marketing?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "How do I increase foot traffic in my retail store?",
+        "method": "NO_DATA"
+    },
+    {
+        "userinput": "Retrieve the inventory turnover rate.",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the latest retail innovations?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you help me with retail analytics?",
+        "method": "MENU"
+    },
+    {
+        "userinput": "Fetch the sales trends from <data>trends_data.csv</data>",
+        "method": "USER_INPUT"
+    },
+    {
+        "userinput": "What is the average customer lifetime value?",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the top 5 retail trends for the next year?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you summarize our last retail innovation meeting?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "userinput": "What are the best practices for retail pricing?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "How do I optimize my retail supply chain?",
+        "method": "NO_DATA"
+    },
+    {
+        "userinput": "Retrieve the sales data for the last year.",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the latest retail strategies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you help me with retail forecasting?",
+        "method": "MENU"
+    },
+    {
+        "userinput": "Fetch the customer loyalty data from <data>loyalty_data.csv</data>",
+        "method": "USER_INPUT"
+    },
+    {
+        "userinput": "What is the average customer retention rate?",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the top 5 retail success stories?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you remind me of the retail strategies we discussed last year?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "userinput": "What are the best practices for retail customer service?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "How do I improve my retail customer experience?",
+        "method": "NO_DATA"
+    },
+    {
+        "userinput": "Retrieve the sales data for the last quarter.",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the latest retail customer insights?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you help me with retail customer analysis?",
+        "method": "MENU"
+    },
+    {
+        "userinput": "Fetch the sales performance data from <data>performance_data.csv</data>",
+        "method": "USER_INPUT"
+    },
+    {
+        "userinput": "What is the average customer acquisition cost?",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the top 5 retail customer trends?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you summarize our last retail customer feedback meeting?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "userinput": "What are the best practices for retail customer engagement?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "How do I enhance my retail customer loyalty?",
+        "method": "NO_DATA"
+    },
+    {
+        "userinput": "Retrieve the sales data for the last month.",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the latest retail customer strategies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you help me with retail customer segmentation?",
+        "method": "MENU"
+    },
+    {
+        "userinput": "Fetch the customer behavior data from <data>behavior_data.csv</data>",
+        "method": "USER_INPUT"
+    },
+    {
+        "userinput": "What is the average customer churn rate?",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the top 5 retail customer challenges?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you remind me of the retail customer strategies we discussed last month?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "userinput": "What are the best practices for retail customer retention?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "How do I improve my retail customer satisfaction?",
+        "method": "NO_DATA"
+    },
+    {
+        "userinput": "Retrieve the sales data for the last week.",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the latest retail customer innovations?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you help me with retail customer feedback analysis?",
+        "method": "MENU"
+    },
+    {
+        "userinput": "Fetch the customer satisfaction data from <data>satisfaction_data.csv</data>",
+        "method": "USER_INPUT"
+    },
+    {
+        "userinput": "What is the average customer response time?",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the top 5 retail customer success stories?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you summarize our last retail customer success meeting?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "userinput": "What are the best practices for retail customer success?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "How do I achieve retail customer success?",
+        "method": "NO_DATA"
+    },
+    {
+        "userinput": "Retrieve the sales data for the last day.",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the latest retail customer success strategies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you help me with retail customer success analysis?",
+        "method": "MENU"
+    },
+    {
+        "userinput": "Fetch the customer success data from <data>success_data.csv</data>",
+        "method": "USER_INPUT"
+    },
+    {
+        "userinput": "What is the average customer success rate?",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the top 5 retail customer success trends?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you remind me of the retail customer success strategies we discussed last week?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "userinput": "What are the best practices for retail customer success management?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "How do I manage retail customer success?",
+        "method": "NO_DATA"
+    },
+    {
+        "userinput": "Retrieve the sales data for the last hour.",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the latest retail customer success innovations?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you help me with retail customer success forecasting?",
+        "method": "MENU"
+    },
+    {
+        "userinput": "Fetch the customer success trends from <data>trends_data.csv</data>",
+        "method": "USER_INPUT"
+    },
+    {
+        "userinput": "What is the average customer success growth rate?",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the top 5 retail customer success challenges?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you summarize our last retail customer success review?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "userinput": "What are the best practices for retail customer success optimization?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "How do I optimize retail customer success?",
+        "method": "NO_DATA"
+    },
+    {
+        "userinput": "Retrieve the sales data for the last minute.",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the latest retail customer success strategies for the next year?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you help me with retail customer success strategy?",
+        "method": "MENU"
+    },
+    {
+        "userinput": "Fetch the customer success strategy data from <data>strategy_data.csv</data>",
+        "method": "USER_INPUT"
+    },
+    {
+        "userinput": "What is the average customer success strategy effectiveness?",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the top 5 retail customer success strategy trends?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you remind me of the retail customer success strategies we discussed last year?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "userinput": "What are the best practices for retail customer success strategy implementation?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "How do I implement retail customer success strategies?",
+        "method": "NO_DATA"
+    },
+    {
+        "userinput": "Retrieve the sales data for the last second.",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the latest retail customer success strategy innovations?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you help me with retail customer success strategy analysis?",
+        "method": "MENU"
+    },
+    {
+        "userinput": "Fetch the customer success strategy analysis data from <data>analysis_data.csv</data>",
+        "method": "USER_INPUT"
+    },
+    {
+        "userinput": "What is the average customer success strategy impact?",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the top 5 retail customer success strategy challenges?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you summarize our last retail customer success strategy meeting?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "userinput": "What are the best practices for retail customer success strategy evaluation?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "How do I evaluate retail customer success strategies?",
+        "method": "NO_DATA"
+    },
+    {
+        "userinput": "Retrieve the sales data for the last millisecond.",
+        "method": "DB_QUERY"
+    },
+    {
+        "userinput": "What are the latest retail customer success strategy trends for the next decade?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "userinput": "Can you help me with retail customer success strategy forecasting?",
+        "method": "MENU"
+    },
+    {
+        "userinput": "Fetch the customer success strategy forecasting data from <data>forecasting_data.csv</data>",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "help me do linear regression x= [1,2,3,4,5], y = [1,2,3,4,5]",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "Can you analyze the sales data from last quarter?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest trends in retail?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What can you do to help me with my retail business?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "I need to know the average customer rating from our previous conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Just explain the concept of market segmentation.",
+        "method": "NO_DATA"
+    },
+
+    {
+        "user_input": "Can you help me analyze the sales data for Q3? The data is in the format: [['Product A', 100], ['Product B', 150], ['Product C', 200]].",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the latest trends in sustainable retail practices?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can you assist me with inventory forecasting?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the customer demographics from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of dynamic pricing in retail.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Retrieve the sales data for the last six months.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the best practices for retail store design?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I improve my customer loyalty program?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Provide the sales trends from the last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the difference between B2B and B2C retail models.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Analyze the customer feedback data from last month.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the current challenges in the e-commerce sector?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can you help me with market research?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Provide the inventory data from the previous quarter.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest innovations in retail technology?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I optimize my supply chain management?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the sales data from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of omnichannel retailing.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Retrieve the sales data for the last year.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail marketing strategies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I improve my online customer experience?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the inventory trends from the last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail analytics.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Analyze the sales data from last quarter.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the current retail trends in Asia?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can you help me with customer segmentation?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Provide the sales data from the previous year.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail technologies for small businesses?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I optimize my retail store layout?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the customer feedback data from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail automation.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Retrieve the sales data for the last month.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail marketing trends?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I improve my retail store's visual merchandising?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the sales data from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail personalization.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Analyze the sales data from last week.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the current retail trends in Europe?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can you help me with inventory optimization?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Provide the sales data from the previous week.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail technologies for large enterprises?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I optimize my retail store's lighting?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the customer demographics from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail sustainability.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Retrieve the sales data for the last day.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail marketing strategies for social media?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I improve my retail store's customer service?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the sales data from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail customer journey mapping.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Analyze the sales data from last hour.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the current retail trends in North America?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can you help me with retail pricing strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Provide the sales data from the previous hour.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail technologies for medium-sized businesses?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I optimize my retail store's signage?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the customer feedback data from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail customer experience.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Retrieve the sales data for the last minute.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail marketing strategies for email campaigns?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I improve my retail store's in-store experience?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the sales data from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail customer loyalty.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Analyze the sales data from last minute.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the current retail trends in South America?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can you help me with retail inventory management?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Provide the sales data from the previous minute.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail technologies for startups?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I optimize my retail store's product placement?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the customer demographics from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail customer engagement.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Retrieve the sales data for the last second.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail marketing strategies for influencer partnerships?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I improve my retail store's checkout process?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the sales data from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail customer retention.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Analyze the sales data from last second.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the current retail trends in Africa?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can you help me with retail customer feedback analysis?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Provide the sales data from the previous second.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail technologies for brick-and-mortar stores?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I optimize my retail store's product display?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the customer feedback data from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail customer satisfaction.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Retrieve the sales data for the last millisecond.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail marketing strategies for content marketing?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I improve my retail store's return policy?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the sales data from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail customer advocacy.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Analyze the sales data from last millisecond.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the current retail trends in Australia?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can you help me with retail customer segmentation?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Provide the sales data from the previous millisecond.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail technologies for omnichannel retailing?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I optimize my retail store's product assortment?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the customer demographics from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail customer value.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Retrieve the sales data for the last nanosecond.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail marketing strategies for mobile apps?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I improve my retail store's loyalty program?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the sales data from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail customer lifetime value.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Analyze the sales data from last nanosecond.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the current retail trends in the Middle East?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can you help me with retail customer journey mapping?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Provide the sales data from the previous nanosecond.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail technologies for customer experience?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I optimize my retail store's product pricing?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the customer feedback data from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail customer behavior.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Retrieve the sales data for the last picosecond.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the latest retail marketing strategies for search engine optimization?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can I improve my retail store's product recommendations?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "Show me the sales data from our last conversation.",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "Explain the concept of retail customer profiling.",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "Analyze the sales data from last picosecond.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the current retail trends in India?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can you help me with retail customer feedback?",
+        "method": "MENU"
+    },
+
+    {
+        "user_input": "Can you provide the latest sales figures for the last quarter?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "What are the current trends in consumer behavior?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "I need the inventory levels for all our stores.",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you assist me with retail analysis?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What was the total revenue for last month?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the key points from our last meeting?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "What are the top-selling products this week?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How do I improve customer retention?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the latest news articles about our competitors?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you extract the data enclosed in <data>sales_figures_2023</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the average sales per store for the past year?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I optimize my inventory?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the latest trends in e-commerce?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you remind me of the key points we discussed last week?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "What is the current stock level of our best-selling product?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with market analysis?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest reviews about our new product?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD123</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the holiday season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve customer satisfaction?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our new product line?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest market research?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our flagship store?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with sales forecasting?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer feedbacks?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD456</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the summer season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I increase foot traffic in my stores?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our seasonal products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest industry reports?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our online store?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with inventory management?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer reviews?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD789</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the spring season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product visibility?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our promotional products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest consumer surveys?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our outlet stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer segmentation?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer testimonials?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD012</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the winter season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product pricing?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our exclusive products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest market trends?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our discount stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with sales performance analysis?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer complaints?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD345</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the fall season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product packaging?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our limited edition products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail news?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our specialty stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer loyalty programs?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer suggestions?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD678</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the festive season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product quality?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our eco-friendly products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail trends?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our department stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer feedback analysis?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer compliments?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD901</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the back-to-school season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product design?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our luxury products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail insights?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our convenience stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer behavior analysis?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer inquiries?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD234</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Black Friday season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product branding?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our budget products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail analytics?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our hypermarkets?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer acquisition strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer feedbacks?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD567</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Cyber Monday season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product marketing?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our premium products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail strategies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our supermarkets?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer retention strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer reviews?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD890</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Valentine's Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product distribution?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our value products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail innovations?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our grocery stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer engagement strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer testimonials?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD123</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Easter season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product availability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our niche products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail technologies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our boutique stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer experience strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer complaints?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD456</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Halloween season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product assortment?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-end products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail disruptions?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our discount stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer loyalty strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer suggestions?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD789</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Thanksgiving season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product presentation?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our mid-range products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail challenges?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our department stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer satisfaction strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer compliments?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD012</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the New Year season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product shelf life?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our entry-level products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail opportunities?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our convenience stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer retention strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer inquiries?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD345</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Independence Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product durability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-demand products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail trends?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our hypermarkets?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer acquisition strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer feedbacks?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD678</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Labor Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product sustainability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-cost products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail insights?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our supermarkets?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer retention strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer reviews?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD901</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Memorial Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product innovation?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-margin products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail analytics?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our grocery stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer engagement strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer testimonials?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD234</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Christmas season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product reliability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-margin products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail strategies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our boutique stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer experience strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer complaints?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD567</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Mother's Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product aesthetics?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-value products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail innovations?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our discount stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer loyalty strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer suggestions?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD890</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Father's Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product functionality?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-value products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail technologies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our department stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer satisfaction strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer compliments?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD123</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the St. Patrick's Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product versatility?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-performance products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail disruptions?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our convenience stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer retention strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer inquiries?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD456</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Cinco de Mayo season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product efficiency?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-performance products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail challenges?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our hypermarkets?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer acquisition strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer feedbacks?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD789</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Fourth of July season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product compatibility?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-quality products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail opportunities?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our supermarkets?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer retention strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer reviews?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD012</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Veterans Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product adaptability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-quality products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail trends?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our grocery stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer engagement strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer testimonials?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD345</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Presidents' Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product flexibility?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-efficiency products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail insights?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our boutique stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer experience strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer complaints?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD678</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Martin Luther King Jr. Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product scalability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-efficiency products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail analytics?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our discount stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer loyalty strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer suggestions?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD901</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Columbus Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product interoperability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-reliability products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail strategies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our department stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer satisfaction strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer compliments?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD234</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Thanksgiving season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product modularity?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-reliability products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail innovations?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our convenience stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer retention strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer inquiries?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD567</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Christmas season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product configurability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-versatility products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail technologies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our hypermarkets?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer acquisition strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer feedbacks?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD890</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the New Year season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product customizability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-versatility products?",
+        "method": "DB_QUERY"
+    },
+
+    {
+        "user_input": "Can you analyze the sentiment of customer reviews for our latest product launch?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the top 5 best-selling products this month?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve the in-store experience for our customers?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the latest trends in sustainable retail practices?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "How can you help me with customer segmentation?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the inventory levels for our online store?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the key points from our last meeting?",
+        "method": "PREVIOUS_CONVO_DATA"
+    },
+    {
+        "user_input": "What are the sales figures for the holiday season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product visibility?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the latest customer testimonials?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the sales trends for our eco-friendly products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail news?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our specialty stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer loyalty programs?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer complaints?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD456</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the summer season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I increase foot traffic in my stores?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our seasonal products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest industry reports?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our online store?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with inventory management?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer reviews?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD789</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the spring season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product visibility?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our promotional products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest consumer surveys?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our outlet stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer segmentation?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer testimonials?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD012</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the winter season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product pricing?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our exclusive products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest market trends?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our discount stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with sales performance analysis?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer complaints?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD345</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the fall season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product packaging?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our limited edition products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail news?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our specialty stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer loyalty programs?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer suggestions?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD678</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the festive season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product quality?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our eco-friendly products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail trends?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our department stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer feedback analysis?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer compliments?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD901</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the back-to-school season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product design?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our luxury products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail insights?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our convenience stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer behavior analysis?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer inquiries?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD234</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Black Friday season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product branding?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our budget products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail analytics?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our hypermarkets?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer acquisition strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer feedbacks?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD567</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Cyber Monday season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product marketing?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our premium products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail strategies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our supermarkets?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer retention strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer reviews?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD890</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Valentine's Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product distribution?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our value products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail innovations?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our grocery stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer engagement strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer testimonials?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD123</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Easter season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product availability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our niche products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail technologies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our boutique stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer experience strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer complaints?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD456</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Halloween season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product assortment?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-end products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail disruptions?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our discount stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer loyalty strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer suggestions?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD789</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Thanksgiving season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product presentation?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our mid-range products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail challenges?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our department stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer satisfaction strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer compliments?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD012</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the New Year season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product shelf life?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our entry-level products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail opportunities?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our convenience stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer retention strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer inquiries?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD345</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Independence Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product durability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-demand products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail trends?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our hypermarkets?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer acquisition strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer feedbacks?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD678</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Labor Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product sustainability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-cost products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail insights?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our supermarkets?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer retention strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer reviews?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD901</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Memorial Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product innovation?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-margin products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail analytics?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our grocery stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer engagement strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer testimonials?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD234</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Christmas season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product reliability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-margin products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail strategies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our boutique stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer experience strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer complaints?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD567</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Mother's Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product aesthetics?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-value products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail innovations?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our discount stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer loyalty strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer suggestions?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD890</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Father's Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product functionality?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-value products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail technologies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our department stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer satisfaction strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer compliments?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD123</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the St. Patrick's Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product versatility?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-performance products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail disruptions?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our convenience stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer retention strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer inquiries?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD456</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Cinco de Mayo season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product efficiency?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-performance products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail challenges?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our hypermarkets?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer acquisition strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer feedbacks?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD789</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Fourth of July season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product compatibility?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-quality products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail opportunities?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our supermarkets?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer retention strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer reviews?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD012</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Veterans Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product adaptability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-quality products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail trends?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our grocery stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer engagement strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer testimonials?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD345</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Presidents' Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product flexibility?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-efficiency products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail insights?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our boutique stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer experience strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer complaints?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD678</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Martin Luther King Jr. Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product scalability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-efficiency products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail analytics?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our discount stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer loyalty strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer suggestions?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD901</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Columbus Day season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product interoperability?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our high-reliability products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail strategies?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our department stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer satisfaction strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer compliments?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD234</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Thanksgiving season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product modularity?",
+        "method": "NO_DATA"
+    },
+    {
+        "user_input": "What are the sales trends for our low-reliability products?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "Can you summarize the latest retail innovations?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "What are the inventory levels for our convenience stores?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can you help me with customer retention strategies?",
+        "method": "MENU"
+    },
+    {
+        "user_input": "What are the latest customer inquiries?",
+        "method": "WEB_SCRAPE"
+    },
+    {
+        "user_input": "Can you provide the sales data for the product code <data>PROD567</data>?",
+        "method": "USER_INPUT"
+    },
+    {
+        "user_input": "What are the sales figures for the Christmas season?",
+        "method": "DB_QUERY"
+    },
+    {
+        "user_input": "How can I improve product configurability?",
+        "method": "NO_DATA"
+    }
+]

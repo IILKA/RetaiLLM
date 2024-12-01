@@ -4,3 +4,5 @@ utils/.DS_Store
 .DS_Store
 config_copy.yaml
 analysis_copy.py
+./plots/*
+plots/*

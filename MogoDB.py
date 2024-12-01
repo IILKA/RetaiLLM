@@ -46,5 +46,12 @@ db_name = "4011"
 mongo_client = MongoDBClient(user, password, server, db_name)
 #mongo_client.list_collections()
 #mongo_client.search_text("inventory")
+<<<<<<< HEAD
 df = mongo_client.get_df("strategy")
 print(df)
+=======
+df = mongo_client.get_df("inventory")
+print(mongo_client.list_collections())
+print(type(mongo_client.list_collections()))
+# print(df)
+>>>>>>> refs/remotes/origin/main

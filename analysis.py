@@ -100,17 +100,20 @@ class ClusteringAnalysis:
         - visualize (bool): Whether to visualize the clustering results.
         
         Returns:
-        - pd.DataFrame: DataFrame with an additional 'cluster_kmeans' column indicating cluster assignments.
+        - dict: Contains a notification that the plot has been generated and a short summary.
         """
         self._scale_features()
         kmeans = KMeans(n_clusters=n_clusters, random_state=random_state)
         self.df['cluster_kmeans'] = kmeans.fit_predict(self.scaled_features)
         
+        summary = f"KMeans clustering performed with {n_clusters} clusters."
+
         if visualize:
             filename = self.plot_clusters('cluster_kmeans', title='KMeans Clustering Results')
-            print(f"Saved KMeans clustering plot as {filename}")
-        
-        return self.df.copy()
+            summary += " A clustering visualization plot has been generated."
+            return {"file_path": filename, "summary": summary}
+        else:
+            return {"file_path": None, "summary": summary}
 
     def dbscan_cluster(self, eps: float = 0.5, min_samples: int = 5, visualize: bool = True):
         """
@@ -122,17 +125,21 @@ class ClusteringAnalysis:
         - visualize (bool): Whether to visualize the clustering results.
         
         Returns:
-        - pd.DataFrame: DataFrame with an additional 'cluster_dbscan' column indicating cluster assignments.
+        - dict: Contains a notification that the plot has been generated and a short summary.
         """
         self._scale_features()
         dbscan = DBSCAN(eps=eps, min_samples=min_samples)
         self.df['cluster_dbscan'] = dbscan.fit_predict(self.scaled_features)
         
+        num_clusters = len(set(self.df['cluster_dbscan'])) - (1 if -1 in self.df['cluster_dbscan'] else 0)
+        summary = f"DBSCAN clustering performed with eps={eps} and min_samples={min_samples}. Number of clusters found: {num_clusters}."
+
         if visualize:
             filename = self.plot_clusters('cluster_dbscan', title='DBSCAN Clustering Results')
-            print(f"Saved DBSCAN clustering plot as {filename}")
-        
-        return self.df.copy()
+            summary += " A clustering visualization plot has been generated."
+            return {"file_path": filename, "summary": summary}
+        else:
+            return {"file_path": None, "summary": summary}
 
     def hierarchical_cluster(self, n_clusters: int = 3, linkage: str = 'ward', visualize: bool = True):
         """
@@ -144,17 +151,20 @@ class ClusteringAnalysis:
         - visualize (bool): Whether to visualize the clustering results.
         
         Returns:
-        - pd.DataFrame: DataFrame with an additional 'cluster_hierarchical' column indicating cluster assignments.
+        - dict: Contains a notification that the plot has been generated and a short summary.
         """
         self._scale_features()
         hierarchical = AgglomerativeClustering(n_clusters=n_clusters, linkage=linkage)
         self.df['cluster_hierarchical'] = hierarchical.fit_predict(self.scaled_features)
         
+        summary = f"Hierarchical clustering performed with {n_clusters} clusters and '{linkage}' linkage."
+
         if visualize:
             filename = self.plot_clusters('cluster_hierarchical', title='Hierarchical Clustering Results')
-            print(f"Saved Hierarchical clustering plot as {filename}")
-        
-        return self.df.copy()
+            summary += " A clustering visualization plot has been generated."
+            return {"file_path": filename, "summary": summary}
+        else:
+            return {"file_path": None, "summary": summary}
 
     def plot_clusters(self, cluster_column: str, title: str = 'Clustering Results', highlight_ids: list = None):
         """
@@ -235,23 +245,35 @@ class CorrelationAnalyzer:
     def calculate_pearson(self):
         """
         Calculates the Pearson correlation matrix.
+        
+        Returns:
+        - dict: Contains the Pearson correlation matrix and a description.
         """
         self.pearson_corr = self.df.corr(method='pearson')
-        print("Pearson correlation matrix calculated.")
+        description = "Pearson correlation matrix calculated."
+        return {"correlation_matrix": self.pearson_corr, "description": description}
 
     def calculate_spearman(self):
         """
         Calculates the Spearman correlation matrix.
+        
+        Returns:
+        - dict: Contains the Spearman correlation matrix and a description.
         """
         self.spearman_corr = self.df.corr(method='spearman')
-        print("Spearman correlation matrix calculated.")
+        description = "Spearman correlation matrix calculated."
+        return {"correlation_matrix": self.spearman_corr, "description": description}
 
     def calculate_kendall(self):
         """
         Calculates the Kendall correlation matrix.
+        
+        Returns:
+        - dict: Contains the Kendall correlation matrix and a description.
         """
         self.kendall_corr = self.df.corr(method='kendall')
-        print("Kendall correlation matrix calculated.")
+        description = "Kendall correlation matrix calculated."
+        return {"correlation_matrix": self.kendall_corr, "description": description}
 
     def visualize_correlation(self, method: str = 'pearson', figsize: tuple = (10, 8), annot: bool = True, cmap: str = 'coolwarm'):
         """
@@ -264,7 +286,7 @@ class CorrelationAnalyzer:
         - cmap (str): The color map to use for the heatmap.
         
         Returns:
-        - str: The filepath of the saved plot.
+        - dict: Contains a notification that the plot has been generated and a short summary.
         """
         if method == 'pearson':
             if self.pearson_corr is None:
@@ -295,8 +317,14 @@ class CorrelationAnalyzer:
         plt.savefig(filename)
         plt.close()
         
-        print(f"Saved correlation heatmap as {filename}")
-        return filename
+        # Find the highest correlation pair (excluding self-correlation)
+        corr_values = corr.abs().where(~np.eye(corr.shape[0], dtype=bool))
+        max_corr = corr_values.unstack().dropna().sort_values(ascending=False).max()
+        max_pair = corr_values.unstack().idxmax()
+        summary = f"Highest {method.capitalize()} correlation is between {max_pair[0]} and {max_pair[1]} with a coefficient of {corr.loc[max_pair[0], max_pair[1]]:.2f}."
+        summary += " A correlation heatmap visualization plot has been generated."
+        
+        return {"file_path": filename, "summary": summary}
 
     def pairwise_correlation(self, method: str = 'pearson') -> pd.DataFrame:
         """
@@ -335,7 +363,7 @@ class CorrelationAnalyzer:
         - figsize (tuple): The size of the figure.
         
         Returns:
-        - str: The filepath of the saved plot.
+        - dict: Contains a notification that the plot has been generated and a short summary.
         """
         sns.pairplot(self.df, kind=kind, hue=hue, diag_kind='kde', corner=True)
         title = 'Pairwise Relationships'
@@ -348,8 +376,8 @@ class CorrelationAnalyzer:
         plt.savefig(filename)
         plt.close()
         
-        print(f"Saved pairwise relationships plot as {filename}")
-        return filename
+        summary = "A pairwise relationships plot has been generated."
+        return {"file_path": filename, "summary": summary}
 
 # ========================= Regression Analysis =========================
 
@@ -461,8 +489,9 @@ class RegressionAnalysis:
         self.X = self.data[feature_columns]
         self.y = self.data[self.target]
         self.n_features = len(feature_columns)
-        print(f"Selected features: {feature_columns}")
-        print(f"Target: {self.target}")
+        description = f"Selected features: {feature_columns}\nTarget: {self.target}"
+        summary = f"Features {feature_columns} selected with target '{self.target}'."
+        return {"description": description, "summary": summary}
 
     def train_test_split_data(self, test_size: float = 0.2, random_state: int = 42):
         """
@@ -475,38 +504,62 @@ class RegressionAnalysis:
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
             self.X, self.y, test_size=test_size, random_state=random_state
         )
-        print(f"Training samples: {self.X_train.shape[0]}")
-        print(f"Testing samples: {self.X_test.shape[0]}")
+        description = f"Training samples: {self.X_train.shape[0]}\nTesting samples: {self.X_test.shape[0]}"
+        summary = f"Data split into {self.X_train.shape[0]} training samples and {self.X_test.shape[0]} testing samples."
+        return {"description": description, "summary": summary}
 
     def train_ridge(self, alpha: float = 1.0):
         model = Ridge(alpha=alpha)
         model.fit(self.X_train, self.y_train)
         self.models['Ridge'] = model
-        print("Ridge regression trained.")
+        coefficients = model.coef_
+        intercept = model.intercept_
+        coef_dict = dict(zip(self.X.columns, coefficients))
+        summary = f"Ridge regression model trained with alpha={alpha}."
+        summary += " A regression visualization plot has been generated."
+        # Feature Importance Plot
+        filename = self.plot_feature_importance('Ridge', coef_dict)
+        return {"file_path": filename, "summary": summary}
 
     def train_lasso(self, alpha: float = 0.1):
         model = Lasso(alpha=alpha)
         model.fit(self.X_train, self.y_train)
         self.models['Lasso'] = model
-        print("Lasso regression trained.")
+        coefficients = model.coef_
+        intercept = model.intercept_
+        coef_dict = dict(zip(self.X.columns, coefficients))
+        summary = f"Lasso regression model trained with alpha={alpha}."
+        summary += " A regression visualization plot has been generated."
+        # Feature Importance Plot
+        filename = self.plot_feature_importance('Lasso', coef_dict)
+        return {"file_path": filename, "summary": summary}
 
     def train_svm(self, C: float = 1.0, kernel: str = 'rbf'):
         model = SVR(C=C, kernel=kernel)
         model.fit(self.X_train, self.y_train)
         self.models['SVM'] = model
-        print("SVM regression trained.")
+        summary = f"SVM regression model trained with C={C} and kernel='{kernel}'."
+        summary += " A regression visualization plot has been generated."
+        # Actual vs Predicted Plot
+        filename = self.plot_actual_vs_predicted('SVM')
+        return {"file_path": filename, "summary": summary}
 
     def train_random_forest(self, n_estimators: int = 100, random_state: int = 42):
         model = RandomForestRegressor(n_estimators=n_estimators, random_state=random_state)
         model.fit(self.X_train, self.y_train)
         self.models['RandomForest'] = model
-        print("Random Forest regression trained.")
+        summary = f"Random Forest regression model trained with {n_estimators} estimators and random_state={random_state}."
+        summary += " A feature importance visualization plot has been generated."
+        # Feature Importance Plot
+        filename = self.plot_feature_importance('RandomForest', model.feature_importances_)
+        return {"file_path": filename, "summary": summary}
 
-    def train_transformer(self, epochs: int = 100, batch_size: int = 16, learning_rate: float = 1e-3, window_size: int = 24, patience: int = 20):
+    def train_transformer(self, steps: int = 6, epochs: int = 200, batch_size: int = 16, learning_rate: float = 1e-3, window_size: int = 24, patience: int = 20):
         """
         Trains a Transformer-based regression model.
 
         Parameters:
+        - steps (int): Number of future observations to predict.
         - epochs (int): Number of training epochs.
         - batch_size (int): Batch size for training.
         - learning_rate (float): Learning rate for the optimizer.
@@ -541,12 +594,12 @@ class RegressionAnalysis:
         targets = np.array(targets)
 
         # Convert to tensors
-        sequences = torch.tensor(sequences, dtype=torch.float32)
-        targets = torch.tensor(targets, dtype=torch.float32)
+        sequences = torch.tensor(sequences, dtype=torch.float32).unsqueeze(-1)  # Shape: (num_samples, window_size, 1)
+        targets = torch.tensor(targets, dtype=torch.float32).unsqueeze(-1)      # Shape: (num_samples, 1)
 
         # Create dataset and dataloader
         dataset = TransformerDatasetLocal(sequences, targets)
-        dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+        train_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)  # Increased batch size for better training
 
         # Initialize model, loss, and optimizer
         input_size = self.X_train.shape[1]
@@ -554,7 +607,7 @@ class RegressionAnalysis:
         model = TransformerRegressor(input_size=input_size).to(device)
         criterion = nn.MSELoss()
         optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=10, verbose=True)
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=10, verbose=False)
 
         # Early stopping parameters
         best_loss = float('inf')
@@ -566,13 +619,13 @@ class RegressionAnalysis:
         for epoch in tqdm(range(epochs), desc="Training Transformer", unit="epoch"):
             epoch_losses = []
             
-            for seq, target in dataloader:
-                seq = seq.to(device)        # Shape: (batch_size, window_size, input_size)
-                target = target.to(device)  # Shape: (batch_size)
+            for batch_X, batch_y in train_loader:
+                batch_X = batch_X.to(device)        # Shape: (batch_size, window_size, input_size)
+                batch_y = batch_y.to(device)        # Shape: (batch_size, 1)
 
                 optimizer.zero_grad()
-                output = model(seq)         # Shape: (batch_size, 1)
-                loss = criterion(output.squeeze(), target)
+                output = model(batch_X)             # Shape: (batch_size, 1)
+                loss = criterion(output, batch_y)
                 loss.backward()
                 optimizer.step()
 
@@ -590,29 +643,93 @@ class RegressionAnalysis:
             else:
                 epochs_no_improve += 1
                 if epochs_no_improve >= patience:
-                    print(f"Early stopping triggered after {patience} epochs without improvement.")
                     early_stop = True
                     break
 
-            # Print average loss every 20 epochs or the first epoch
-            if (epoch+1) % 20 == 0 or epoch == 0:
-                print(f"Epoch {epoch+1}/{epochs}, Loss: {avg_loss:.6f}")
-
+            # Early stopping flag
             if early_stop:
                 break
 
         # Load the best model
         model.load_state_dict(best_model_state)
-        self.models['Transformer'] = {'model': model, 'scaler_X': scaler_X, 'scaler_y': scaler_y, 'window_size': window_size}
-        print("Transformer regression trained.")
+
+        # Forecasting
+        model.eval()
+        sales = self.data[self.target].values
+        sales_scaled = scaler_X.transform(self.X_train).flatten()
+        forecast_scaled = []
+
+        # Initialize the current sequence with the last window_size points
+        current_seq = torch.tensor(sales_scaled[-window_size:], dtype=torch.float32).unsqueeze(0).unsqueeze(-1).to(device)  # Shape: (1, window_size, 1)
+
+        for _ in range(steps):
+            with torch.no_grad():
+                pred_scaled = model(current_seq).cpu().numpy().flatten()[0]
+            forecast_scaled.append(pred_scaled)
+            # Update the current sequence by removing the first element and adding the new prediction
+            new_input = torch.tensor([[pred_scaled]], dtype=torch.float32).unsqueeze(-1).to(device)  # Shape: (1, 1, 1)
+            current_seq = torch.cat((current_seq[:,1:,:], new_input), dim=1)  # Shape: (1, window_size, 1)
+
+        # Inverse scaling
+        forecast = scaler_y.inverse_transform(np.array(forecast_scaled).reshape(-1,1)).flatten()
+
+        # Generate future dates based on frequency
+        last_date = self.data.index[-1]
+        freq_offset = pd.tseries.frequencies.to_offset(self.frequency)
+        forecast_dates = [last_date + (freq_offset * (i+1)) for i in range(steps)]
+        forecast_series = pd.Series(forecast, index=forecast_dates)
+
+        self.predictions = forecast_series
+        self.future_dates = forecast_dates
+        self.models['Transformer'] = {
+            'model': model,
+            'scaler_X': scaler_X,
+            'scaler_y': scaler_y,
+            'window_size': window_size
+        }
+
+        # Plot and save the forecast
+        plot_info = self.plot_forecast(forecast_series, 'Transformer')
+
+        # Prepare summary with forecasted values
+        forecast_values = forecast_series.to_dict()
+        forecast_summary = "Forecasted values:\n"
+        for date, value in forecast_values.items():
+            forecast_summary += f"[{date.date()}: {value:.2f}]\n"
+        forecast_summary += "A time series forecast visualization plot has been generated."
+
+        return {"file_path": plot_info["file_path"], "summary": forecast_summary}
 
     def evaluate_models(self):
         """
         Evaluates all trained models and stores the results.
+
+        Returns:
+        - dict: Contains evaluation metrics and a summary.
         """
+        evaluation_results = {}
+        summaries = []
         for name, model in self.models.items():
             if name != 'Transformer':
                 predictions = model.predict(self.X_test)
+                # Extract model parameters if applicable
+                if hasattr(model, 'coef_') and hasattr(model, 'intercept_'):
+                    coefficients = model.coef_
+                    intercept = model.intercept_
+                    coef_dict = dict(zip(self.X.columns, coefficients))
+                    evaluation_results[name] = {
+                        'MSE': mean_squared_error(self.y_test, predictions),
+                        'R2': r2_score(self.y_test, predictions),
+                        'Intercept': intercept,
+                        'Coefficients': coef_dict
+                    }
+                    summary_str = f"{name} Model - Intercept: {intercept:.4f}, Coefficients: {coef_dict}"
+                else:
+                    evaluation_results[name] = {
+                        'MSE': mean_squared_error(self.y_test, predictions),
+                        'R2': r2_score(self.y_test, predictions)
+                    }
+                    summary_str = f"{name} Model - MSE: {evaluation_results[name]['MSE']:.4f}, R2: {evaluation_results[name]['R2']:.4f}"
             else:
                 # For Transformer, perform scaling and forecasting
                 transformer_info = model
@@ -643,27 +760,109 @@ class RegressionAnalysis:
                     predictions_scaled = transformer_model(sequences).cpu().numpy().flatten()
                 
                 predictions = scaler_y.inverse_transform(predictions_scaled.reshape(-1,1)).flatten()
-            
-            mse = mean_squared_error(self.y_test, predictions)
-            r2 = r2_score(self.y_test, predictions)
-            self.results[name] = {'MSE': mse, 'R2': r2, 'Predictions': predictions}
-            print(f"{name} - MSE: {mse:.4f}, R2: {r2:.4f}")
+                
+                mse = mean_squared_error(self.y_test.iloc[window_size:], predictions)
+                r2 = r2_score(self.y_test.iloc[window_size:], predictions)
+                evaluation_results[name] = {'MSE': mse, 'R2': r2}
+                summary_str = f"{name} Model - MSE: {mse:.4f}, R2: {r2:.4f}"
+            evaluation_results[name]['summary'] = summary_str
+            summaries.append(summary_str)
+        self.results = evaluation_results
+        summary = "Model evaluations completed. " + "; ".join(summaries)
+        return {"file_path": None, "summary": summary}
+
+    def plot_feature_importance(self, model_name: str, importances):
+        """
+        Plots feature importances for models that support it (e.g., Random Forest, Ridge, Lasso).
+        
+        Parameters:
+        - model_name (str): Name of the model.
+        - importances (dict or array-like): Feature importances or coefficients.
+        
+        Returns:
+        - str: The filepath of the saved plot.
+        """
+        plt.figure(figsize=(10, 6))
+        features = self.X.columns
+        if model_name in ['Ridge', 'Lasso']:
+            # Ensure coefficients are ordered according to features
+            if isinstance(importances, dict):
+                coef = [importances[feature] for feature in features]
+            else:
+                coef = importances
+            sns.barplot(x=features, y=coef, palette='viridis')
+            plt.axhline(0, color='red', linestyle='--')
+            plt.title(f'{model_name} Coefficients')
+            plt.xlabel('Features')
+            plt.ylabel('Coefficient Value')
+        elif model_name == 'RandomForest':
+            # For Random Forest, importances are all positive
+            importances = importances
+            sns.barplot(x=features, y=importances, palette='viridis')
+            plt.title('Random Forest Feature Importances')
+            plt.xlabel('Features')
+            plt.ylabel('Importance')
+        else:
+            raise ValueError("Feature importance plotting not supported for this model.")
+
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        filename = f"plots/{model_name.lower()}_feature_importances_{get_timestamp()}.png"
+        plt.savefig(filename)
+        plt.close()
+        return filename
+
+
+    def plot_actual_vs_predicted(self, model_name: str):
+        """
+        Plots actual vs predicted values for regression models and saves it as a file.
+        
+        Parameters:
+        - model_name (str): Name of the model.
+        
+        Returns:
+        - str: The filepath of the saved plot.
+        """
+        predictions = self.models[model_name].predict(self.X_test)
+        plt.figure(figsize=(10, 6))
+        sns.scatterplot(x=self.y_test, y=predictions, alpha=0.6)
+        sns.lineplot(x=self.y_test, y=self.y_test, color='red')  # Perfect prediction line
+        plt.title(f'Actual vs Predicted Sales ({model_name})')
+        plt.xlabel('Actual Sales')
+        plt.ylabel('Predicted Sales')
+        plt.grid(True)
+        plt.tight_layout()
+        filename = f"plots/{model_name.lower()}_actual_vs_predicted_{get_timestamp()}.png"
+        plt.savefig(filename)
+        plt.close()
+        return filename
 
     def plot_results(self):
         """
         Plots actual vs predicted values for univariate models with continuous regression curves.
         Labels the true and predicted values of the test set.
         Saves the plots as files.
-        For multivariate models, only outputs predictions.
+
+        Returns:
+        - list of dict: Each dictionary contains the file path and summary of the saved plot.
         """
         # Ensure the plots directory exists
         os.makedirs('plots', exist_ok=True)
+        plot_results = []
 
         for name, model in self.models.items():
             if name != 'Transformer':
                 # For non-Transformer models, get predictions for training and testing sets
                 predictions_train = model.predict(self.X_train)
                 predictions_test = model.predict(self.X_test)
+                # Extract model parameters if applicable
+                if hasattr(model, 'coef_') and hasattr(model, 'intercept_'):
+                    intercept = model.intercept_
+                    coefficients = model.coef_
+                    coef_dict = dict(zip(self.X.columns, coefficients))
+                else:
+                    intercept = None
+                    coef_dict = None
             else:
                 # For Transformer, perform scaling and forecasting
                 transformer_info = model
@@ -769,15 +968,75 @@ class RegressionAnalysis:
                 plt.savefig(filename)
                 plt.close()
                 
-                print(f"Saved regression plot for {name} as {filename}")
-            else:
-                # Multivariate regression: Output predictions
+                # Prepare summary
                 if name != 'Transformer':
-                    print(f"\n{name} Regression Predictions on Test Set:")
-                    print(model.predict(self.X_test))
+                    summary = f"{name} Model - Intercept: {intercept:.4f}, Coefficients: {coef_dict}"
                 else:
-                    print(f"\n{name} Regression Predictions on Test Set:")
-                    print(predictions_test)
+                    summary = f"{name} Model - No intercept or coefficients available."
+    
+                summary += " A regression visualization plot has been generated."
+                plot_results.append({"file_path": filename, "summary": summary})
+            else:
+                # Multivariate regression: Generate Actual vs Predicted Plot
+                if name != 'Transformer':
+                    predictions = model.predict(self.X_test)
+                else:
+                    predictions = predictions_test
+                plt.figure(figsize=(10, 6))
+                sns.scatterplot(x=self.y_test, y=predictions, alpha=0.6)
+                sns.lineplot(x=self.y_test, y=self.y_test, color='red')  # Perfect prediction line
+                plt.title(f'Actual vs Predicted Sales ({name})')
+                plt.xlabel('Actual Sales')
+                plt.ylabel('Predicted Sales')
+                plt.grid(True)
+                plt.tight_layout()
+                filename = f"plots/{name.lower()}_actual_vs_predicted_{get_timestamp()}.png"
+                plt.savefig(filename)
+                plt.close()
+                
+                # Prepare summary
+                if name != 'Transformer':
+                    summary = f"{name} Model - Coefficients: {coef_dict}"
+                else:
+                    summary = f"{name} Model - No intercept or coefficients available."
+    
+                summary += " An actual vs. predicted visualization plot has been generated."
+                plot_results.append({"file_path": filename, "summary": summary})
+        
+        return plot_results
+
+    def plot_forecast(self, forecast: pd.Series, method: str):
+        """
+        Plots historical sales data along with the forecasted values and saves the plot as a file.
+
+        Parameters:
+        - forecast (pd.Series): Forecasted sales values.
+        - method (str): Forecasting method used ('ARIMA' or 'Transformer').
+
+        Returns:
+        - dict: Contains the file path of the saved plot and a short summary.
+        """
+        plt.figure(figsize=(12,6))
+        plt.plot(self.data[self.sales_column], label='Historical Sales')
+        plt.plot(forecast, label=f'Forecasted Sales ({method})', linestyle='--')
+        plt.xlabel('Date')
+        plt.ylabel('Sales')
+        plt.title(f'Sales Forecast using {method}')
+        plt.legend()
+        plt.grid(True)
+        
+        # Generate filename with timestamp
+        timestamp = get_timestamp()
+        filename = f"plots/sales_forecast_{method.lower()}_{timestamp}.png"
+        plt.tight_layout()
+        plt.savefig(filename)
+        plt.close()
+        
+        summary = f"Forecasted values for the next periods:\n"
+        for date, value in forecast.to_dict().items():
+            summary += f"[{date.date()}: {value:.2f}]\n"
+        summary += " A time series forecast visualization plot has been generated."
+        return {"file_path": filename, "summary": summary}
 
     def get_results(self) -> dict:
         """
@@ -809,6 +1068,9 @@ class KaplanMeierEstimator:
     def fit(self):
         """Fit the Kaplan-Meier model."""
         self.km_fit.fit(durations=self.data['durations'], event_observed=self.data['event_observed'])
+        description = "Kaplan-Meier model fitted."
+        summary = f"Median survival time: {self.km_fit.median_survival_time_:.2f} months."
+        return {"file_path": None, "summary": summary}
 
     def plot_survival_curve(self):
         """Plot the Kaplan-Meier survival curve and save it as a file."""
@@ -826,7 +1088,8 @@ class KaplanMeierEstimator:
         plt.savefig(filename)
         plt.close()
         
-        print(f"Saved Kaplan-Meier survival curve as {filename}")
+        summary = "A Kaplan-Meier survival curve visualization plot has been generated."
+        return {"file_path": filename, "summary": summary}
 
 class CoxProportionalHazardsModel:
     def __init__(self, data: pd.DataFrame):
@@ -850,8 +1113,14 @@ class CoxProportionalHazardsModel:
     def fit(self):
         """Fit the Cox proportional hazards model."""
         self.cox_model.fit(self.data, duration_col='duration', event_col='event')
-        print("Cox Proportional Hazards Model Summary:")
-        print(self.cox_model.summary)
+        summary = self.cox_model.summary.to_string()
+        significant = self.cox_model.summary[self.cox_model.summary['p'] < 0.05]
+        significant_covariates = significant[['coef', 'exp(coef)', 'p']].to_dict('records')
+        summary_str = "Significant covariates:\n"
+        for covariate in significant_covariates:
+            summary_str += f"{covariate['coef']} | Hazard Ratio: {covariate['exp(coef)']:.4f} | p-value: {covariate['p']:.4f}\n"
+        summary_str += " A Cox proportional hazards model visualization plot has been generated."
+        return {"file_path": None, "summary": summary_str}
 
     def plot_survival_curve(self, covariates: dict = None):
         """
@@ -867,11 +1136,13 @@ class CoxProportionalHazardsModel:
             sample = pd.DataFrame([covariates])
             survival_function = self.cox_model.predict_survival_function(sample)
             plt.step(survival_function.index, survival_function.iloc[:, 0], where="post", label=str(covariates))
+            summary = f"Survival curve for covariates {covariates} has been generated."
         else:
             # Plot the baseline survival curve
             survival_function = self.cox_model.predict_survival_function(self.data)
             for column in survival_function.columns:
                 plt.step(survival_function.index, survival_function[column], where="post", alpha=0.3)
+            summary = "Baseline survival curves have been generated."
         
         plt.title('Cox Proportional Hazards Model Survival Curve')
         plt.xlabel('Time (months)')
@@ -892,7 +1163,8 @@ class CoxProportionalHazardsModel:
         plt.savefig(filename)
         plt.close()
         
-        print(f"Saved Cox survival curve as {filename}")
+        summary += " A Cox proportional hazards model visualization plot has been generated."
+        return {"file_path": filename, "summary": summary}
 
 # ========================= Time Series Forecasting =========================
 
@@ -947,6 +1219,9 @@ class TimeSeriesForecaster:
         self.predictions = None
         self.future_dates = None
 
+        # Ensure the plots directory exists
+        os.makedirs("plots", exist_ok=True)
+
     def determine_method(self) -> str:
         """
         Determines the forecasting method based on the number of complete cycles in the data.
@@ -962,7 +1237,7 @@ class TimeSeriesForecaster:
         else:
             raise ValueError("Insufficient data for forecasting. Require at least two complete cycles.")
 
-    def forecast_arima(self, steps: int = 6) -> pd.Series:
+    def forecast_arima(self, steps: int = 6) -> dict:
         """
         Forecasts future sales using ARIMA model with seasonal decomposition.
 
@@ -970,7 +1245,7 @@ class TimeSeriesForecaster:
         - steps (int): Number of future periods to forecast.
 
         Returns:
-        - forecast (pd.Series): Forecasted sales values.
+        - dict: Contains the forecasted sales series, plot info, and a short summary.
         """
         # Seasonal decomposition
         decomposition = seasonal_decompose(self.data[self.sales_column], period=self.cycle_period, model='additive', extrapolate_trend='freq')
@@ -987,7 +1262,10 @@ class TimeSeriesForecaster:
             fitted_model = model.fit()
         except Exception as e:
             print(f"ARIMA model fitting failed: {e}")
-            return pd.Series([np.nan]*steps, index=pd.date_range(start=self.data.index[-1] + pd.tseries.frequencies.to_offset(self.frequency), periods=steps, freq=self.frequency))
+            return {
+                "file_path": None,
+                "summary": "ARIMA model fitting failed."
+            }
 
         # Forecast the trend
         trend_forecast = fitted_model.forecast(steps=steps)
@@ -1014,9 +1292,16 @@ class TimeSeriesForecaster:
         self.models['ARIMA'] = fitted_model
 
         # Plot and save the forecast
-        self.plot_forecast(forecast_series, 'ARIMA')
+        plot_info = self.plot_forecast(forecast_series, 'ARIMA')
 
-        return forecast_series
+        # Prepare summary with forecasted values
+        forecast_values = forecast_series.to_dict()
+        forecast_summary = "Forecasted values:\n"
+        for date, value in forecast_values.items():
+            forecast_summary += f"[{date.date()}: {value:.2f}]\n"
+        forecast_summary += "A time series forecast visualization plot has been generated."
+
+        return {"file_path": plot_info["file_path"], "summary": forecast_summary}
 
     def prepare_transformer_data(self, window_size: int = 24) -> DataLoader:
         """
@@ -1038,7 +1323,7 @@ class TimeSeriesForecaster:
         for i in range(len(sales_scaled) - window_size):
             sequences.append(sales_scaled[i:i+window_size])
             targets.append(sales_scaled[i+window_size])
-        
+
         sequences = np.array(sequences)
         targets = np.array(targets)
 
@@ -1051,7 +1336,7 @@ class TimeSeriesForecaster:
 
         return train_loader
 
-    def forecast_transformer(self, steps: int = 6, window_size: int = 24, epochs: int = 200, learning_rate: float = 1e-3, patience: int = 20) -> pd.Series:
+    def forecast_transformer(self, steps: int = 6, window_size: int = 24, epochs: int = 200, learning_rate: float = 1e-3, patience: int = 20) -> dict:
         """
         Forecasts future sales using Transformer model with improved training.
 
@@ -1063,7 +1348,7 @@ class TimeSeriesForecaster:
         - patience (int): Number of epochs to wait for improvement before stopping.
 
         Returns:
-        - forecast (pd.Series): Forecasted sales values.
+        - dict: Contains the forecasted sales series, plot info, and a short summary.
         """
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -1071,10 +1356,11 @@ class TimeSeriesForecaster:
         train_loader = self.prepare_transformer_data(window_size=window_size)
 
         # Initialize model, loss, and optimizer
-        model = TransformerRegressor(input_size=1).to(device)
+        input_size = 1  # Assuming univariate time series
+        model = TransformerRegressor(input_size=input_size).to(device)
         criterion = nn.MSELoss()
         optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=10, verbose=True)
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=10, verbose=False)
 
         # Early stopping parameters
         best_loss = float('inf')
@@ -1110,14 +1396,10 @@ class TimeSeriesForecaster:
             else:
                 epochs_no_improve += 1
                 if epochs_no_improve >= patience:
-                    print(f"Early stopping triggered after {patience} epochs without improvement.")
                     early_stop = True
                     break
 
-            # Print average loss every 20 epochs or the first epoch
-            if (epoch+1) % 20 == 0 or epoch == 0:
-                print(f"Epoch {epoch+1}/{epochs}, Loss: {avg_loss:.6f}")
-
+            # Early stopping flag
             if early_stop:
                 break
 
@@ -1142,7 +1424,7 @@ class TimeSeriesForecaster:
             current_seq = torch.cat((current_seq[:,1:,:], new_input), dim=1)  # Shape: (1, window_size, 1)
 
         # Inverse scaling
-        forecast = self.scaler.inverse_transform(np.array(forecast_scaled).reshape(-1, 1)).flatten()
+        forecast = self.scaler.inverse_transform(np.array(forecast_scaled).reshape(-1,1)).flatten()
 
         # Generate future dates based on frequency
         last_date = self.data.index[-1]
@@ -1152,12 +1434,24 @@ class TimeSeriesForecaster:
 
         self.predictions = forecast_series
         self.future_dates = forecast_dates
-        self.models['Transformer'] = model
+        self.models['Transformer'] = {
+            'model': model,
+            'scaler_X': None,  # Not used in this context
+            'scaler_y': self.scaler,
+            'window_size': window_size
+        }
 
         # Plot and save the forecast
-        self.plot_forecast(forecast_series, 'Transformer')
+        plot_info = self.plot_forecast(forecast_series, 'Transformer')
 
-        return forecast_series
+        # Prepare summary with forecasted values
+        forecast_values = forecast_series.to_dict()
+        forecast_summary = "Forecasted values:\n"
+        for date, value in forecast_values.items():
+            forecast_summary += f"[{date.date()}: {value:.2f}]\n"
+        forecast_summary += "A time series forecast visualization plot has been generated."
+
+        return {"file_path": plot_info["file_path"], "summary": forecast_summary}
 
     def plot_forecast(self, forecast: pd.Series, method: str):
         """
@@ -1166,6 +1460,9 @@ class TimeSeriesForecaster:
         Parameters:
         - forecast (pd.Series): Forecasted sales values.
         - method (str): Forecasting method used ('ARIMA' or 'Transformer').
+
+        Returns:
+        - dict: Contains the file path of the saved plot and a short summary.
         """
         plt.figure(figsize=(12,6))
         plt.plot(self.data[self.sales_column], label='Historical Sales')
@@ -1183,9 +1480,10 @@ class TimeSeriesForecaster:
         plt.savefig(filename)
         plt.close()
         
-        print(f"Saved {method} forecast plot as {filename}")
+        summary = f"Forecasted values for the next periods have been generated."
+        return {"file_path": filename, "summary": summary}
 
-    def run_forecast(self, steps: int = 6, window_size: int = 24, epochs: int = 200, lr: float = 0.001) -> pd.Series:
+    def run_forecast(self, steps: int = 6, window_size: int = 24, epochs: int = 200, lr: float = 0.001) -> dict:
         """
         Executes the forecasting process by selecting the appropriate method.
 
@@ -1196,10 +1494,10 @@ class TimeSeriesForecaster:
         - lr (float): Learning rate for the Transformer optimizer.
 
         Returns:
-        - forecast (pd.Series): Forecasted sales values.
+        - dict: Contains the plot file path and a short summary.
         """
         method = self.determine_method()
-        print(f"Selected Forecasting Method: {method}")
+        description_method = f"Selected Forecasting Method: {method}."
 
         if method == 'ARIMA':
             forecast = self.forecast_arima(steps=steps)
@@ -1208,7 +1506,9 @@ class TimeSeriesForecaster:
         else:
             raise ValueError("Unsupported forecasting method.")
 
+        forecast['summary'] = f"{description_method} {forecast['summary']}"
         return forecast
+
 
 # ========================= Data Analysis Manager =========================
 
@@ -1240,7 +1540,7 @@ class DataAnalysisManager:
                                    Example: {"method": "Clustering_DBSCAN", "features": ["Advertising", "Sales"], "eps": 0.5, "min_samples": 2}
 
         Returns:
-        - result: The result of the analysis, which could be a DataFrame, plot filepath, or printed output.
+        - dict: Contains the file path of the saved plot and a short summary.
         """
         method = analysis_command.get("method", "").lower()
         if not method:
@@ -1266,31 +1566,29 @@ class DataAnalysisManager:
 
             # Calculate specified correlation
             if corr_type.lower() == "pearson":
-                self.correlation.calculate_pearson()
-                corr_matrix = self.correlation.pearson_corr
-                print("Pearson Correlation Matrix:")
-                print(corr_matrix)
-                corr_plot = self.correlation.visualize_correlation(method='pearson')
+                corr_result = self.correlation.calculate_pearson()
+                corr_matrix = corr_result["correlation_matrix"]
+                plot_info = self.correlation.visualize_correlation(method='pearson')
+                summary = plot_info["summary"]
             elif corr_type.lower() == "spearman":
-                self.correlation.calculate_spearman()
-                corr_matrix = self.correlation.spearman_corr
-                print("Spearman Correlation Matrix:")
-                print(corr_matrix)
-                corr_plot = self.correlation.visualize_correlation(method='spearman')
+                corr_result = self.correlation.calculate_spearman()
+                corr_matrix = corr_result["correlation_matrix"]
+                plot_info = self.correlation.visualize_correlation(method='spearman')
+                summary = plot_info["summary"]
             elif corr_type.lower() == "kendall":
-                self.correlation.calculate_kendall()
-                corr_matrix = self.correlation.kendall_corr
-                print("Kendall Correlation Matrix:")
-                print(corr_matrix)
-                corr_plot = self.correlation.visualize_correlation(method='kendall')
+                corr_result = self.correlation.calculate_kendall()
+                corr_matrix = corr_result["correlation_matrix"]
+                plot_info = self.correlation.visualize_correlation(method='kendall')
+                summary = plot_info["summary"]
             else:
                 raise ValueError("Unsupported correlation type. Choose 'Pearson', 'Spearman', or 'Kendall'.")
 
-            # Optionally, return pairwise correlations with p-values
-            pairwise_corr = self.correlation.pairwise_correlation(method=corr_type.lower())
-            print("\nPairwise Correlations with P-values:")
-            print(pairwise_corr)
-            return pairwise_corr
+            # Prepare the result
+            result = {
+                "file_path": plot_info["file_path"],
+                "summary": summary
+            }
+            return result
 
         elif method.startswith("clustering"):
             # Example: "Clustering_DBSCAN"
@@ -1308,20 +1606,24 @@ class DataAnalysisManager:
             # Perform specified clustering
             if cluster_type.lower() == "kmeans":
                 n_clusters = analysis_command.get("n_clusters", 3)
-                clustered_df = self.clustering.kmeans_cluster(n_clusters=n_clusters)
+                clustered_result = self.clustering.kmeans_cluster(n_clusters=n_clusters)
             elif cluster_type.lower() == "dbscan":
                 eps = analysis_command.get("eps", 0.5)
                 min_samples = analysis_command.get("min_samples", 5)
-                clustered_df = self.clustering.dbscan_cluster(eps=eps, min_samples=min_samples)
+                clustered_result = self.clustering.dbscan_cluster(eps=eps, min_samples=min_samples)
             elif cluster_type.lower() == "hierarchical":
                 n_clusters = analysis_command.get("n_clusters", 3)
                 linkage = analysis_command.get("linkage", 'ward')
-                clustered_df = self.clustering.hierarchical_cluster(n_clusters=n_clusters, linkage=linkage)
+                clustered_result = self.clustering.hierarchical_cluster(n_clusters=n_clusters, linkage=linkage)
             else:
                 raise ValueError("Unsupported clustering type. Choose 'KMeans', 'DBSCAN', or 'Hierarchical'.")
 
-            print(f"{cluster_type} clustering performed.")
-            return clustered_df
+            # Prepare the result
+            result = {
+                "file_path": clustered_result["file_path"],
+                "summary": clustered_result["summary"]
+            }
+            return result
 
         elif method.startswith("regression"):
             # Example: "Regression_Ridge"
@@ -1337,45 +1639,52 @@ class DataAnalysisManager:
 
             # Initialize RegressionAnalysis
             self.regression = RegressionAnalysis(self.df, target=target[0])
-            self.regression.set_features(predictors)
-            self.regression.train_test_split_data()
+            feature_info = self.regression.set_features(predictors)
+            split_info = self.regression.train_test_split_data()
 
             # Train specified regression model
             if regression_type.lower() == "ridge":
                 alpha = analysis_command.get("alpha", 1.0)
-                self.regression.train_ridge(alpha=alpha)
+                train_info = self.regression.train_ridge(alpha=alpha)
             elif regression_type.lower() == "lasso":
                 alpha = analysis_command.get("alpha", 0.1)
-                self.regression.train_lasso(alpha=alpha)
+                train_info = self.regression.train_lasso(alpha=alpha)
             elif regression_type.lower() == "svm":
                 C = analysis_command.get("C", 1.0)
                 kernel = analysis_command.get("kernel", 'rbf')
-                self.regression.train_svm(C=C, kernel=kernel)
+                train_info = self.regression.train_svm(C=C, kernel=kernel)
             elif regression_type.lower() == "randomforest":
                 n_estimators = analysis_command.get("n_estimators", 100)
                 random_state = analysis_command.get("random_state", 42)
-                self.regression.train_random_forest(n_estimators=n_estimators, random_state=random_state)
+                train_info = self.regression.train_random_forest(n_estimators=n_estimators, random_state=random_state)
             elif regression_type.lower() == "transformer":
                 epochs = analysis_command.get("epochs", 200)
                 batch_size = analysis_command.get("batch_size", 16)
                 lr = analysis_command.get("lr", 1e-3)
                 window_size = analysis_command.get("window_size", 24)
                 patience = analysis_command.get("patience", 20)
-                self.regression.train_transformer(epochs=epochs, batch_size=batch_size, learning_rate=lr, window_size=window_size, patience=patience)
+                train_info = self.regression.train_transformer(steps=6, epochs=epochs, batch_size=batch_size, learning_rate=lr, window_size=window_size, patience=patience)
             else:
                 raise ValueError("Unsupported regression type. Choose 'Ridge', 'Lasso', 'SVM', 'RandomForest', or 'Transformer'.")
 
             # Evaluate models
-            self.regression.evaluate_models()
-            results = self.regression.get_results()
-            print("\nRegression Model Evaluation:")
-            for model_name, metrics in results.items():
-                print(f"{model_name}: MSE = {metrics['MSE']:.4f}, R2 = {metrics['R2']:.4f}")
+            evaluation = self.regression.evaluate_models()
 
             # Plot results with regression lines and save plots (only for univariate)
-            self.regression.plot_results()
+            plot_info = self.regression.plot_results()
 
-            return results
+            # Prepare the result
+            if plot_info:
+                result = {
+                    "file_path": plot_info[0]["file_path"],
+                    "summary": plot_info[0]["summary"]
+                }
+            else:
+                result = {
+                    "file_path": None,
+                    "summary": "Regression analysis completed without generating plots."
+                }
+            return result
 
         elif method == "kaplan_meier":
             # Example: {"method": "Kaplan_Meier", "data": pd.DataFrame with 'durations' and 'event_observed'}
@@ -1390,9 +1699,16 @@ class DataAnalysisManager:
 
             # Initialize KaplanMeierEstimator
             self.kaplan_meier = KaplanMeierEstimator(data=data)
-            self.kaplan_meier.fit()
-            self.kaplan_meier.plot_survival_curve()
-            return self.kaplan_meier.km_fit
+            fit_info = self.kaplan_meier.fit()
+            plot_info = self.kaplan_meier.plot_survival_curve()
+            summary = fit_info["summary"]
+
+            # Prepare the result
+            result = {
+                "file_path": plot_info["file_path"],
+                "summary": summary
+            }
+            return result
 
         elif method == "cox_proportional_hazards":
             # Example: {"method": "Cox_Proportional_Hazards", "data": pd.DataFrame with 'duration', 'event', and covariates}
@@ -1402,16 +1718,23 @@ class DataAnalysisManager:
 
             # Initialize CoxProportionalHazardsModel
             self.cox_model = CoxProportionalHazardsModel(data=data)
-            self.cox_model.fit()
-            self.cox_model.plot_survival_curve()
-            return self.cox_model.cox_model
+            fit_info = self.cox_model.fit()
+            plot_info = self.cox_model.plot_survival_curve()
+            summary = fit_info["summary"]
+
+            # Prepare the result
+            result = {
+                "file_path": plot_info["file_path"],
+                "summary": summary
+            }
+            return result
 
         elif method == "time_series_forecast":
             # Example: {"method": "Time_Series_Forecast", "steps": 6, "window_size": 24, "epochs": 200, "lr": 0.001}
             steps = analysis_command.get("steps", 6)
             window_size = analysis_command.get("window_size", 24)
             epochs = analysis_command.get("epochs", 200)
-            lr = analysis_command.get("lr", 0.001)
+            lr = analysis_command.get("lr", 1e-3)
             cycle_period = analysis_command.get("cycle_period", None)
 
             sales_column = analysis_command.get("sales_column", "Sales")
@@ -1434,7 +1757,16 @@ class DataAnalysisManager:
                 epochs=epochs,
                 lr=lr
             )
-            return forecast
+            # Corrected lines: Directly get 'summary' without popping
+            summary = forecast.get("summary", "")
+            plot_info = forecast.get("file_path", None)
+
+            # Prepare the result
+            result = {
+                "file_path": plot_info,
+                "summary": summary
+            }
+            return result
 
         else:
             raise ValueError(f"Unsupported analysis method: {method}")
@@ -1467,9 +1799,9 @@ if __name__ == "__main__":
     # Perform the correlation analysis
     result_corr = manager_corr.perform_analysis(analysis_command_corr)
 
-    # Display the pairwise correlations
-    print("\nPairwise Correlations:")
-    print(result_corr)
+    # Display the summary
+    print("\nSummary:")
+    print(result_corr["summary"])
 
     # ------------------- Example 2: Clustering Analysis (KMeans) -------------------
     print("\n===== Example 2: KMeans Clustering =====")
@@ -1495,11 +1827,11 @@ if __name__ == "__main__":
     }
 
     # Perform the clustering analysis
-    clustered_data = manager_cluster.perform_analysis(analysis_command_cluster)
+    clustered_result = manager_cluster.perform_analysis(analysis_command_cluster)
 
-    # Display the clustered DataFrame
-    print("\nClustered Data Sample:")
-    print(clustered_data.head())
+    # Display the summary
+    print("\nSummary:")
+    print(clustered_result["summary"])
 
     # ------------------- Example 3: Regression Analysis (Ridge) - Multivariate -------------------
     print("\n===== Example 3: Ridge Regression (Multivariate) =====")
@@ -1527,10 +1859,9 @@ if __name__ == "__main__":
     # Perform the regression analysis
     results_reg = manager_reg.perform_analysis(analysis_command_reg)
 
-    # Display the evaluation results
-    print("\nRegression Model Evaluation:")
-    for model, metrics in results_reg.items():
-        print(f"{model}: MSE = {metrics['MSE']:.4f}, R2 = {metrics['R2']:.4f}")
+    # Display the summary
+    print("\nSummary:")
+    print(results_reg["summary"])
 
     # ------------------- Example 4: Survival Analysis (Kaplan-Meier) -------------------
     print("\n===== Example 4: Kaplan-Meier Estimation =====")
@@ -1550,7 +1881,11 @@ if __name__ == "__main__":
     }
 
     # Perform the Kaplan-Meier analysis
-    km_fit = manager_km.perform_analysis(analysis_command_km)
+    km_result = manager_km.perform_analysis(analysis_command_km)
+
+    # Display the summary
+    print("\nSummary:")
+    print(km_result["summary"])
 
     # ------------------- Example 5: Survival Analysis (Cox Proportional Hazards Model) -------------------
     print("\n===== Example 5: Cox Proportional Hazards Model =====")
@@ -1574,7 +1909,11 @@ if __name__ == "__main__":
     }
 
     # Perform the Cox Proportional Hazards analysis
-    cox_fit = manager_cox.perform_analysis(analysis_command_cox)
+    cox_result = manager_cox.perform_analysis(analysis_command_cox)
+
+    # Display the summary
+    print("\nSummary:")
+    print(cox_result["summary"])
 
     # ------------------- Example 6: Time Series Forecasting (ARIMA) -------------------
     print("\n===== Example 6: ARIMA Time Series Forecasting =====")
@@ -1603,9 +1942,9 @@ if __name__ == "__main__":
     # Perform the forecasting analysis
     forecast_ts = manager_ts.perform_analysis(analysis_command_ts)
 
-    # Display the forecasted sales
-    print("\nForecasted Sales (ARIMA):")
-    print(forecast_ts)
+    # Display the summary
+    print("\nSummary:")
+    print(forecast_ts["summary"])
 
     # ------------------- Example 7: Regression Analysis (Random Forest) - Multivariate -------------------
     print("\n===== Example 7: Random Forest Regression (Multivariate) =====")
@@ -1634,10 +1973,9 @@ if __name__ == "__main__":
     # Perform the regression analysis
     results_rf = manager_rf.perform_analysis(analysis_command_rf)
 
-    # Display the evaluation results
-    print("\nRandom Forest Regression Evaluation:")
-    for model, metrics in results_rf.items():
-        print(f"{model}: MSE = {metrics['MSE']:.4f}, R2 = {metrics['R2']:.4f}")
+    # Display the summary
+    print("\nSummary:")
+    print(results_rf["summary"])
 
     # ------------------- Example 8: Regression Analysis (Lasso) - Univariate -------------------
     print("\n===== Example 8: Lasso Regression (Univariate) =====")
@@ -1661,10 +1999,9 @@ if __name__ == "__main__":
     # Perform the regression analysis
     results_lasso = manager_lasso.perform_analysis(analysis_command_lasso)
 
-    # Display the evaluation results
-    print("\nLasso Regression Evaluation:")
-    for model, metrics in results_lasso.items():
-        print(f"{model}: MSE = {metrics['MSE']:.4f}, R2 = {metrics['R2']:.4f}")
+    # Display the summary
+    print("\nSummary:")
+    print(results_lasso["summary"])
 
     # ------------------- Example 9: Time Series Forecasting (Transformer) -------------------
     print("\n===== Example 9: Transformer Time Series Forecasting =====")
@@ -1706,9 +2043,9 @@ if __name__ == "__main__":
     # Perform the forecasting analysis
     forecast_transformer = manager_transformer.perform_analysis(analysis_command_transformer)
 
-    # Display the forecasted sales
-    print("\nForecasted Sales (Transformer):")
-    print(forecast_transformer)
+    # Display the summary
+    print("\nSummary:")
+    print(forecast_transformer["summary"])
 
     # ------------------- Example 10: Clustering Analysis (DBSCAN) with Highlighted Customers -------------------
     print("\n===== Example 10: DBSCAN Clustering with Highlighted Customers =====")
@@ -1735,18 +2072,20 @@ if __name__ == "__main__":
     }
 
     # Perform the clustering analysis
-    clustered_data_dbscan = manager_dbscan.perform_analysis(analysis_command_dbscan)
+    clustered_result_dbscan = manager_dbscan.perform_analysis(analysis_command_dbscan)
 
     # Define customer IDs to highlight
     highlight_customers = np.random.choice(clustering_data_dbscan['customer_id'], size=10, replace=False).tolist()
 
     # Plot clusters with highlighted customers
-    clustered_data_dbscan = manager_dbscan.clustering.df  # Updated DataFrame with cluster labels
-    clustered_data_dbscan = clustered_data_dbscan.copy()  # To avoid SettingWithCopyWarning
+    clustered_df_dbscan = clustering_data_dbscan.copy()
+    scaler = StandardScaler()
+    scaled_features_dbscan = scaler.fit_transform(clustered_df_dbscan[["Advertising", "Sales", "Foot_Traffic", "Promotions"]])
+    dbscan = DBSCAN(eps=0.5, min_samples=5)
+    clustered_df_dbscan['cluster_dbscan'] = dbscan.fit_predict(scaled_features_dbscan)
 
-    # Re-initialize ClusteringAnalysis to access plot_clusters method with highlights
-    clustering_instance_dbscan = ClusteringAnalysis(clustering_data_dbscan, ["Advertising", "Sales", "Foot_Traffic", "Promotions"])
-    clustering_instance_dbscan.df = clustered_data_dbscan  # Update the DataFrame with cluster labels
+    # Initialize ClusteringAnalysis instance
+    clustering_instance_dbscan = ClusteringAnalysis(clustering_df := clustered_df_dbscan, ["Advertising", "Sales", "Foot_Traffic", "Promotions"], customer_id_column='customer_id')
 
     # Plot and save the clusters with highlighted customers
     filename_dbscan = clustering_instance_dbscan.plot_clusters(
@@ -1754,11 +2093,9 @@ if __name__ == "__main__":
         title='DBSCAN Clustering with Highlighted Customers',
         highlight_ids=highlight_customers
     )
-    print(f"Saved DBSCAN clustering plot with highlights as {filename_dbscan}")
-
-    # Display the clustered DataFrame sample
-    print("\nDBSCAN Clustered Data Sample:")
-    print(clustered_data_dbscan.head())
+    summary_dbscan = f"DBSCAN clustering with eps=0.5 and min_samples=5. Number of clusters found: {len(set(clustered_df_dbscan['cluster_dbscan'])) - (1 if -1 in clustered_df_dbscan['cluster_dbscan'] else 0)}. A clustering visualization plot has been generated."
+    print("\nSummary:")
+    print(summary_dbscan)
 
     # ------------------- Example 11: Multiple Analysis Methods (Correlation, Clustering, Regression) -------------------
     print("\n===== Example 11: Multiple Analysis Methods (Correlation, Clustering, Regression) =====")
@@ -1792,7 +2129,7 @@ if __name__ == "__main__":
         "features": ["Advertising", "Sales", "Foot_Traffic", "Promotions"],
         "n_clusters": 5
     }
-    clustered_data_multiple = manager_multiple.perform_analysis(clustering_command_multiple)
+    clustered_result_multiple = manager_multiple.perform_analysis(clustering_command_multiple)
 
     # 3. Ridge Regression
     regression_command_multiple = {
@@ -1801,15 +2138,15 @@ if __name__ == "__main__":
         "target": ["Sales"],
         "alpha": 1.0
     }
-    regression_results_multiple = manager_multiple.perform_analysis(regression_command_multiple)
+    regression_result_multiple = manager_multiple.perform_analysis(regression_command_multiple)
 
-    # Display all results
-    print("\nAll Analysis Results:")
-    print("Correlation Analysis Result:")
-    print(correlation_result_multiple.head())
-    print("\nClustering Analysis Result Sample:")
-    print(clustered_data_multiple.head())
-    print("\nRegression Analysis Result:")
-    for model, metrics in regression_results_multiple.items():
-        print(f"{model}: MSE = {metrics['MSE']:.4f}, R2 = {metrics['R2']:.4f}")
+    # Display all summaries
+    print("\nSummary:")
+    print("1. Correlation Analysis:")
+    print(correlation_result_multiple["summary"])
 
+    print("\n2. Clustering Analysis:")
+    print(clustered_result_multiple["summary"])
+
+    print("\n3. Regression Analysis:")
+    print(regression_result_multiple["summary"])
