@@ -953,6 +953,7 @@ class RegressionAnalysis:
                 
                 if not np.isnan(predictions_curve).all():
                     # Plot the continuous regression curve
+                    plt.pyplot.switch_backend('Agg') 
                     plt.plot(feature_range, predictions_curve, color='purple', label='Regression Curve', linewidth=2)
                 
                 plt.xlabel(predictor.replace('_', ' ').title())
@@ -1017,6 +1018,7 @@ class RegressionAnalysis:
         - dict: Contains the file path of the saved plot and a short summary.
         """
         plt.figure(figsize=(12,6))
+        plt.pyplot.switch_backend('Agg')
         plt.plot(self.data[self.sales_column], label='Historical Sales')
         plt.plot(forecast, label=f'Forecasted Sales ({method})', linestyle='--')
         plt.xlabel('Date')
@@ -1465,6 +1467,7 @@ class TimeSeriesForecaster:
         - dict: Contains the file path of the saved plot and a short summary.
         """
         plt.figure(figsize=(12,6))
+        plt.pyplot.switch_backend('Agg')
         plt.plot(self.data[self.sales_column], label='Historical Sales')
         plt.plot(forecast, label=f'Forecasted Sales ({method})', linestyle='--')
         plt.xlabel('Date')
