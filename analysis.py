@@ -953,7 +953,6 @@ class RegressionAnalysis:
                 
                 if not np.isnan(predictions_curve).all():
                     # Plot the continuous regression curve
-                    plt.pyplot.switch_backend('Agg') 
                     plt.plot(feature_range, predictions_curve, color='purple', label='Regression Curve', linewidth=2)
                 
                 plt.xlabel(predictor.replace('_', ' ').title())
@@ -1018,7 +1017,6 @@ class RegressionAnalysis:
         - dict: Contains the file path of the saved plot and a short summary.
         """
         plt.figure(figsize=(12,6))
-        plt.pyplot.switch_backend('Agg')
         plt.plot(self.data[self.sales_column], label='Historical Sales')
         plt.plot(forecast, label=f'Forecasted Sales ({method})', linestyle='--')
         plt.xlabel('Date')
@@ -1189,9 +1187,15 @@ class TimeSeriesForecaster:
                               If None, it will be set based on the frequency.
         """
         self.data = data.copy()
-        self.date_column = date_column
         self.sales_column = sales_column
-        self.data[self.date_column] = pd.to_datetime(self.data[self.date_column])
+
+        # Handle case where date_column is missing
+        if date_column not in self.data.columns:
+            self.data[date_column] = pd.date_range(start="2020-01-01", periods=len(self.data), freq='D')  # Default daily frequency
+        else:
+            self.data[date_column] = pd.to_datetime(self.data[date_column])
+
+        self.date_column = date_column
         self.data.set_index(self.date_column, inplace=True)
 
         # Infer frequency if not provided
@@ -1467,7 +1471,6 @@ class TimeSeriesForecaster:
         - dict: Contains the file path of the saved plot and a short summary.
         """
         plt.figure(figsize=(12,6))
-        plt.pyplot.switch_backend('Agg')
         plt.plot(self.data[self.sales_column], label='Historical Sales')
         plt.plot(forecast, label=f'Forecasted Sales ({method})', linestyle='--')
         plt.xlabel('Date')
@@ -1923,7 +1926,7 @@ if __name__ == "__main__":
     # Enhanced Monthly Sales Data for ARIMA Forecasting (5 years)
     arima_data = pd.DataFrame({
         "Sales": np.random.poisson(lam=200, size=60) + np.linspace(50, 150, 60).astype(int),  # Adding trend
-        "Date": pd.date_range(start="2018-01-01", periods=60, freq='MS')  # 'MS' for Month Start
+          # 'MS' for Month Start
     })
 
     # Initialize DataAnalysisManager with the enhanced ARIMA DataFrame
