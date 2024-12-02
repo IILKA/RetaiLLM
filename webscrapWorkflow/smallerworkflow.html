@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .process-step h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.2em;
+        }
+        
+        .process-step p {
+            margin: 3px 0;
+            line-height: 0.8;
+            font-size: 0.8em;
+        }
+        .container {
+            max-width: 800px;
+            margin: 10px auto;
+            font-family: Arial, sans-serif;
+            padding: 0 10px;
+        }
+        .flow-diagram {
+            background: #f8f9fa;
+            padding: 20px 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .process-step {
+            background: white;
+            padding: 10px 100px;
+            margin: 20px 0;
+            border: 1px solid #4a90e2;
+            border-radius: 6px;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            color: #2c3e50;
+            text-align: center;
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 3px 6px 8px #888888;
+        }
+        .process-step::after {
+            content: "⬇";
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            color: #4a90e2;
+            z-index: 1;
+        }
+        .process-step:last-child::after {
+            content: none;
+        }
+        .icon-container {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 80%;
+            width: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .icon {
+            height: 80%;
+            width: auto;
+        }
+        .icon-1 {
+            height: 80%;
+            width: auto;
+            max-width: 100%;
+        }
+        .icon-2 {
+            height: 80%;
+            width: auto;
+            max-width: 45%;
+        }
+        .process-step:nth-child(odd) .icon-container {
+            right: 5px;
+        }
+        .process-step:nth-child(even) .icon-container {
+            left: 5px;
+        }
+        .function-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            font-size: 0.8em;
+        }
+        .function-table th, .function-table td {
+            border: 1px solid #dee2e6;
+            padding: 6px;
+            text-align: left;
+        }
+        .function-table th {
+            background: #4a90e2;
+            color: white;
+        }
+        .function-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .function-table tr:hover {
+            background-color: #e9ecef;
+        }
+        .process-step:nth-child(1) { background-color: #e3f2fd; }
+        .process-step:nth-child(2) { background-color: #e8f5e9; }
+        .process-step:nth-child(3) { background-color: #fff3e0; }
+        .process-step:nth-child(4) { background-color: #f3e5f5; }
+        .process-step:nth-child(5) { background-color: #e0f7fa; }
+        .process-step:nth-child(6) { background-color: #fce4ec; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="font-size: 1.2em;">Web Scraping and Analysis Pipeline</h2>
+        
+        <!-- Rest of the HTML remains exactly the same -->
+        <div class="flow-diagram">
+            <div class="process-step">
+                <h3>1. User Input Processing</h3>
+                <p>scrapfast() / search_and_scrape()</p>
+                <p>→ Process keywords and parameters</p>
+                <div class="icon-container">
+                    <img src="keyword.png" class="icon-1" alt="keyword icon">
+                </div>
+            </div>
+            <div class="process-step">
+                <h3>2. Search Engine Querying</h3>
+                <p>scrape_website_content()</p>
+                <p>→ Multiple search engines (Google, Bing, DuckDuckGo, etc.)</p>
+                <div class="icon-container">
+                    <img src="google.png" class="icon-1" alt="Google icon">
+                    <img src="bing.png" class="icon-1" alt="Bing icon">
+                </div>
+            </div>
+            <div class="process-step">
+                <h3>3. URL Collection and Validation</h3>
+                <p>BeuatifulSoup.select(engine['result_selector'])</p>
+                <p>→ Extract and validate URLs from search results</p>
+                <div class="icon-container">
+                    <img src="search.png" class="icon-1" alt="URL icon 1">
+                </div>
+            </div>
+            <div class="process-step">
+                <h3>4. Content Scraping</h3>
+                <p>langchain WebBaseLoader.load()</p>
+                <p>→ Extract content from validated URLs</p>
+                <div class="icon-container">
+                    <img src="bug.png" class="icon-1" alt="Scraping icon">
+                </div>
+            </div>
+            <div class="process-step">
+                <h3>5. Content Processing</h3>
+                <p>Deepseek.get_content_summary()</p>
+                <p>→ Summarization and text analysis</p>
+                <div class="icon-container">
+                    <img src="summary.png" class="icon-1" alt="Processing icon 2">
+                </div>
+            </div>
+            <div class="process-step">
+                <h3>6. Sentiment Analysis</h3>
+                <p>perform_overall_sentiment_analysis()</p>
+                <p>→ Generate sentiment metrics and insights</p>
+                <div class="icon-container">
+                    <img src="sentiment-analysis.png" class="icon-1" alt="Sentiment icon">
+                </div>
+            </div>
+        </div>
+
+        <table class="function-table">
+            <tr>
+                <th>Function</th>
+                <th>Input</th>
+                <th>Output</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>scrapfast()</td>
+                <td>words[], num_res, num_attempt, summary</td>
+                <td>List of result dictionaries</td>
+                <td>Main entry point for web scraping pipeline</td>
+            </tr>
+            <tr>
+                <td>search_and_scrape()</td>
+                <td>keywords, num_res, num_attempt, summary</td>
+                <td>Processed results</td>
+                <td>Orchestrates search and content extraction</td>
+            </tr>
+            <tr>
+                <td>fetch_with_selenium()</td>
+                <td>url</td>
+                <td>Extracted content</td>
+                <td>Handles content extraction from URLs</td>
+            </tr>
+            <tr>
+                <td>BeuatifulSoup.select(engine['result_selector'])</td>
+                <td>scrapped content with possible url</td>
+                <td>possible url</td>
+                <td>filter out the possible url</td>
+            </tr>
+            <tr>
+                <td>langchain WebBaseLoader.load()</td>
+                <td>url</td>
+                <td>scrapped content</td>
+                <td>Web Scrap in a faster speed</td>
+            </tr>
+            <tr>
+                <td>Deepseek.get_content_summary</td>
+                <td>content to be summarized</td>
+                <td>Summary</td>
+                <td>Summarization</td>
+            </tr>
+            <tr>
+                <td>perform_overall_sentiment_analysis()</td>
+                <td>text</td>
+                <td>Sentiment metrics</td>
+                <td>Analyzes content sentiment</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
