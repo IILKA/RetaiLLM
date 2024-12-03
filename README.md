@@ -65,6 +65,9 @@ conda create -f environment.yaml
 conda activate retaillm
 ```
 
+To set up the connection to the LLM server, please fill your hostURL, apikey, model_name into the config.yaml. 
+
+
 
 
 
