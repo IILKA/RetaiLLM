@@ -1,8 +1,8 @@
 Agent:
-  model_id: "deepseek-chat"
+  model_id:  # your model id here
   host_locally: False  
-  base_url: "https://api.deepseek.com"
-  api_key: "sk-686ff11433504a54bac51df6a77c6123"
+  base_url:  # your host here
+  api_key:   # your pai here
   menu_return_length: 500
   response_return_length: 500
   debug: True
@@ -12,9 +12,9 @@ Data:
   data_node_save_dir: "data/data_nodes/"
 
 Scraper: 
-  model_id: "deepseek-chat"
-  base_url: "https://api.deepseek.com"
-  api_key: "sk-686ff11433504a54bac51df6a77c6123"
+  model_id:  # set a model id for scraper, can be the same to the Agent
+  base_url:  # set scraper host id here
+  api_key:  #
 
 
   
