@@ -1,6 +1,6 @@
 # RetaiLLM
 
-<img src=./assets/retaillm_icon.png width=30%, margin_left=45%> 
+<img src=./assets/retaillm_icon.png width=30%, margin-left=45%> 
 
 
 
