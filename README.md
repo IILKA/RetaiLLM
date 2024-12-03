@@ -1,4 +1,8 @@
 # RetaiLLM
+
+<img src=./assets/retaillm_icon.png> 
+
+
 This is an APAI4011/STAT4011 course project repo. 
 
 
