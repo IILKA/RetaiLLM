@@ -67,7 +67,7 @@ git clone https://github.com/IILKA/RetaiLLM/
 set up the environment: 
 
 ```
-conda create -n retaillm 
+conda create -n retaillm python=3.11
 conda activate retaillm
 pip install -r requirements.txt
 ```
