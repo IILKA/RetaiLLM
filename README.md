@@ -9,7 +9,7 @@ This is an APAI4011/STAT4011 course project repo.
 
 
 
-
+![presentation vid](https://youtu.be/ZmcpD6MSm78)
 
 ## Installation
 
