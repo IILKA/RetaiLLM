@@ -67,8 +67,9 @@ git clone https://github.com/IILKA/RetaiLLM/
 set up the environment: 
 
 ```
-conda create -f environment.yaml
+conda create -n retaillm 
 conda activate retaillm
+pip install -r requirements.txt
 ```
 
 To set up the connection to the LLM server, please fill your hostURL, apikey, model_name into the config.yaml. 
